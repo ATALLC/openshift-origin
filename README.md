@@ -1,5 +1,27 @@
 # OpenShift Origin Deployment Template
 
+## NOTE: Forked from [https://github.com/microsoft/openshift-origin](https://github.com/microsoft/openshift-origin)
+
+**ATA ADO Setup Instructions**
+
+1. READ THE ORIGINAL INSTRUCTIONS CAREFULLY. 
+2. Set-up pre-requisites in original documentation. For ATA members, use the following repo [https://github.com/ATALLC/smartfm-openshift-deploy](https://github.com/ATALLC/smartfm-openshift-deploy) using the openshift-origin-3.9 branch to automatically create those pre-reqs.
+3. Create the following pipeline variables
+- AGENT_POOL: The ADO agent pool to use
+- RESOURCE_MANAGER_SERVICE_CONNECTION: ADO Service Connection to use. Must have access to the RESOURCE_GROUP.
+- RESOURCE_GROUP: OpenShift resource group to use
+- ENV_PARAMETERS_FILES: File to use for deploy parameters from env folder
+- OS_ADMIN_USER_NAME: Openshift Administrator user name
+- OS_ADMIN_PASSWORD: Openshift Administrator password
+- SSH_PUBLIC_KEY: SSH public key to use for all the nodes
+- KEY_VAULT_RESOURCE_GROUP: Resource group containing the keyvault
+- KEY_VAULT_NAME: Name of the key vault with all the deployment secrets
+- AAD_CLIENT_ID: AppId for the service principal created in step 2
+- AAD_CLIENT_SECRET: Password for the service principal created in step 2
+4. Execute the pipeline
+
+**ORIGINAL INSTRUCTIONS**
+
 ## NOTE: Structural change to Repo
 
 The master branch will now contain the most current release of OpenShift Origin with experimental items.  This may cause instability but will include new things or try new things.

@@ -18,58 +18,55 @@
 			"value": "managed"
 		},
 		"openshiftClusterPrefix": {
-			"value": "changeme"
+			"value": "smartfmcluster"
 		},
 		"masterInstanceCount": {
 			"value": 3
 		},
 		"infraInstanceCount": {
-			"value": 3
+			"value": 2
 		},
 		"nodeInstanceCount": {
-			"value": 3
+			"value": 2
 		},
 		"dataDiskSize": {
 			"value": 128
 		},
 		"adminUsername": {
-			"value": "changeme"
+			"value": "OSADMINUSERNAME"
 		},
 		"openshiftPassword": {
-			"value": "changeme"
+			"value": "OSADMINPASSWORD"
 		},
 		"enableMetrics": {
-			"value": "false"
+			"value": "true"
 		},
 		"enableLogging": {
-			"value": "false"
+			"value": "true"
 		},
 		"sshPublicKey": {
-			"value": "changeme"
+			"value": "SSHPUBLICKEY"
 		},
 		"keyVaultResourceGroup": {
-			"value": "changeme"
+			"value": "KEYVAULTUSERGROUP"
 		},
 		"keyVaultName": {
-			"value": "changeme"
+			"value": "KEYVAULTNAME"
 		},
 		"keyVaultSecret": {
-			"value": "changeme"
+			"value": "sshPrivateKey"
 		},
 		"enableAzure": {
 			"value": "true"
 		},
 		"aadClientId": {
-			"value": "changeme"
+			"value": "AADCLIENTID"
 		},
 		"aadClientSecret": {
-			"value": "changeme"
+			"value": "AADCLIENTSECRET"
 		},
 		"defaultSubDomainType": {
 			"value": "nipio"
-		},
-		"defaultSubDomain": {
-			"value": "changeme"
 		}
 	}
 }
