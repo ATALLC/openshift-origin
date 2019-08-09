@@ -9,11 +9,14 @@
 3. Create the following pipeline variables
 - RESOURCE_MANAGER_SERVICE_CONNECTION: ADO Service Connection to use. Must have access to the RESOURCE_GROUP.
 - RESOURCE_GROUP: OpenShift resource group to use
+- MASTER_COUNT: Number of master nodes.
+- INFR_COUNT: Number of infrastructure nodes.
+- NODE_COUNT: Number of application nodes.
 - OS_ADMIN_USER_NAME: Openshift Administrator user name
 - OS_ADMIN_PASSWORD: Openshift Administrator password
 - SSH_PUBLIC_KEY: SSH public key to use for all the nodes
-- KEY_VAULT_RESOURCE_GROUP: Resource group containing the keyvault
-- KEY_VAULT_NAME: Name of the key vault with all the deployment secrets
+- KEYVAULT_RESOURCE_GROUP: Resource group containing the keyvault
+- KEYVAULT_NAME: Name of the key vault with all the deployment secrets
 - AAD_CLIENT_ID: AppId for the service principal created in step 2
 - AAD_CLIENT_SECRET: Password for the service principal created in step 2
 4. Execute the pipeline

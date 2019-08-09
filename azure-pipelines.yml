@@ -20,16 +20,19 @@ stages:
           steps:
           - checkout: self
           - script: |
+              sed -i.bak 's|MASTERCOUNT|$(MASTER_COUNT)|g' azuredeploy.parameters.json
+              sed -i.bak 's|INFRCOUNT|$(INFR_COUNT)|g' azuredeploy.parameters.json
+              sed -i.bak 's|NODECOUNT|$(NODE_COUNT)|g' azuredeploy.parameters.json
               sed -i.bak 's|OSADMINUSERNAME|$(OS_ADMIN_USER_NAME)|g' azuredeploy.parameters.json
               sed -i.bak 's|OSADMINPASSWORD|$(OS_ADMIN_PASSWORD)|g' azuredeploy.parameters.json
               sed -i.bak 's|SSHPUBLICKEY|$(SSH_PUBLIC_KEY)|g' azuredeploy.parameters.json
-              sed -i.bak 's|KEYVAULTUSERGROUP|$(KEY_VAULT_USER_GROUP)|g' azuredeploy.parameters.json
-              sed -i.bak 's|KEYVAULTNAME|$(KEY_VAULT_NAME)|g' azuredeploy.parameters.json
+              sed -i.bak 's|KEYVAULTRESOURCEGROUP|$(KEYVAULT_RESOURCE_GROUP)|g' azuredeploy.parameters.json
+              sed -i.bak 's|KEYVAULTNAME|$(KEYVAULT_NAME)|g' azuredeploy.parameters.json
               sed -i.bak 's|AADCLIENTID|$(AAD_CLIENT_ID)|g' azuredeploy.parameters.json
               sed -i.bak 's|AADCLIENTSECRET|$(AAD_CLIENT_SECRET)|g' azuredeploy.parameters.json
             displayName: 'Update variables in parameter file from pipeline variables'
           - task: AzureResourceGroupDeployment@2
-            displayName: 'Azure Deployment:Create Or Update Resource Group action on ADO Agent'
+            displayName: 'Deploy Openshift Origin Cluster'
             inputs:
               azureSubscription: $(RESOURCE_MANAGER_SERVICE_CONNECTION)
               resourceGroupName: $(RESOURCE_GROUP)

@@ -21,13 +21,13 @@
 			"value": "smartfmcluster"
 		},
 		"masterInstanceCount": {
-			"value": 3
+			"value": MASTERCOUNT
 		},
 		"infraInstanceCount": {
-			"value": 2
+			"value": INFRCOUNT
 		},
 		"nodeInstanceCount": {
-			"value": 2
+			"value": NODECOUNT
 		},
 		"dataDiskSize": {
 			"value": 128
@@ -48,7 +48,7 @@
 			"value": "SSHPUBLICKEY"
 		},
 		"keyVaultResourceGroup": {
-			"value": "KEYVAULTUSERGROUP"
+			"value": "KEYVAULTRESOURCEGROUP"
 		},
 		"keyVaultName": {
 			"value": "KEYVAULTNAME"
