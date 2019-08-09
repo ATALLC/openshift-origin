@@ -7,7 +7,6 @@
 1. READ THE ORIGINAL INSTRUCTIONS CAREFULLY. 
 2. Set-up pre-requisites in original documentation. For ATA members, use the following repo [https://github.com/ATALLC/smartfm-openshift-deploy](https://github.com/ATALLC/smartfm-openshift-deploy) using the openshift-origin-3.9 branch to automatically create those pre-reqs.
 3. Create the following pipeline variables
-- AGENT_POOL: The ADO agent pool to use
 - RESOURCE_MANAGER_SERVICE_CONNECTION: ADO Service Connection to use. Must have access to the RESOURCE_GROUP.
 - RESOURCE_GROUP: OpenShift resource group to use
 - OS_ADMIN_USER_NAME: Openshift Administrator user name

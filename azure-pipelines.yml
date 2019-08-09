@@ -12,7 +12,7 @@ stages:
   - deployment: Deploy
     displayName: Deploy
     pool:
-      name: '$(AGENT_POOL)'
+      name: 'smartFMAgentPool'
     environment: 'Development'
     strategy:
       runOnce:
