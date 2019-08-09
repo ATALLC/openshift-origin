@@ -1,19 +1,38 @@
-# Starter pipeline
-# Start with a minimal pipeline that you can customize to build and deploy your code.
-# Add steps that build, run tests, deploy, and more:
-# https://aka.ms/yaml
+# Deploy OpenShift Container Platform
+# Uses Fork of https://github.com/microsoft/openshift-origin
+# https://github.com/ATALLC/openshift-origin
 
 trigger:
-- master
+- none
 
-pool:
-  vmImage: 'ubuntu-latest'
-
-steps:
-- script: echo Hello, world!
-  displayName: 'Run a one-line script'
-
-- script: |
-    echo Add other tasks to build, test, and deploy your project.
-    echo See https://aka.ms/yaml
-  displayName: 'Run a multi-line script'
+stages:
+- stage: Deploy
+  displayName: Deploy
+  jobs:
+  - deployment: Deploy
+    displayName: Deploy
+    pool:
+      name: '$(AGENT_POOL)'
+    environment: 'Development'
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - checkout: self
+          - script: |
+              sed 's/OSADMINUSERNAME/$(OS_ADMIN_USER_NAME)/g' azuredeploy.parameters.json
+              sed 's/OSADMINPASSWORD/$(OS_ADMIN_PASSWORD)/g' azuredeploy.parameters.json
+              sed 's/SSHPUBLICKEY/$(SSH_PUBLIC_KEY)/g' azuredeploy.parameters.json
+              sed 's/KEYVAULTUSERGROUP/$(KEY_VAULT_USER_GROUP)/g' azuredeploy.parameters.json
+              sed 's/KEYVAULTNAME/$(KEY_VAULT_NAME)/g' azuredeploy.parameters.json
+              sed 's/AADCLIENTID/$(AAD_CLIENT_ID)/g' azuredeploy.parameters.json
+              sed 's/AADCLIENTSECRET/$(AAD_CLIENT_SECRET)/g' azuredeploy.parameters.json
+            displayName: 'Update variables in parameter file from pipeline variables'
+          - task: AzureResourceGroupDeployment@2
+            displayName: 'Azure Deployment:Create Or Update Resource Group action on ADO Agent'
+            inputs:
+              azureSubscription: $(RESOURCE_MANAGER_SERVICE_CONNECTION)
+              resourceGroupName: $(RESOURCE_GROUP)
+              location: 'East US'
+              csmFile: 'azuredeploy.json'
+              csmParametersFile: 'azuredeploy.parameters.json'
