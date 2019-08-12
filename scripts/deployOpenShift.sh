@@ -73,6 +73,10 @@ cat > updateansiblecfg.yaml <<EOF
       regexp: '^library '
       insertafter: '#library        = /usr/share/my_modules/'
       line: 'library = /home/${SUDOUSER}/openshift-ansible/roles/lib_utils/library/'
+  - lineinfile:
+      dest: /etc/ansible/ansible.cfg
+      regexp: '^timeout '
+      line: 'timeout = 60'
 EOF
 
 # Run Ansible Playbook to update ansible.cfg file
