@@ -36,6 +36,7 @@ stages:
             inputs:
               azureSubscription: $(RESOURCE_MANAGER_SERVICE_CONNECTION)
               resourceGroupName: $(RESOURCE_GROUP)
+              # location is ignored if the resource group alreadye exists
               location: 'East US'
               csmFile: 'azuredeploy.json'
               csmParametersFile: 'azuredeploy.parameters.json'
