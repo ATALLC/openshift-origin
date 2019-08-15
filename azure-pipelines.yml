@@ -12,7 +12,7 @@ stages:
   - deployment: Deploy
     displayName: Deploy
     pool:
-      name: 'smartFMAgentPool'
+      vmImage: 'ubuntu-latest'
     environment: 'Development'
     strategy:
       runOnce:
