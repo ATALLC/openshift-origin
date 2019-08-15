@@ -67,6 +67,9 @@
 		},
 		"defaultSubDomainType": {
 			"value": "nipio"
+		},
+		"networkResourceGroup": {
+			"value": "NETWORKRESOURCEGROUP"
 		}
 	}
 }

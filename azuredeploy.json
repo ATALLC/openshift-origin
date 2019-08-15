@@ -233,6 +233,13 @@
 			"metadata": {
 				"description": "Default Subdomain for application routing (Wildcard DNS) - must enter something even if you are using nip.io"
 			}
+		},
+		"networkResourceGroup": {
+			"type": "string",
+			"defaultValue": "",
+			"metadata": {
+				"description": "Resource group containing network resources"
+			}
 		}
 	},
 	"variables": {
@@ -324,7 +331,7 @@
 		"openshiftMasterPublicIpDnsLabel": "[concat('masterdns', uniqueString(concat(subscription().subscriptionId, 'master')))]",
 
 		"masterLoadBalancerName": "[concat(variables('openshiftMasterHostname'), 'lb')]",
-		"masterPublicIpAddressId": "[resourceId('Microsoft.Network/publicIPAddresses', variables('openshiftMasterPublicIpDnsLabel'))]",
+		"masterPublicIpAddressId": "[resourceId(parameters('networkResourceGroup'), 'Microsoft.Network/publicIPAddresses', variables('openshiftMasterPublicIpDnsLabel'))]",
 		"masterLbId": "[resourceId('Microsoft.Network/loadBalancers', variables('masterLoadBalancerName'))]",
 		"masterLbFrontEndConfigId": "[concat(variables('masterLbId'), '/frontendIPConfigurations/loadBalancerFrontEnd')]",
 		"masterLbBackendPoolId": "[concat(variables('masterLbId'),'/backendAddressPools/loadBalancerBackend')]",
@@ -332,7 +339,7 @@
 		"masterLbHttpsProbeId": "[concat(variables('masterLbId'),'/probes/httpsProbe')]",
 
 		"infraLoadBalancerName": "[concat(variables('openshiftInfraHostname'), 'lb')]",
-		"infraPublicIpAddressId": "[resourceId('Microsoft.Network/publicIPAddresses', variables('infraLbPublicIpDnsLabel'))]",
+		"infraPublicIpAddressId": "[resourceId(parameters('networkResourceGroup'), 'Microsoft.Network/publicIPAddresses', variables('infraLbPublicIpDnsLabel'))]",
 		"infraLbId": "[resourceId('Microsoft.Network/loadBalancers', variables('infraLoadBalancerName'))]",
 		"infraLbFrontEndConfigId": "[concat(variables('infraLbId'), '/frontendIPConfigurations/loadBalancerFrontEnd')]",
 		"infraLbBackendPoolId": "[concat(variables('infraLbId'),'/backendAddressPools/loadBalancerBackend')]",
@@ -728,9 +735,6 @@
 				"version": "[variables('redHatTags').version]",
 				"platform": "[variables('redHatTags').platform]"
 			},
-			"dependsOn": [
-				"[concat('Microsoft.Network/publicIPAddresses/', variables('openshiftMasterPublicIpDnsLabel'))]"
-			],
 			"properties": {
 				"frontendIPConfigurations": [{
 					"name": "LoadBalancerFrontEnd",
@@ -807,9 +811,6 @@
 				"version": "[variables('redHatTags').version]",
 				"platform": "[variables('redHatTags').platform]"
 			},
-			"dependsOn": [
-				"[concat('Microsoft.Network/publicIPAddresses/', variables('infraLbPublicIpDnsLabel'))]"
-			],
 			"properties": {
 				"frontendIPConfigurations": [{
 					"name": "LoadBalancerFrontEnd",
@@ -886,10 +887,8 @@
 				"platform": "[variables('redHatTags').platform]"
 			},
 			"dependsOn": [
-				"[concat('Microsoft.Network/virtualNetworks/', variables('virtualNetworkName'))]",
 				"[concat('Microsoft.Network/loadBalancers/', variables('masterLoadBalancerName'))]",
-				"[concat(variables('masterLbId'), '/inboundNatRules/SSH-', variables('openshiftMasterHostname') ,copyIndex())]",
-				"[concat('Microsoft.Network/networkSecurityGroups/', variables('openshiftMasterHostname'), '-nsg')]"
+				"[concat(variables('masterLbId'), '/inboundNatRules/SSH-', variables('openshiftMasterHostname') ,copyIndex())]"
 			],
 			"copy": {
 				"name": "masterNicLoop",
@@ -901,7 +900,7 @@
 					"properties": {
 						"privateIPAllocationMethod": "Dynamic",
 						"subnet": {
-							"id": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourceGroup().name, '/providers/Microsoft.Network/virtualNetworks/', variables('virtualNetworkName'), '/subnets/', variables('masterSubnetName'))]"
+							"id": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', parameters('networkResourceGroup'), '/providers/Microsoft.Network/virtualNetworks/', variables('virtualNetworkName'), '/subnets/', variables('masterSubnetName'))]"
 						},
 						"loadBalancerBackendAddressPools": [{
 							"id": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourceGroup().name, '/providers/Microsoft.Network/loadBalancers/', variables('masterLoadBalancerName'), '/backendAddressPools/loadBalancerBackEnd')]"
@@ -914,7 +913,7 @@
 					}
 				}],
 				"networkSecurityGroup": {
-					"id": "[resourceId('Microsoft.Network/networkSecurityGroups', concat(variables('openshiftMasterHostname'), '-nsg'))]"
+					"id": "[resourceId(parameters('networkResourceGroup'), 'Microsoft.Network/networkSecurityGroups', concat(variables('openshiftMasterHostname'), '-nsg'))]"
 				}
 			}
 		}, {
@@ -930,9 +929,7 @@
 				"platform": "[variables('redHatTags').platform]"
 			},
 			"dependsOn": [
-				"[concat('Microsoft.Network/virtualNetworks/', variables('virtualNetworkName'))]",
-				"[concat('Microsoft.Network/loadBalancers/', variables('infraLoadBalancerName'))]",
-				"[concat('Microsoft.Network/networkSecurityGroups/', variables('openshiftInfraHostname'), '-nsg')]"
+				"[concat('Microsoft.Network/loadBalancers/', variables('infraLoadBalancerName'))]"
 			],
 			"copy": {
 				"name": "infraNicLoop",
@@ -944,7 +941,7 @@
 					"properties": {
 						"privateIPAllocationMethod": "Dynamic",
 						"subnet": {
-							"id": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourceGroup().name, '/providers/Microsoft.Network/virtualNetworks/', variables('virtualNetworkName'), '/subnets/', variables('masterSubnetName'))]"
+							"id": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', parameters('networkResourceGroup'), '/providers/Microsoft.Network/virtualNetworks/', variables('virtualNetworkName'), '/subnets/', variables('masterSubnetName'))]"
 						},
 						"loadBalancerBackendAddressPools": [{
 							"id": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourceGroup().name, '/providers/Microsoft.Network/loadBalancers/', variables('infraLoadBalancerName'), '/backendAddressPools/loadBalancerBackEnd')]"
@@ -952,7 +949,7 @@
 					}
 				}],
 				"networkSecurityGroup": {
-					"id": "[resourceId('Microsoft.Network/networkSecurityGroups', concat(variables('openshiftInfraHostname'), '-nsg'))]"
+					"id": "[resourceId(parameters('networkResourceGroup'), 'Microsoft.Network/networkSecurityGroups', concat(variables('openshiftInfraHostname'), '-nsg'))]"
 				}
 			}
 		}, {
@@ -967,10 +964,6 @@
 				"version": "[variables('redHatTags').version]",
 				"platform": "[variables('redHatTags').platform]"
 			},
-			"dependsOn": [
-				"[concat('Microsoft.Network/virtualNetworks/', variables('virtualNetworkName'))]",
-				"[concat('Microsoft.Network/networkSecurityGroups/', variables('openshiftNodeHostname'), '-nsg')]"
-			],
 			"copy": {
 				"name": "nodeNicLoop",
 				"count": "[parameters('nodeInstanceCount')]"
@@ -981,12 +974,12 @@
 					"properties": {
 						"privateIPAllocationMethod": "Dynamic",
 						"subnet": {
-							"id": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourceGroup().name, '/providers/Microsoft.Network/virtualNetworks/', variables('virtualNetworkName'), '/subnets/', variables('nodeSubnetName'))]"
+							"id": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', parameters('networkResourceGroup'), '/providers/Microsoft.Network/virtualNetworks/', variables('virtualNetworkName'), '/subnets/', variables('nodeSubnetName'))]"
 						}
 					}
 				}],
 				"networkSecurityGroup": {
-					"id": "[resourceId('Microsoft.Network/networkSecurityGroups', concat(variables('openshiftNodeHostname'), '-nsg'))]"
+					"id": "[resourceId(parameters('networkResourceGroup'), 'Microsoft.Network/networkSecurityGroups', concat(variables('openshiftNodeHostname'), '-nsg'))]"
 				}
 			}
 		}, {
@@ -1373,10 +1366,10 @@
 						"value": "[variables('openshiftMasterHostname')]"
 					},
 					"openshiftMasterPublicIpFqdn": {
-						"value": "[reference(variables('openshiftMasterPublicIpDnsLabel')).dnsSettings.fqdn]"
+						"value": "[reference(concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', parameters('networkResourceGroup'), '/providers/Microsoft.Network/publicIPAddresses/', variables('openshiftMasterPublicIpDnsLabel')), variables('apiVersionStorage')).dnsSettings.fqdn]"
 					},
 					"openshiftMasterPublicIpAddress": {
-						"value": "[reference(variables('openshiftMasterPublicIpDnsLabel')).ipAddress]"
+						"value": "[reference(concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', parameters('networkResourceGroup'), '/providers/Microsoft.Network/publicIPAddresses/', variables('openshiftMasterPublicIpDnsLabel')), variables('apiVersionStorage')).ipAddress]"
 					},
 					"openshiftInfraHostname": {
 						"value": "[variables('openshiftInfraHostname')]"
@@ -1418,7 +1411,7 @@
 						"value": "[parameters('aadClientSecret')]"
 					},
 					"nipioDomain": {
-						"value": "[concat(reference(variables('infraLbPublicIpDnsLabel')).ipAddress, '.nip.io')]"
+						"value": "[concat(reference(concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', parameters('networkResourceGroup'), '/providers/Microsoft.Network/publicIPAddresses/', variables('infraLbPublicIpDnsLabel')), variables('apiVersionStorage')).ipAddress, '.nip.io')]"
 					},
 					"customDomain": {
 						"value": "[variables('defaultSubDomain')]"
@@ -1441,18 +1434,5 @@
 			}
 		}
 	],
-	"outputs": {
-		"OpenShift Console Url": {
-			"type": "string",
-			"value": "[concat('https://', reference(variables('openshiftMasterPublicIpDnsLabel')).dnsSettings.fqdn, '/console')]"
-		},
-		"OpenShift Master SSH": {
-			"type": "string",
-			"value": "[concat('ssh -p 2200 ', parameters('adminUsername'), '@', reference(variables('openshiftMasterPublicIpDnsLabel')).dnsSettings.fqdn)]"
-		},
-		"OpenShift Infra Load Balancer FQDN": {
-			"type": "string",
-			"value": "[reference(variables('infraLbPublicIpDnsLabel')).dnsSettings.fqdn]"
-		}
-	}
+	"outputs": {}
 }

@@ -20,6 +20,7 @@
 - AAD_CLIENT_ID: AppId for the service principal created in step 2
 - AAD_CLIENT_SECRET: Password for the service principal created in step 2
 - OPENSHIFT_CLUSTER_PREFIX: Used in resource naming. Default is smartfmcluster.
+- NETWORK_RESOURCE_GROUP: Resource group containing the network resources
 4. Execute the pipeline
 
 **ORIGINAL INSTRUCTIONS**

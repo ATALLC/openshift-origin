@@ -32,6 +32,7 @@ stages:
               sed -i.bak 's|AADCLIENTID|$(AAD_CLIENT_ID)|g' azuredeploy.parameters.json
               sed -i.bak 's|AADCLIENTSECRET|$(AAD_CLIENT_SECRET)|g' azuredeploy.parameters.json
               sed -i.bak 's|OPENSHIFTCLUSTERPREFIX|$(OPENSHIFT_CLUSTER_PREFIX)|g' azuredeploy.parameters.json
+              sed -i.bak 's|NETWORKRESOURCEGROUP|$(NETWORK_RESOURCE_GROUP)|g' azuredeploy.parameters.json
             displayName: 'Update variables in parameter file from pipeline variables'
           - task: AzureResourceGroupDeployment@2
             displayName: 'Deploy Openshift Origin Cluster'
