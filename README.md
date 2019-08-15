@@ -19,6 +19,7 @@
 - KEYVAULT_NAME: Name of the key vault with all the deployment secrets
 - AAD_CLIENT_ID: AppId for the service principal created in step 2
 - AAD_CLIENT_SECRET: Password for the service principal created in step 2
+- OPENSHIFT_CLUSTER_PREFIX: Used in resource naming. Default is smartfmcluster.
 4. Execute the pipeline
 
 **ORIGINAL INSTRUCTIONS**
