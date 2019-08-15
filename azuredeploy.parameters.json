@@ -18,7 +18,7 @@
 			"value": "managed"
 		},
 		"openshiftClusterPrefix": {
-			"value": "smartfmcluster"
+			"value": "OPENSHIFTCLUSTERPREFIX"
 		},
 		"masterInstanceCount": {
 			"value": MASTERCOUNT
