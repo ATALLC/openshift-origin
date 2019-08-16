@@ -31,6 +31,9 @@ export STORAGEKIND=${24}
 export MASTERCLUSTERTYPE=${30}
 export PRIVATEDNS=${32}
 
+# Setting DOMAIN variable
+export DOMAIN=`domainname -d`
+
 # Determine if Commercial Azure or Azure Government
 CLOUD=$( curl -H Metadata:true "http://169.254.169.254/metadata/instance/compute/location?api-version=2017-04-02&format=text" | cut -c 1-2 )
 export CLOUD=${CLOUD^^}
