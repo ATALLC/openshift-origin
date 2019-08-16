@@ -70,6 +70,39 @@
 		},
 		"networkResourceGroup": {
 			"value": "NETWORKRESOURCEGROUP"
+		},
+		"vnetName": {
+		    "value": "VIRTUALNETNAME"
+		},
+		"masterSubnetName": {
+			"value": "MASTERSUBNETNAME"
+		},
+		"nodeSubnetName": {
+			"value": "NODESUBNETNAME"
+		},
+		"masterNetworkSecurityGroupName": {
+			"value": "MASTERNETWORKSECURITYGROUPNAME"
+		},
+		"infrastructureNetworkSecurityGroupName": {
+			"value": "INFRASTRUCTURENETWORKSECURITYGROUPNAME"
+		},
+	    "nodeNetworkSecurityGroupName": {
+			"value": "NODENETWORKSECURITYGROUPNAME"
+		},
+		"enablePublicAccess": {
+			"value": "ENABLEPUBLICACCESS"
+		},
+		"infraLbPublicIpDnsLabel": {
+			"value": "INFRASTRUCTUREPUBLICIPDNSPREFIX"
+		},
+		"openshiftMasterPublicIpDnsLabel": {
+			"value": "MASTERPUBLICIPDNSPREFIX"
+		},
+		"infraStaticPrivateIp": {
+			"value": "INFRASTRUCTURESTATICPRIVATEIP"
+		},
+		"openshiftMasterStaticPrivateIp": {
+			"value": "OPENSHIFTSTATICPRIVATEIP"
 		}
 	}
 }

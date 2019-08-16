@@ -21,6 +21,17 @@
 - AAD_CLIENT_SECRET: Password for the service principal created in step 2
 - OPENSHIFT_CLUSTER_PREFIX: Used in resource naming. Default is smartfmcluster.
 - NETWORK_RESOURCE_GROUP: Resource group containing the network resources
+- VNET_NAME: Virtual network name
+- MASTER_SUBNET_NAME: Master subnet name
+- NODE_SUBNET_NAME: Node subnet name
+- MASTER_NETWORK_SECURITY_GROUP_NAME: Master network security group name
+- INFRASTRUCTURE_NETWORK_SECURITY_GROUP_NAME: Infrastructure network security group name
+- NODE_NETWORK_SECURITY_GROUP_NAME: Node network security group name
+- ENABLE_PUBLIC_ACCESS: Create public ips for public load balancers if true
+- INFRASTRUCTURE_PUBLIC_IP_DNS_LABEL: Infrastructure public IP DNS prefix
+- OPENSHIFT_MASTER_PUBLIC_IP_DNS_LABEL: OpenShift master public IP DNS prefix
+- INFRASTRUCTURE_STATIC_PRIVATE_IP: Static private IP to assign to infrastructure internal load balancer if public access is not enabled
+- OPENSHIFT_STATIC_PRIVATE_IP: Static private IP to assign to openshift internal load balancer if public access is not enabled
 4. Execute the pipeline
 
 **ORIGINAL INSTRUCTIONS**

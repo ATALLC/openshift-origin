@@ -33,6 +33,17 @@ stages:
               sed -i.bak 's|AADCLIENTSECRET|$(AAD_CLIENT_SECRET)|g' azuredeploy.parameters.json
               sed -i.bak 's|OPENSHIFTCLUSTERPREFIX|$(OPENSHIFT_CLUSTER_PREFIX)|g' azuredeploy.parameters.json
               sed -i.bak 's|NETWORKRESOURCEGROUP|$(NETWORK_RESOURCE_GROUP)|g' azuredeploy.parameters.json
+              sed -i.bak 's|VIRTUALNETNAME|$(VNET_NAME)|g' azuredeploy.parameters.json
+              sed -i.bak 's|MASTERSUBNETNAME|$(MASTER_SUBNET_NAME)|g' azuredeploy.parameters.json
+              sed -i.bak 's|NODESUBNETNAME|$(NODE_SUBNET_NAME)|g' azuredeploy.parameters.json
+              sed -i.bak 's|MASTERNETWORKSECURITYGROUPNAME|$(MASTER_NETWORK_SECURITY_GROUP_NAME)|g' azuredeploy.parameters.json
+              sed -i.bak 's|INFRASTRUCTURENETWORKSECURITYGROUPNAME|$(INFRASTRUCTURE_NETWORK_SECURITY_GROUP_NAME)|g' azuredeploy.parameters.json
+              sed -i.bak 's|NODENETWORKSECURITYGROUPNAME|$(NODE_NETWORK_SECURITY_GROUP_NAME)|g' azuredeploy.parameters.json
+              sed -i.bak 's|ENABLEPUBLICACCESS|$(ENABLE_PUBLIC_ACCESS)|g' azuredeploy.parameters.json
+              sed -i.bak 's|INFRASTRUCTUREPUBLICIPDNSPREFIX|$(INFRASTRUCTURE_PUBLIC_IP_DNS_PREFIX)|g' azuredeploy.parameters.json
+              sed -i.bak 's|MASTERPUBLICIPDNSPREFIX|$(MASTER_PUBLIC_IP_DNS_PREFIX)|g' azuredeploy.parameters.json
+              sed -i.bak 's|INFRASTRUCTURESTATICPRIVATEIP|$(INFRASTRUCTURE_STATIC_PRIVATE_IP)|g' azuredeploy.parameters.json
+              sed -i.bak 's|OPENSHIFTSTATICPRIVATEIP|$(OPENSHIFT_STATIC_PRIVATE_IP)|g' azuredeploy.parameters.json
             displayName: 'Update variables in parameter file from pipeline variables'
           - task: AzureResourceGroupDeployment@2
             displayName: 'Deploy Openshift Origin Cluster'

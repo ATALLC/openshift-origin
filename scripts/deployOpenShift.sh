@@ -28,6 +28,8 @@ export METRICS=${21}
 export LOGGING=${22}
 export AZURE=${23}
 export STORAGEKIND=${24}
+export MASTERCLUSTERTYPE=${30}
+export PRIVATEDNS=${32}
 
 # Determine if Commercial Azure or Azure Government
 CLOUD=$( curl -H Metadata:true "http://169.254.169.254/metadata/instance/compute/location?api-version=2017-04-02&format=text" | cut -c 1-2 )
@@ -93,6 +95,19 @@ then
 else
   DOCKERREGISTRYYAML=dockerregistrypublic.yaml
   export CLOUDNAME="AzurePublicCloud"
+fi
+
+# Configure master cluster address information based on Cluster type (private or public)
+echo $(date) " - Create variable for master cluster address based on cluster type"
+if [[ $MASTERCLUSTERTYPE == "false" ]]
+then
+	MASTERCLUSTERADDRESS="openshift_master_cluster_hostname=$MASTER-0
+openshift_master_cluster_public_hostname=$PRIVATEDNS
+openshift_master_cluster_public_vip=$PRIVATEDNS"
+else
+	MASTERCLUSTERADDRESS="openshift_master_cluster_hostname=$MASTERPUBLICIPHOSTNAME
+openshift_master_cluster_public_hostname=$MASTERPUBLICIPHOSTNAME
+openshift_master_cluster_public_vip=$MASTERPUBLICIPADDRESS"
 fi
 
 # Create Master nodes grouping
@@ -172,9 +187,8 @@ openshift_router_selector='region=infra'
 openshift_registry_selector='region=infra'
 
 $HAMODE
-openshift_master_cluster_hostname=$MASTERPUBLICIPHOSTNAME
-openshift_master_cluster_public_hostname=$MASTERPUBLICIPHOSTNAME
-openshift_master_cluster_public_vip=$MASTERPUBLICIPADDRESS
+# Addresses for connecting to the OpenShift master nodes
+$MASTERCLUSTERADDRESS
 
 # Enable HTPasswdPasswordIdentityProvider
 openshift_master_identity_providers=[{'name': 'htpasswd_auth', 'login': 'true', 'challenge': 'true', 'kind': 'HTPasswdPasswordIdentityProvider', 'filename': '/etc/origin/master/htpasswd'}]
@@ -377,6 +391,21 @@ then
 	   echo $(date) "- Logging configuration failed"
 	   exit 12
 	fi
+fi
+
+# Creating variables file for private master and Azure AD configuration playbook
+echo $(date) " - Creating variables file for future playbooks"
+cat > /home/$SUDOUSER/openshift-container-platform-playbooks/vars.yaml <<EOF
+admin_user: $SUDOUSER
+master_lb_private_dns: $PRIVATEDNS
+domain: $DOMAIN
+EOF
+
+# Configure cluster for private masters
+if [[ $MASTERCLUSTERTYPE == "false" ]]
+then
+	echo $(date) " - Configure cluster for private masters"
+	runuser -l $SUDOUSER -c "ansible-playbook -f 30 ~/openshift-container-platform-playbooks/activate-private-lb-fqdn.31x.yaml"
 fi
 
 # Delete yaml files
