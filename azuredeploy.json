@@ -902,7 +902,7 @@
 					"id": "[variables('masterLbFrontEndConfigId')]"
 				},
 				"protocol": "tcp",
-				"frontendPort": "443",
+				"frontendPort": "[copyIndex(443)]",
 				"backendPort": 443,
 				"enableFloatingIP": false
 			}
