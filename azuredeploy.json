@@ -1511,20 +1511,10 @@
 						}
 					},
 					"enablePublicAccess": {
-						"type": "string",
-						"defaultValue": "false",
-						"allowedValues": [
-							"true", "false"
-						],
-						"metadata": {
-							"description": "Create public IP addresses"
-						}
+						"value": "[parameters('enablePublicAccess')]"
 					},
 					"openshiftMasterStaticPrivateIp": {
-						"type": "string",
-						"metadata": {
-							"description": "Static private IP for master load balancer"
-						}
+						"value": "[parameters('openshiftMasterStaticPrivateIp')]"
 					}
 				}
 			}

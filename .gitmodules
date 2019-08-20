@@ -1,0 +1,7 @@
+[submodule "openshift-container-platform-playbooks"]
+	path = openshift-container-platform-playbooks
+	url = https://github.com/Microsoft/openshift-container-platform-playbooks.git
+[submodule "openshift-ansible"]
+	path = openshift-ansible
+	url = https://github.com/openshift/openshift-ansible
+	branch = release-3.9
