@@ -56,15 +56,23 @@ sed -i -e "s/^#pty=False/pty=False/" /etc/ansible/ansible.cfg
 sed -i -e "s/^#stdout_callback = skippy/stdout_callback = skippy/" /etc/ansible/ansible.cfg
 
 # Cloning Ansible playbook repository
-((cd /home/$SUDOUSER && git clone https://github.com/Microsoft/openshift-container-platform-playbooks.git) || (cd openshift-container-platform-playbooks && git pull))
+if [ -d /home/$SUDOUSER/openshift-ansible-ata ]
+then
+  echo " - Cleaning old playbooks"
+  rm -rf /home/${SUDOUSER}/openshift-ansible-ata
+else
+  echo " - Retrieving playbooks"
+fi
+runuser -l $SUDOUSER -c "git clone --recurse-submodules -b existing-network-3.9 https://github.com/ATALLC/openshift-origin.git /home/$SUDOUSER/openshift-ansible-ata"
+chmod -R 777 /home/$SUDOUSER/openshift-ansible-ata
 if [ -d /home/${SUDOUSER}/openshift-container-platform-playbooks ]
 then
   echo " - Retrieved playbooks successfully"
+  mv /home/${SUDOUSER}/openshift-ansible-ata/openshift-container-platform-playbooks /home/${SUDOUSER}/openshift-container-platform-playbooks
 else
   echo " - Retrieval of playbooks failed"
   exit 99
 fi
-
 # Create playbook to update ansible.cfg file
 
 cat > updateansiblecfg.yaml <<EOF
@@ -245,9 +253,7 @@ $nodegroup
 EOF
 
 echo $(date) " - Cloning openshift-ansible repo for use in installation"
-
-runuser -l $SUDOUSER -c "git clone -b release-3.9 https://github.com/openshift/openshift-ansible /home/$SUDOUSER/openshift-ansible"
-chmod -R 777 /home/$SUDOUSER/openshift-ansible
+mv /home/$SUDOUSER/openshift-ansible-ata/openshift-ansible /home/$SUDOUSER/openshift-ansible
 
 # Run a loop playbook to ensure DNS Hostname resolution is working prior to continuing with script
 echo $(date) " - Running DNS Hostname resolution check"

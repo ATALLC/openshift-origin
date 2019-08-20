@@ -376,6 +376,25 @@
 				"skuTier": "Standard"
 			}
 		},
+		"mstrLbRule": [{
+			"name": "OpenShiftAdminConsole",
+			"properties": {
+				"frontendIPConfiguration": {
+					"id": "[variables('masterLbFrontEndConfigId')]"
+				},
+				"backendAddressPool": {
+					"id": "[variables('masterLbBackendPoolId')]"
+				},
+				"protocol": "Tcp",
+				"loadDistribution": "SourceIP",
+				"idleTimeoutInMinutes": 30,
+				"frontendPort": 443,
+				"backendPort": 443,
+				"probe": {
+					"id": "[variables('masterLbHttpsProbeId')]"
+				}
+			}
+		}],
 		"managedStorageCount": 3,
 		"unmanagedStorageCount": "[length(variables('newStorageAccountArray'))]",
 		"storageLoopCount": "[concat(parameters('storageKind'), 'StorageCount')]",
@@ -831,25 +850,7 @@
 				"backendAddressPools": [{
 					"name": "loadBalancerBackEnd"
 				}],
-				"loadBalancingRules": [{
-					"name": "OpenShiftAdminConsole",
-					"properties": {
-						"frontendIPConfiguration": {
-							"id": "[variables('masterLbFrontEndConfigId')]"
-						},
-						"backendAddressPool": {
-							"id": "[variables('masterLbBackendPoolId')]"
-						},
-						"protocol": "Tcp",
-						"loadDistribution": "SourceIP",
-						"idleTimeoutInMinutes": 30,
-						"frontendPort": 443,
-						"backendPort": 443,
-						"probe": {
-							"id": "[variables('masterLbHttpsProbeId')]"
-						}
-					}
-				}],
+				"loadBalancingRules": "[if(equals(parameters('enablePublicAccess'), 'true'), variables('mstrLbRule'), json('[]'))]",
 				"probes": [{
 					"name": "httpsProbe",
 					"properties": {
@@ -880,6 +881,29 @@
 				"protocol": "tcp",
 				"frontendPort": "[copyIndex(2200)]",
 				"backendPort": 22,
+				"enableFloatingIP": false
+			}
+		},
+		{
+			"apiVersion": "[variables('apiVersionNetwork')]",
+			"type": "Microsoft.Network/loadBalancers/inboundNatRules",
+			"name": "[concat(variables('masterLoadBalancerName'), '/', 'HTTPS-', variables('openshiftMasterHostname'), copyIndex())]",
+			"condition": "[equals(parameters('enablePublicAccess'), 'false')]",
+			"location": "[variables('location')]",
+			"copy": {
+				"name": "masterLbLoop",
+				"count": "[parameters('masterInstanceCount')]"
+			},
+			"dependsOn": [
+				"[variables('masterLbId')]"
+			],
+			"properties": {
+				"frontendIPConfiguration": {
+					"id": "[variables('masterLbFrontEndConfigId')]"
+				},
+				"protocol": "tcp",
+				"frontendPort": "443",
+				"backendPort": 443,
 				"enableFloatingIP": false
 			}
 		},
