@@ -278,7 +278,7 @@ DOMAIN=`domainname -d`
 DNSSERVER=`tail -1 /etc/resolv.conf | cut -d ' ' -f 2`
 
 echo $(date) " - restarting systemd-logind NetworkManager after hostname change"
-runuser -l $SUDOUSER -c "systemctl restart systemd-logind NetworkManager"
+systemctl restart systemd-logind NetworkManager
 
 runuser -l $SUDOUSER -c "ansible-playbook /home/$SUDOUSER/openshift-ansible/playbooks/openshift-node/network_manager.yml"
 
