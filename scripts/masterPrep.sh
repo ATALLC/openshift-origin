@@ -26,13 +26,26 @@ echo $(date) " - System updates successfully installed"
 
 # Only install Ansible and pyOpenSSL on Master-0 Node
 # python-passlib needed for metrics
+echo $(date) " - Install Ansible on the master node"
 
 if hostname -f|grep -- "-0" >/dev/null
 then
-    echo $(date) " - Installing Ansible, pyOpenSSL and python-passlib"
-    yum -y --enablerepo=epel install pyOpenSSL python-passlib
-	yum -y install https://releases.ansible.com/ansible/rpm/release/epel-7-x86_64/ansible-2.6.2-1.el7.ans.noarch.rpm
+    echo $(date) " - Installing Ansible"
+    ### ADD THE COMMANDS TO COPY THE RPMS ###
+    #COPY the RPMS to /tmp/ansible-rpms/
+	  yum -y install /tmp/ansible-rpms/*.rpm
 fi
+
+echo $(date) " - Ansible installed successfully"
+
+if hostname -f|grep -- "-0" >/dev/null
+then
+    echo $(date) " - Installing pyOpenSSL and python-passlib"
+    yum -y --enablerepo=epel install pyOpenSSL python-passlib
+	#yum -y install https://releases.ansible.com/ansible/rpm/release/epel-7-x86_64/ansible-2.6.2-1.el7.ans.noarch.rpm
+fi
+
+echo $(date) " - pyOpenSSL and python-passlib installed successfully"
 
 # Install java to support metrics
 echo $(date) " - Installing Java"
