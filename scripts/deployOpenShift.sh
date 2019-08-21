@@ -263,6 +263,9 @@ $nodegroup
 [new_nodes]
 EOF
 
+echo $(date) " - restarting systemd-logind NetworkManager after hostname change"
+runuser -l $SUDOUSER -c "systemctl restart systemd-logind NetworkManager"
+
 echo $(date) " - Cloning openshift-ansible repo for use in installation"
 mv /home/$SUDOUSER/openshift-origin/openshift-ansible /home/$SUDOUSER/openshift-ansible
 chmod -R 777 /home/$SUDOUSER/openshift-ansible
