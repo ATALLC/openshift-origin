@@ -119,12 +119,12 @@ else
   export CLOUDNAME="AzurePublicCloud"
 fi
 
-# Configure master cluster address information based on Cluster type (private or public)
+# Configure master cluster address information based on Cluster type (private, false or public, true)
 echo $(date) " - Create variable for master cluster address based on cluster type"
 if [[ $MASTERCLUSTERTYPE == "false" ]]
 then
 	MASTERCLUSTERADDRESS="openshift_master_cluster_hostname=$MASTER-0
-openshift_master_cluster_public_hostname=$PRIVATEDNS
+openshift_master_cluster_public_hostname=$MASTER-0
 openshift_master_cluster_public_vip=$PRIVATEDNS"
 else
 	MASTERCLUSTERADDRESS="openshift_master_cluster_hostname=$MASTERPUBLICIPHOSTNAME

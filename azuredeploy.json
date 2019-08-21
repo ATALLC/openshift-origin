@@ -1470,10 +1470,10 @@
 						"value": "[variables('openshiftMasterHostname')]"
 					},
 					"openshiftMasterPublicIpFqdn": {
-						"value": "[if(equals(parameters('enablePublicAccess'), 'true'), reference(concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', parameters('networkResourceGroup'), '/providers/Microsoft.Network/publicIPAddresses/', parameters('openshiftMasterPublicIpDnsLabel')), variables('apiVersionStorage')).dnsSettings.fqdn, parameters('openshiftMasterStaticPrivateIp'))]"
+						"value": "[if(equals(parameters('enablePublicAccess'), 'true'), reference(concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', parameters('networkResourceGroup'), '/providers/Microsoft.Network/publicIPAddresses/', parameters('openshiftMasterPublicIpDnsLabel')), variables('apiVersionStorage')).dnsSettings.fqdn, '')]"
 					},
 					"openshiftMasterPublicIpAddress": {
-						"value": "[if(equals(parameters('enablePublicAccess'), 'true'), reference(concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', parameters('networkResourceGroup'), '/providers/Microsoft.Network/publicIPAddresses/', parameters('openshiftMasterPublicIpDnsLabel')), variables('apiVersionStorage')).ipAddress, parameters('openshiftMasterStaticPrivateIp'))]"
+						"value": "[if(equals(parameters('enablePublicAccess'), 'true'), reference(concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', parameters('networkResourceGroup'), '/providers/Microsoft.Network/publicIPAddresses/', parameters('openshiftMasterPublicIpDnsLabel')), variables('apiVersionStorage')).ipAddress, '')]"
 					},
 					"openshiftInfraHostname": {
 						"value": "[variables('openshiftInfraHostname')]"
@@ -1515,7 +1515,7 @@
 						"value": "[parameters('aadClientSecret')]"
 					},
 					"nipioDomain": {
-						"value": "[concat(parameters('infraStaticPrivateIp'), '.nip.io')]"
+						"value": "[concat(if(equals(parameters('enablePublicAccess'), 'true'), reference(parameters('infraLbPublicIpDnsLabel')).ipAddress, reference(concat(variables('openshiftInfraHostname'), '-0-nic')).ipConfigurations[0].properties.privateIPAddress), '.nip.io')]"
 					},
 					"customDomain": {
 						"value": "[variables('defaultSubDomain')]"
@@ -1538,7 +1538,7 @@
 						"value": "[parameters('enablePublicAccess')]"
 					},
 					"openshiftMasterStaticPrivateIp": {
-						"value": "[parameters('openshiftMasterStaticPrivateIp')]"
+						"value": "[reference(concat(variables('openshiftMasterHostname'), '-0-nic')).ipConfigurations[0].properties.privateIPAddress]"
 					}
 				}
 			}
