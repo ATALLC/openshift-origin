@@ -263,9 +263,6 @@ $nodegroup
 [new_nodes]
 EOF
 
-echo $(date) " - restarting systemd-logind NetworkManager after hostname change"
-runuser -l $SUDOUSER -c "systemctl restart systemd-logind NetworkManager"
-
 echo $(date) " - Cloning openshift-ansible repo for use in installation"
 mv /home/$SUDOUSER/openshift-origin/openshift-ansible /home/$SUDOUSER/openshift-ansible
 chmod -R 777 /home/$SUDOUSER/openshift-ansible
@@ -279,6 +276,9 @@ echo $(date) " - DNS Hostname resolution check complete"
 echo $(date) " - Setting up NetworkManager on eth0"
 DOMAIN=`domainname -d`
 DNSSERVER=`tail -1 /etc/resolv.conf | cut -d ' ' -f 2`
+
+echo $(date) " - restarting systemd-logind NetworkManager after hostname change"
+runuser -l $SUDOUSER -c "systemctl restart systemd-logind NetworkManager"
 
 runuser -l $SUDOUSER -c "ansible-playbook /home/$SUDOUSER/openshift-ansible/playbooks/openshift-node/network_manager.yml"
 
