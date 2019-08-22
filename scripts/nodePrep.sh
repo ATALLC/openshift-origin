@@ -69,5 +69,14 @@ fi
 systemctl enable docker
 systemctl start docker
 
-echo $(date) " - Script Complete"
+### Copy the zip archive to /tmp/image_archive
 
+# cd /tmp/image_archive
+docker load -i openshift_origin-pod.docker
+docker load -i openshift_origin-docker-registry.docker
+docker load -i openshift_origin-deployer.docker
+docker load -i openshift_origin-haproxy-router.docker
+docker load -i cockpit_kubernetes.docker
+docker load -i openshift_origin-node.docker
+
+echo $(date) " - Script Complete"
