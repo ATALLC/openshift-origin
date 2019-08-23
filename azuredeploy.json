@@ -2,14 +2,6 @@
 	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json",
 	"contentVersion": "1.0.0.0",
 	"parameters": {
-		"_artifactsLocation": {
-			"type": "string",
-			"metadata": {
-				"description": "The base URL where artifacts required by this template are located. When the template is deployed using the accompanying scripts, a private location in the subscription will be used and this value will be automatically generated.",
-				"artifactsBaseUrl": ""
-			},
-			"defaultValue": "https://raw.githubusercontent.com/Microsoft/openshift-origin/master"
-		},
 		"masterVmSize": {
 			"type": "string",
 			"defaultValue": "Standard_DS3_v2",
@@ -310,6 +302,90 @@
 			"metadata": {
 			    "description": "Static private IP for master load balancer"
 			}
+		},
+		"nodePrepScriptUrl": {
+			"type": "string",
+			"metadata": {
+				"description": "Node prep script URL"
+			}
+		},
+		"masterPrepScriptUrl": {
+			"type": "string",
+			"metadata": {
+				"description": "Master prep script URL"
+			}
+		},
+		"openshiftDeploymentScriptUrl": {
+			"type": "string",
+			"metadata": {
+				"description": "Openshift deploy prep script URL"
+			}
+		},
+		"clusterNodeDeploymentTemplateUrl": {
+			"type": "string",
+			"metadata": {
+				"description": "Cluster node ARM template URL"
+			}
+		},
+		"openshiftDeploymentTemplateUrl": {
+			"type": "string",
+			"metadata": {
+				"description": "Openshift ARM template URL"
+			}
+		},
+		"ansibleRPMUrl": {
+			"type": "string",
+			"metadata": {
+				"description": "Ansible RPM URL"
+			}
+		},
+		"openshiftAnsibleUrl": {
+			"type": "string",
+			"metadata": {
+				"description": "Openshift ansible archive URL"
+			}
+		},
+		"openshiftContainerPlatformPlaybooksUrl": {
+			"type": "string",
+			"metadata": {
+				"description": "Openshift container platform playbooks archive URL"
+			}
+		},
+		"cockpitKubernetesImageUrl": {
+			"type": "string",
+			"metadata": {
+				"description": "Cockpit kubernetes Image URL"
+			}
+		},
+		"openshiftOriginDeployerImageUrl": {
+			"type": "string",
+			"metadata": {
+				"description": "Openshift origin deployer image URL"
+			}
+		},
+		"openshiftOriginDockerRegistryImageUrl": {
+			"type": "string",
+			"metadata": {
+				"description": "Openshift origin docker registry image URL"
+			}
+		},
+		"openshiftOriginHAProxyImageUrl": {
+			"type": "string",
+			"metadata": {
+				"description": "Openshift origin HA proxy iamge URL"
+			}
+		},
+		"openshiftOriginPodImageUrl": {
+			"type": "string",
+			"metadata": {
+				"description": "Openshift origin pod image URL"
+			}
+		},
+		"openshiftOriginNodeImageUrl": {
+			"type": "string",
+			"metadata": {
+				"description": "Openshift origin node image URL"
+			}
 		}
 	},
 	"variables": {
@@ -466,14 +542,9 @@
 		},
 		"singlequote": "'",
 		"sshKeyPath": "[concat('/home/', parameters('adminUsername'), '/.ssh/authorized_keys')]",
-		"nodePrepScriptUrl": "[concat(parameters('_artifactsLocation'), '/scripts/nodePrep.sh')]",
-		"masterPrepScriptUrl": "[concat(parameters('_artifactsLocation'), '/scripts/masterPrep.sh')]",
-		"openshiftDeploymentScriptUrl": "[concat(parameters('_artifactsLocation'), '/scripts/deployOpenShift.sh')]",
 		"nodePrepScriptFileName": "nodePrep.sh",
 		"masterPrepScriptFileName": "masterPrep.sh",
 		"openshiftDeploymentScriptFileName": "deployOpenShift.sh",
-		"clusterNodeDeploymentTemplateUrl": "[concat(parameters('_artifactsLocation'), '/nested/clusternode.json')]",
-		"openshiftDeploymentTemplateUrl": "[concat(parameters('_artifactsLocation'), '/nested/openshiftdeploy.json')]",
 		"vmSizesMap": {
 			"Standard_A4": {
 				"storageAccountType": "Standard_LRS",
@@ -1102,7 +1173,7 @@
 			"properties": {
 				"mode": "Incremental",
 				"templateLink": {
-					"uri": "[variables('clusterNodeDeploymentTemplateUrl')]",
+					"uri": "[parameters('clusterNodeDeploymentTemplateUrl')]",
 					"contentVersion": "1.0.0.0"
 				},
 				"parameters": {
@@ -1184,7 +1255,7 @@
 			"properties": {
 				"mode": "Incremental",
 				"templateLink": {
-					"uri": "[variables('clusterNodeDeploymentTemplateUrl')]",
+					"uri": "[parameters('clusterNodeDeploymentTemplateUrl')]",
 					"contentVersion": "1.0.0.0"
 				},
 				"parameters": {
@@ -1266,7 +1337,7 @@
 			"properties": {
 				"mode": "Incremental",
 				"templateLink": {
-					"uri": "[variables('clusterNodeDeploymentTemplateUrl')]",
+					"uri": "[parameters('clusterNodeDeploymentTemplateUrl')]",
 					"contentVersion": "1.0.0.0"
 				},
 				"parameters": {
@@ -1358,11 +1429,11 @@
 				"autoUpgradeMinorVersion": true,
 				"settings": {
 					"fileUris": [
-						"[variables('masterPrepScriptUrl')]"
+						"[parameters('masterPrepScriptUrl')]"
 					]
 				},
 				"protectedSettings": {
-					"commandToExecute": "[concat('bash ', variables('masterPrepScriptFileName'), ' ', variables('newStorageAccountPersistentVolume1'), ' ', parameters('adminUsername'), ' ', variables('location'))]"
+					"commandToExecute": "[concat('bash ', variables('masterPrepScriptFileName'), ' ', variables('newStorageAccountPersistentVolume1'), ' ', parameters('adminUsername'), ' ', variables('location'), ' ', parameters('ansibleRPMUrl'), ' ', parameters('cockpitKubernetesImageUrl'), ' ', parameters('openshiftOriginDeployerImageUrl'), ' ', parameters('openshiftOriginDockerRegistryImageUrl'), ' ', parameters('openshiftOriginHAProxyImageUrl'), ' ', parameters('openshiftOriginPodImageUrl'), ' ', parameters('openshiftOriginNodeImageUrl'))]"
 				}
 			}
 		}, {
@@ -1391,11 +1462,11 @@
 				"autoUpgradeMinorVersion": true,
 				"settings": {
 					"fileUris": [
-						"[variables('nodePrepScriptUrl')]"
+						"[parameters('nodePrepScriptUrl')]"
 					]
 				},
 				"protectedSettings": {
-					"commandToExecute": "[concat('bash ', variables('nodePrepScriptFileName'))]"
+					"commandToExecute": "[concat('bash ', variables('nodePrepScriptFileName'), ' ', parameters('cockpitKubernetesImageUrl'), ' ', parameters('openshiftOriginDeployerImageUrl'), ' ', parameters('openshiftOriginDockerRegistryImageUrl'), ' ', parameters('openshiftOriginHAProxyImageUrl'), ' ', parameters('openshiftOriginPodImageUrl'), ' ', parameters('openshiftOriginNodeImageUrl'))]"
 				}
 			}
 		}, {
@@ -1424,11 +1495,11 @@
 				"autoUpgradeMinorVersion": true,
 				"settings": {
 					"fileUris": [
-						"[variables('nodePrepScriptUrl')]"
+						"[parameters('nodePrepScriptUrl')]"
 					]
 				},
 				"protectedSettings": {
-					"commandToExecute": "[concat('bash ', variables('nodePrepScriptFileName'))]"
+					"commandToExecute": "[concat('bash ', variables('nodePrepScriptFileName'), ' ', parameters('cockpitKubernetesImageUrl'), ' ', parameters('openshiftOriginDeployerImageUrl'), ' ', parameters('openshiftOriginDockerRegistryImageUrl'), ' ', parameters('openshiftOriginHAProxyImageUrl'), ' ', parameters('openshiftOriginPodImageUrl'), ' ', parameters('openshiftOriginNodeImageUrl'))]"
 				}
 			}
 		}, {
@@ -1444,18 +1515,15 @@
 			"properties": {
 				"mode": "Incremental",
 				"templateLink": {
-					"uri": "[variables('openshiftDeploymentTemplateUrl')]",
+					"uri": "[parameters('openshiftDeploymentTemplateUrl')]",
 					"contentVersion": "1.0.0.0"
 				},
 				"parameters": {
-					"_artifactsLocation": {
-						"value": "[parameters('_artifactsLocation')]"
-					},
 					"apiVersionCompute": {
 						"value": "[variables('apiVersionCompute')]"
 					},
 					"openshiftDeploymentScriptUrl": {
-						"value": "[variables('openshiftDeploymentScriptUrl')]"
+						"value": "[parameters('openshiftDeploymentScriptUrl')]"
 					},
 					"openshiftDeploymentScriptFileName": {
 						"value": "[variables('openshiftDeploymentScriptFileName')]"
@@ -1539,6 +1607,12 @@
 					},
 					"openshiftMasterStaticPrivateIp": {
 						"value": "[reference(concat(variables('openshiftMasterHostname'), '-0-nic')).ipConfigurations[0].properties.privateIPAddress]"
+					},
+					"openshiftAnsibleUrl": {
+						"value": "[parameters('openshiftAnsibleUrl')]"
+					},
+					"openshiftContainerPlatformPlaybooksUrl": {
+						"value": "[parameters('openshiftContainerPlatformPlaybooksUrl')]"
 					}
 				}
 			}

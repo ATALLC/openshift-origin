@@ -5,6 +5,13 @@ echo $(date) " - Starting Script"
 STORAGEACCOUNT=$1
 SUDOUSER=$2
 LOCATION=$3
+ANSIBLERPMARCHIVELINK=$4
+COCKPITKUBERNETESIMAGELINK=$5
+OPENSHIFTORIGINDEPLOYERIMAGELINK=$6
+OPENSHIFTORIGINDOCKERREGISTRYIMAGELINK=$7
+OPENSHIFTORIGINHAPROXYIMAGELINK=$8
+OPENSHIFTORIGINPODIMAGELINK=$9
+OPENSHIFTORIGINNODEIMAGELINK=${10}
 
 # Install EPEL repository
 echo $(date) " - Installing EPEL"
@@ -33,25 +40,8 @@ then
     echo $(date) " - Installing Ansible"
     ### ADD THE COMMANDS TO COPY THE RPMS ###
     #COPY the RPMS to /tmp/ansible-rpms/
-    wget -P /tmp/ansible-rpms/ https://raw.githubusercontent.com/ATALLC/openshift-origin/existing-network-3.9/ansible-rpms/ansible-2.6.2-1.el7.ans.noarch.rpm
-	  wget -P /tmp/ansible-rpms/ https://raw.githubusercontent.com/ATALLC/openshift-origin/existing-network-3.9/ansible-rpms/libyaml-0.1.4-11.el7_0.x86_64.rpm
-	  wget -P /tmp/ansible-rpms/ https://raw.githubusercontent.com/ATALLC/openshift-origin/existing-network-3.9/ansible-rpms/python-babel-0.9.6-8.el7.noarch.rpm
-	  wget -P /tmp/ansible-rpms/ https://raw.githubusercontent.com/ATALLC/openshift-origin/existing-network-3.9/ansible-rpms/python-backports-1.0-8.el7.x86_64.rpm
-	  wget -P /tmp/ansible-rpms/ https://raw.githubusercontent.com/ATALLC/openshift-origin/existing-network-3.9/ansible-rpms/python-cffi-1.6.0-5.el7.x86_64.rpm
-	  wget -P /tmp/ansible-rpms/ https://raw.githubusercontent.com/ATALLC/openshift-origin/existing-network-3.9/ansible-rpms/python-enum34-1.0.4-1.el7.noarch.rpm
-	  wget -P /tmp/ansible-rpms/ https://raw.githubusercontent.com/ATALLC/openshift-origin/existing-network-3.9/ansible-rpms/python-idna-2.4-1.el7.noarch.rpm
-	  wget -P /tmp/ansible-rpms/ https://raw.githubusercontent.com/ATALLC/openshift-origin/existing-network-3.9/ansible-rpms/python-ipaddress-1.0.16-2.el7.noarch.rpm
-	  wget -P /tmp/ansible-rpms/ https://raw.githubusercontent.com/ATALLC/openshift-origin/existing-network-3.9/ansible-rpms/python-jinja2-2.7.2-3.el7_6.noarch.rpm
-	  wget -P /tmp/ansible-rpms/ https://raw.githubusercontent.com/ATALLC/openshift-origin/existing-network-3.9/ansible-rpms/python-markupsafe-0.11-10.el7.x86_64.rpm
-	  wget -P /tmp/ansible-rpms/ https://raw.githubusercontent.com/ATALLC/openshift-origin/existing-network-3.9/ansible-rpms/python-paramiko-2.1.1-9.el7.noarch.rpm
-	  wget -P /tmp/ansible-rpms/ https://raw.githubusercontent.com/ATALLC/openshift-origin/existing-network-3.9/ansible-rpms/python-ply-3.4-11.el7.noarch.rpm
-	  wget -P /tmp/ansible-rpms/ https://raw.githubusercontent.com/ATALLC/openshift-origin/existing-network-3.9/ansible-rpms/python-pycparser-2.14-1.el7.noarch.rpm
-	  wget -P /tmp/ansible-rpms/ https://raw.githubusercontent.com/ATALLC/openshift-origin/existing-network-3.9/ansible-rpms/python-setuptools-0.9.8-7.el7.noarch.rpm
-	  wget -P /tmp/ansible-rpms/ https://raw.githubusercontent.com/ATALLC/openshift-origin/existing-network-3.9/ansible-rpms/python-six-1.9.0-2.el7.noarch.rpm
-	  wget -P /tmp/ansible-rpms/ https://raw.githubusercontent.com/ATALLC/openshift-origin/existing-network-3.9/ansible-rpms/python2-cryptography-1.7.2-2.el7.x86_64.rpm
-	  wget -P /tmp/ansible-rpms/ https://raw.githubusercontent.com/ATALLC/openshift-origin/existing-network-3.9/ansible-rpms/python2-pyasn1-0.1.9-7.el7.noarch.rpm
-	  wget -P /tmp/ansible-rpms/ https://raw.githubusercontent.com/ATALLC/openshift-origin/existing-network-3.9/ansible-rpms/PyYAML-3.10-11.el7.x86_64.rpm
-    wget -P /tmp/ansible-rpms/ https://raw.githubusercontent.com/ATALLC/openshift-origin/existing-network-3.9/ansible-rpms/sshpass-1.06-2.el7.x86_64.rpm
+    wget -P /tmp/ansible-rpms/ $ANSIBLERPMARCHIVELINK
+    tar -xvf /tmp/ansible-rpms/ansible-rpms.tar
 	  yum -y install /tmp/ansible-rpms/*.rpm
 fi
 
@@ -156,13 +146,17 @@ EOF
 fi
 
 ### Copy the zip archive to /tmp/image_archive
-
+wget $COCKPITKUBERNETESIMAGELINK
+wget $OPENSHIFTORIGINDEPLOYERIMAGELINK
+wget $OPENSHIFTORIGINDOCKERREGISTRYIMAGELINK
+wget $OPENSHIFTORIGINHAPROXYIMAGELINK
+wget $OPENSHIFTORIGINPODIMAGELINK
+wget $OPENSHIFTORIGINNODEIMAGELINK
 # cd /tmp/image_archive
-docker load -i openshift_origin-pod.docker
-docker load -i openshift_origin-docker-registry.docker
-docker load -i openshift_origin-deployer.docker
-docker load -i openshift_origin-haproxy-router.docker
+docker load -i openshift_origin-pod.3.9.docker
+docker load -i openshift_origin-docker-registry.3.9.docker
+docker load -i openshift_origin-deployer.3.9.docker
+docker load -i openshift_origin-haproxy-router.3.9.docker
 docker load -i cockpit_kubernetes.docker
 docker load -i openshift_origin-node.docker
-
 echo $(date) " - Script Complete"

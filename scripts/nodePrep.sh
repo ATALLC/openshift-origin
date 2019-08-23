@@ -2,6 +2,13 @@
 
 echo $(date) " - Starting Script"
 
+COCKPITKUBERNETESIMAGELINK=$1
+OPENSHIFTORIGINDEPLOYERIMAGELINK=$2
+OPENSHIFTORIGINDOCKERREGISTRYIMAGELINK=$3
+OPENSHIFTORIGINHAPROXYIMAGELINK=$4
+OPENSHIFTORIGINPODIMAGELINK=$5
+OPENSHIFTORIGINNODEIMAGELINK=$6
+
 # Install EPEL repository
 echo $(date) " - Installing EPEL"
 
@@ -70,7 +77,12 @@ systemctl enable docker
 systemctl start docker
 
 ### Copy the zip archive to /tmp/image_archive
-
+wget $COCKPITKUBERNETESIMAGELINK
+wget $OPENSHIFTORIGINDEPLOYERIMAGELINK
+wget $OPENSHIFTORIGINDOCKERREGISTRYIMAGELINK
+wget $OPENSHIFTORIGINHAPROXYIMAGELINK
+wget $OPENSHIFTORIGINPODIMAGELINK
+wget $OPENSHIFTORIGINNODEIMAGELINK
 # cd /tmp/image_archive
 docker load -i openshift_origin-pod.docker
 docker load -i openshift_origin-docker-registry.docker

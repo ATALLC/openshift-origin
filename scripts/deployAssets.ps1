@@ -30,6 +30,7 @@ $openshiftOriginDeployerImage = "openshift_origin-deployer.3.9.docker"
 $openshiftOriginDockerRegistryImage = "openshift_origin-docker-registry.3.9.docker"
 $openshiftOriginHAProxyImage = "openshift_origin-haproxy-router.3.9.docker"
 $openshiftOriginPodImage = "openshift_origin-pod.3.9.docker"
+$openshiftOriginNodeImage = "openshift_origin-node.docker"
 
 #upload assets
 $aoutput = "Uploading $($path)/$($ansibleArchive) to $($container.CloudBlobContainer.Uri.AbsoluteUri)/$($ansibleArchive)"
@@ -74,6 +75,9 @@ Set-AzureStorageBlobContent -File "$($path)/$($openshiftOriginHAProxyImage)" -Co
 $oopioutput = "Uploading $($path)/$($openshiftOriginPodImage) to $($container.CloudBlobContainer.Uri.AbsoluteUri)/$($openshiftOriginPodImage)"
 Write-Output $oopioutput
 Set-AzureStorageBlobContent -File "$($path)/$($openshiftOriginPodImage)" -Container $container.Name -Blob $openshiftOriginPodImage -Context $ctx -Force:$Force | Out-Null
+$oonioutput = "Uploading $($path)/$($openshiftOriginNodeImage) to $($container.CloudBlobContainer.Uri.AbsoluteUri)/$($openshiftOriginNodeImage)"
+Write-Output $oonioutput
+Set-AzureStorageBlobContent -File "$($path)/$($openshiftOriginNodeImage)" -Container $container.Name -Blob $openshiftOriginNodeImage -Context $ctx -Force:$Force | Out-Null
 
 #generate download links
 $containerURI = "https://" + $san + ".blob.core.usgovcloudapi.net/" + $cn + "/"
@@ -122,3 +126,6 @@ $openshiftOriginHAProxyImageLink | Out-File $path/scripts/OPENSHIFT_ORIGIN_HA_PR
 $openshiftOriginPodImageSAS = New-AzureStorageBlobSASToken -Container $cn -Blob $openshiftOriginPodImage -Permission rwd -StartTime $startTime -ExpiryTime $endTime -Context $ctx
 $openshiftOriginPodImageLink = "$($containerURI)$($openshiftOriginPodImage)$($openshiftOriginPodImageSAS)"
 $openshiftOriginPodImageLink | Out-File $path/scripts/OPENSHIFT_ORIGIN_POD_IMAGE_LINK.txt -NoNewline
+$openshiftOriginNodeImageSAS = New-AzureStorageBlobSASToken -Container $cn -Blob $openshiftOriginNodeImage -Permission rwd -StartTime $startTime -ExpiryTime $endTime -Context $ctx
+$openshiftOriginNodeImageLink = "$($containerURI)$($openshiftOriginNodeImage)$($openshiftOriginNodeImageSAS)"
+$openshiftOriginNodeImageLink | Out-File $path/scripts/OPENSHIFT_ORIGIN_NODE_IMAGE_LINK.txt -NoNewline

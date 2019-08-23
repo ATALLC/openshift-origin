@@ -49,6 +49,14 @@ stages:
           - script: |
               ./scripts/cr_docker_archive.sh
             displayName: 'Download docker images'
+          - task: ArchiveFiles@2
+            displayName: 'Archive source folder for staging in Azure blob storage for pushing to CCE if build is successful'
+            inputs:
+              rootFolderOrFile: '$(Build.SourcesDirectory)'
+              includeRootFolder: false
+              archiveType: 'tar'
+              archiveFile: '$(Build.SourcesDirectory)/openshift-origin.tar'
+              replaceExistingArchive: true
           - task: AzurePowerShell@4
             displayName: 'Upload the deployable assets to blob store and generate SAS links'
             inputs:
@@ -97,6 +105,9 @@ stages:
               OPENSHIFT_ORIGIN_POD_IMAGE_URI=`cat scripts/OPENSHIFT_ORIGIN_POD_IMAGE_LINK.txt`
               echo $OPENSHIFT_ORIGIN_POD_IMAGE_URI
               echo "##vso[task.setvariable variable=OPENSHIFT_ORIGIN_POD_IMAGE_URI]'$OPENSHIFT_ORIGIN_POD_IMAGE_URI'"
+              OPENSHIFT_ORIGIN_NODE_IMAGE_URI=`cat scripts/OPENSHIFT_ORIGIN_NODE_IMAGE_LINK.txt`
+              echo $OPENSHIFT_ORIGIN_NODE_IMAGE_URI
+              echo "##vso[task.setvariable variable=OPENSHIFT_ORIGIN_NODE_IMAGE_URI]'$OPENSHIFT_ORIGIN_NODE_IMAGE_URI'"
             displayName: 'Load links into the pipeline'
           - script: |
               echo $(ANSIBLE_URI)
@@ -125,39 +136,24 @@ stages:
               wget -P $(Build.SourcesDirectory)/tmp/openshift_origin-haproxy-router.3.9.docker $(OPENSHIFT_ORIGIN_HA_PROXY_IMAGE_URI)
               echo $(OPENSHIFT_ORIGIN_POD_IMAGE_URI)
               wget -P $(Build.SourcesDirectory)/tmp/openshift_origin-pod.3.9.docker $(OPENSHIFT_ORIGIN_POD_IMAGE_URI)
+              echo $(OPENSHIFT_ORIGIN_NODE_IMAGE_URI)
+              wget -P $(Build.SourcesDirectory)/tmp/openshift_origin-node.docker $(OPENSHIFT_ORIGIN_NODE_IMAGE_URI)
               ls -al $(Build.SourcesDirectory)/tmp
             displayName: 'Test SAS links'
-#          - script: |
-#              sed -i.bak 's|MASTERCOUNT|$(MASTER_COUNT)|g' azuredeploy.parameters.json
-#              sed -i.bak 's|INFRCOUNT|$(INFR_COUNT)|g' azuredeploy.parameters.json
-#              sed -i.bak 's|NODECOUNT|$(NODE_COUNT)|g' azuredeploy.parameters.json
-#              sed -i.bak 's|OSADMINUSERNAME|$(OS_ADMIN_USER_NAME)|g' azuredeploy.parameters.json
-#              sed -i.bak 's|OSADMINPASSWORD|$(OS_ADMIN_PASSWORD)|g' azuredeploy.parameters.json
-#              sed -i.bak 's|SSHPUBLICKEY|$(SSH_PUBLIC_KEY)|g' azuredeploy.parameters.json
-#              sed -i.bak 's|KEYVAULTRESOURCEGROUP|$(KEYVAULT_RESOURCE_GROUP)|g' azuredeploy.parameters.json
-#              sed -i.bak 's|KEYVAULTNAME|$(KEYVAULT_NAME)|g' azuredeploy.parameters.json
-#              sed -i.bak 's|AADCLIENTID|$(AAD_CLIENT_ID)|g' azuredeploy.parameters.json
-#              sed -i.bak 's|AADCLIENTSECRET|$(AAD_CLIENT_SECRET)|g' azuredeploy.parameters.json
-#              sed -i.bak 's|OPENSHIFTCLUSTERPREFIX|$(OPENSHIFT_CLUSTER_PREFIX)|g' azuredeploy.parameters.json
-#              sed -i.bak 's|NETWORKRESOURCEGROUP|$(NETWORK_RESOURCE_GROUP)|g' azuredeploy.parameters.json
-#              sed -i.bak 's|VIRTUALNETNAME|$(VNET_NAME)|g' azuredeploy.parameters.json
-#              sed -i.bak 's|MASTERSUBNETNAME|$(MASTER_SUBNET_NAME)|g' azuredeploy.parameters.json
-#              sed -i.bak 's|NODESUBNETNAME|$(NODE_SUBNET_NAME)|g' azuredeploy.parameters.json
-#              sed -i.bak 's|MASTERNETWORKSECURITYGROUPNAME|$(MASTER_NETWORK_SECURITY_GROUP_NAME)|g' azuredeploy.parameters.json
-#              sed -i.bak 's|INFRASTRUCTURENETWORKSECURITYGROUPNAME|$(INFRASTRUCTURE_NETWORK_SECURITY_GROUP_NAME)|g' azuredeploy.parameters.json
-#              sed -i.bak 's|NODENETWORKSECURITYGROUPNAME|$(NODE_NETWORK_SECURITY_GROUP_NAME)|g' azuredeploy.parameters.json
-#              sed -i.bak 's|ENABLEPUBLICACCESS|$(ENABLE_PUBLIC_ACCESS)|g' azuredeploy.parameters.json
-#              sed -i.bak 's|INFRASTRUCTUREPUBLICIPDNSPREFIX|$(INFRASTRUCTURE_PUBLIC_IP_DNS_PREFIX)|g' azuredeploy.parameters.json
-#              sed -i.bak 's|MASTERPUBLICIPDNSPREFIX|$(MASTER_PUBLIC_IP_DNS_PREFIX)|g' azuredeploy.parameters.json
-#              sed -i.bak 's|INFRASTRUCTURESTATICPRIVATEIP|$(INFRASTRUCTURE_STATIC_PRIVATE_IP)|g' azuredeploy.parameters.json
-#              sed -i.bak 's|OPENSHIFTSTATICPRIVATEIP|$(OPENSHIFT_STATIC_PRIVATE_IP)|g' azuredeploy.parameters.json
-#            displayName: 'Update variables in parameter file from pipeline variables'
-#          - task: AzureResourceGroupDeployment@2
-#            displayName: 'Deploy Openshift Origin Cluster'
-#            inputs:
-#              azureSubscription: $(RESOURCE_MANAGER_SERVICE_CONNECTION)
-#              resourceGroupName: $(RESOURCE_GROUP)
+          - task: AzurePowerShell@4
+            displayName: 'Update Parameters File'
+            inputs:
+              azureSubscription: $(RESOURCE_MANAGER_SERVICE_CONNECTION)
+              scriptType: 'FilePath'
+              scriptPath: 'scripts/updateParameters.ps1'
+              scriptArguments: $(Build.SourcesDirectory) $(MASTER_COUNT) $(INFR_COUNT) $(NODE_COUNT) $(OS_ADMIN_USER_NAME) $(OS_ADMIN_PASSWORD) $(SSH_PUBLIC_KEY) $(KEYVAULT_RESOURCE_GROUP) $(KEYVAULT_NAME) $(SSH_PUBLIC_KEY) $(KEYVAULT_RESOURCE_GROUP) $(KEYVAULT_NAME) $(AAD_CLIENT_ID) $(AAD_CLIENT_SECRET) $(OPENSHIFT_CLUSTER_PREFIX) $(NETWORK_RESOURCE_GROUP) $(VNET_NAME) $(MASTER_SUBNET_NAME) $(NODE_SUBNET_NAME) $(MASTER_NETWORK_SECURITY_GROUP_NAME) $(INFRASTRUCTURE_NETWORK_SECURITY_GROUP_NAME) $(NODE_NETWORK_SECURITY_GROUP_NAME) $(ENABLE_PUBLIC_ACCESS) $(INFRASTRUCTURE_PUBLIC_IP_DNS_PREFIX) $(MASTER_PUBLIC_IP_DNS_PREFIX) $(INFRASTRUCTURE_STATIC_PRIVATE_IP) $(OPENSHIFT_STATIC_PRIVATE_IP) $(OPENSHIFT_STATIC_PRIVATE_IP) $(NODE_PREP_SH_URI) $(MASTER_PREP_SH_URI) $(DEPLOY_OPENSHIFT_SH_URI) $(CLUSTERNODE_JSON_URI) $(OPENSHIFT_DEPLOY_JSON_URI) $(ANSIBLE_URI) $(OPENSHIFT_ANSIBLE_URI) $(OPENSHIFT_CONTAINER_PLATFORM_PLAYBOOKS_URI) $(COCKPIT_KUBERNETES_IMAGE_URI) $(OPENSHIFT_ORIGIN_DEPLOYER_IMAGE_URI) $(OPENSHIFT_ORIGIN_DOCKER_REGISTRY_IMAGE_URI) $(OPENSHIFT_ORIGIN_HA_PROXY_IMAGE_URI) $(OPENSHIFT_ORIGIN_POD_IMAGE_URI) $(OPENSHIFT_ORIGIN_NODE_IMAGE_URI)
+              azurePowerShellVersion: 'LatestVersion'
+          - task: AzureResourceGroupDeployment@2
+            displayName: 'Deploy Openshift Origin Cluster'
+            inputs:
+              azureSubscription: $(RESOURCE_MANAGER_SERVICE_CONNECTION)
+              resourceGroupName: $(RESOURCE_GROUP)
               # location is ignored if the resource group already exists
-#              location: 'East US'
-#              csmFile: 'azuredeploy.json'
-#              csmParametersFile: 'azuredeploy.parameters.json'
+              location: 'East US'
+              csmFile: 'azuredeploy.json'
+              csmParametersFile: 'azuredeploy.parameters.json'

@@ -28,8 +28,10 @@ export METRICS=${21}
 export LOGGING=${22}
 export AZURE=${23}
 export STORAGEKIND=${24}
-export MASTERCLUSTERTYPE=${30}
-export PRIVATEDNS=${32}
+export MASTERCLUSTERTYPE=${25}
+export PRIVATEIP=${26}
+export OPENSHIFTANSIBLEARCHIVELINK=${27}
+export OPENSHIFTCONTAINERPLATFORMPLAYBOOKSARCHIVELINK=${28}
 
 # Setting DOMAIN variable
 export DOMAIN=`domainname -d`
@@ -64,17 +66,16 @@ else
   echo " - Retrieving playbooks"
 fi
 
-# Cloning Ansible playbook repository
-((cd /home/$SUDOUSER && git clone --recurse-submodules -b existing-network-3.9 https://github.com/ATALLC/openshift-origin.git) || (cd openshift-origin && git pull))
-if [ -d /home/${SUDOUSER}/openshift-origin ]
+# Pulling ansible playbook repository
+wget -P /home/${SUDOUSER}/openshift-container-platform-playbooks/ $OPENSHIFTCONTAINERPLATFORMPLAYBOOKSARCHIVELINK
+tar -xvf /home/${SUDOUSER}/openshift-container-platform-playbooks/openshift-container-platform-playbooks.tar
+if [ -d /home/${SUDOUSER}/openshift-container-platform-playbooks ]
 then
   echo " - Retrieved playbooks successfully"
 else
   echo " - Retrieval of playbooks failed"
   exit 99
 fi
-
-mv /home/${SUDOUSER}/openshift-origin/openshift-container-platform-playbooks /home/${SUDOUSER}/openshift-container-platform-playbooks
 
 # Create playbook to update ansible.cfg file
 
@@ -124,12 +125,12 @@ echo $(date) " - Create variable for master cluster address based on cluster typ
 if [[ $MASTERCLUSTERTYPE == "false" ]]
 then
 	MASTERCLUSTERADDRESS="openshift_master_cluster_hostname=$MASTER-0
-openshift_master_cluster_public_hostname=$MASTER-0
-openshift_master_cluster_public_vip=$PRIVATEDNS"
+	openshift_master_cluster_public_hostname=$MASTER-0
+	openshift_master_cluster_public_vip=$PRIVATEIP"
 else
 	MASTERCLUSTERADDRESS="openshift_master_cluster_hostname=$MASTERPUBLICIPHOSTNAME
-openshift_master_cluster_public_hostname=$MASTERPUBLICIPHOSTNAME
-openshift_master_cluster_public_vip=$MASTERPUBLICIPADDRESS"
+	openshift_master_cluster_public_hostname=$MASTERPUBLICIPHOSTNAME
+	openshift_master_cluster_public_vip=$MASTERPUBLICIPADDRESS"
 fi
 
 # Create Master nodes grouping
@@ -267,7 +268,8 @@ $nodegroup
 EOF
 
 echo $(date) " - Cloning openshift-ansible repo for use in installation"
-mv /home/$SUDOUSER/openshift-origin/openshift-ansible /home/$SUDOUSER/openshift-ansible
+wget -P /home/${SUDOUSER}/openshift-ansible/ $OPENSHIFTANSIBLEARCHIVELINK
+tar -xvf /home/${SUDOUSER}/openshift-ansible/openshift-ansible.tar
 chmod -R 777 /home/$SUDOUSER/openshift-ansible
 
 # Run a loop playbook to ensure DNS Hostname resolution is working prior to continuing with script
@@ -424,7 +426,7 @@ fi
 echo $(date) " - Creating variables file for future playbooks"
 cat > /home/$SUDOUSER/openshift-container-platform-playbooks/vars.yaml <<EOF
 admin_user: $SUDOUSER
-master_lb_private_dns: $PRIVATEDNS
+master_lb_private_dns: $MASTER-0
 domain: $DOMAIN
 EOF
 

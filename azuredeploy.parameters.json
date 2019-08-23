@@ -2,9 +2,6 @@
 	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
 	"contentVersion": "1.0.0.0",
 	"parameters": {
-		"_artifactsLocation": {
-			"value": "https://raw.githubusercontent.com/ATALLC/openshift-origin/existing-network-3.9"
-		},
 		"masterVmSize": {
 			"value": "Standard_D4s_v3"
 		},
@@ -103,6 +100,48 @@
 		},
 		"openshiftMasterStaticPrivateIp": {
 			"value": "OPENSHIFTSTATICPRIVATEIP"
+		},
+		"nodePrepScriptUrl": {
+			"value": "NODEPREPSCRIPTURL"
+		},
+		"masterPrepScriptUrl": {
+			"value": "MASTERPREPSCRIPTURL"
+		},
+		"openshiftDeploymentScriptUrl": {
+			"value": "OPENSHIFTDEPLOYMENTSCRIPTURL"
+		},
+		"clusterNodeDeploymentTemplateUrl": {
+			"value": "CLUSTERNODEDEPLOYMENTTEMPLATEURL"
+		},
+		"openshiftDeploymentTemplateUrl": {
+			"value": "OPENSHIFTDEPLOYMENTTEMPLATEURL"
+		},
+		"ansibleRPMUrl": {
+			"value": "ANSIBLERPMURL"
+		},
+		"openshiftAnsibleUrl": {
+			"value": "OPENSHIFTANSIBLEURL"
+		},
+		"openshiftContainerPlatformPlaybooksUrl": {
+			"value": "OPENSHIFTCONTAINERPLATFORMPLAYBOOKSURL"
+		},
+		"cockpitKubernetesImageUrl": {
+			"value": "COCKPITKUBERNETESIMAGEURL"
+		},
+		"openshiftOriginDeployerImageUrl": {
+			"value": "OPENSHIFTORIGINDEPLOYERIMAGEURL"
+		},
+		"openshiftOriginDockerRegistryImageUrl": {
+			"value": "OPENSHIFTORIGINDOCKERREGISTRYIMAGEURL"
+		},
+		"openshiftOriginHAProxyImageUrl": {
+			"value": "OPENSHIFTORIGINHAPROXYIMAGEURL"
+		},
+		"openshiftOriginPodImageUrl": {
+			"value": "OPENSHIFTORIGINPODIMAGEURL"
+		},
+		"openshiftOriginNodeImageUrl": {
+			"value": "OPENSHIFTORIGINNODEIMAGEURL"
 		}
 	}
 }

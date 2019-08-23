@@ -2,8 +2,8 @@
 
 echo $(date) " - Starting Script"
 
-#docker pull docker.io/openshift/origin-node
-#docker save -o openshift_origin-node.3.9.docker openshift/origin-node
+docker pull docker.io/openshift/origin-node
+docker save -o openshift_origin-node.docker openshift/origin-node
 
 #docker pull docker.io/openshift/origin-control-plane
 #docker save -o openshift_origin-control-plane.docker openshift/origin-control-plane
