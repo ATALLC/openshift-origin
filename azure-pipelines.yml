@@ -19,6 +19,8 @@ stages:
         deploy:
           steps:
           - checkout: self
+          - script: git checkout existing-network-3.9
+          - script: git submodule update --init
           #tar folders for staging in azure storage
           - task: ArchiveFiles@2
             displayName: 'Archiving Ansible RPMs'
@@ -57,59 +59,74 @@ stages:
               azurePowerShellVersion: 'LatestVersion'
           - script: |
               ANSIBLE_URI=`cat scripts/ANSIBLE_LINK.txt`
+              echo $ANSIBLE_URI
               echo "##vso[task.setvariable variable=ANSIBLE_URI]'$ANSIBLE_URI'"
               OPENSHIFT_ANSIBLE_URI=`cat scripts/OPENSHIFT_ANSIBLE_LINK.txt`
+              echo $OPENSHIFT_ANSIBLE_URI
               echo "##vso[task.setvariable variable=OPENSHIFT_ANSIBLE_URI]'$OPENSHIFT_ANSIBLE_URI'"
               OPENSHIFT_CONTAINER_PLATFORM_PLAYBOOKS_URI=`cat scripts/OPENSHIFT_CONTAINER_PLATFORM_PLAYBOOKS_LINK.txt`
+              echo $OPENSHIFT_CONTAINER_PLATFORM_PLAYBOOKS_URI
               echo "##vso[task.setvariable variable=OPENSHIFT_CONTAINER_PLATFORM_PLAYBOOKS_URI]'$OPENSHIFT_CONTAINER_PLATFORM_PLAYBOOKS_URI'"
               CLUSTERNODE_JSON_URI=`cat scripts/CLUSTERNODE_JSON_LINK.txt`
+              echo $CLUSTERNODE_JSON_URI
               echo "##vso[task.setvariable variable=CLUSTERNODE_JSON_URI]'$CLUSTERNODE_JSON_URI'"
               OPENSHIFT_DEPLOY_JSON_URI=`cat scripts/OPENSHIFT_DEPLOY_JSON_LINK.txt`
+              echo $OPENSHIFT_DEPLOY_JSON_URI
               echo "##vso[task.setvariable variable=OPENSHIFT_DEPLOY_JSON_URI]'$OPENSHIFT_DEPLOY_JSON_URI'"
               DEPLOY_OPENSHIFT_SH_URI=`cat scripts/DEPLOY_OPENSHIFT_SH_LINK.txt`
+              echo $DEPLOY_OPENSHIFT_SH_URI
               echo "##vso[task.setvariable variable=DEPLOY_OPENSHIFT_SH_URI]'$DEPLOY_OPENSHIFT_SH_URI'"
               MASTER_PREP_SH_URI=`cat scripts/MASTER_PREP_SH_LINK.txt`
+              echo $MASTER_PREP_SH_URI
               echo "##vso[task.setvariable variable=MASTER_PREP_SH_URI]'$MASTER_PREP_SH_URI'"
               NODE_PREP_SH_URI=`cat scripts/NODE_PREP_SH_LINK.txt`
+              echo $NODE_PREP_SH_URI
               echo "##vso[task.setvariable variable=NODE_PREP_SH_URI]'$NODE_PREP_SH_URI'"
               COCKPIT_KUBERNETES_IMAGE_URI=`cat scripts/COCKPIT_KUBERNETES_IMAGE_LINK.txt`
+              echo $COCKPIT_KUBERNETES_IMAGE_URI
               echo "##vso[task.setvariable variable=COCKPIT_KUBERNETES_IMAGE_URI]'$COCKPIT_KUBERNETES_IMAGE_URI'"
               OPENSHIFT_ORIGIN_DEPLOYER_IMAGE_URI=`cat scripts/OPENSHIFT_ORIGIN_DEPLOYER_IMAGE_LINK.txt`
+              echo $OPENSHIFT_ORIGIN_DEPLOYER_IMAGE_URI
               echo "##vso[task.setvariable variable=OPENSHIFT_ORIGIN_DEPLOYER_IMAGE_URI]'$OPENSHIFT_ORIGIN_DEPLOYER_IMAGE_URI'"
               OPENSHIFT_ORIGIN_DOCKER_REGISTRY_IMAGE_URI=`cat scripts/OPENSHIFT_ORIGIN_DOCKER_REGISTRY_IMAGE_LINK.txt`
+              echo $OPENSHIFT_ORIGIN_DOCKER_REGISTRY_IMAGE_URI
               echo "##vso[task.setvariable variable=OPENSHIFT_ORIGIN_DOCKER_REGISTRY_IMAGE_URI]'$OPENSHIFT_ORIGIN_DOCKER_REGISTRY_IMAGE_URI'"
               OPENSHIFT_ORIGIN_HA_PROXY_IMAGE_URI=`cat scripts/OPENSHIFT_ORIGIN_HA_PROXY_IMAGE_LINK.txt`
+              echo $OPENSHIFT_ORIGIN_HA_PROXY_IMAGE_URI
               echo "##vso[task.setvariable variable=OPENSHIFT_ORIGIN_HA_PROXY_IMAGE_URI]'$OPENSHIFT_ORIGIN_HA_PROXY_IMAGE_URI'"
               OPENSHIFT_ORIGIN_POD_IMAGE_URI=`cat scripts/OPENSHIFT_ORIGIN_POD_IMAGE_LINK.txt`
+              echo $OPENSHIFT_ORIGIN_POD_IMAGE_URI
               echo "##vso[task.setvariable variable=OPENSHIFT_ORIGIN_POD_IMAGE_URI]'$OPENSHIFT_ORIGIN_POD_IMAGE_URI'"
+            displayName: 'Load links into the pipeline'
+          - script: |
               echo $(ANSIBLE_URI)
-              wget -P $(Build.SourcesDirectory)/tmp/ $(ANSIBLE_URI)
+              wget -P $(Build.SourcesDirectory)/tmp/ansible-rpms.tar $(ANSIBLE_URI)
               echo $(OPENSHIFT_ANSIBLE_URI)
-              wget -P $(Build.SourcesDirectory)/tmp/ $(OPENSHIFT_ANSIBLE_URI)
+              wget -P $(Build.SourcesDirectory)/tmp/openshift-ansible.tar $(OPENSHIFT_ANSIBLE_URI)
               echo $(OPENSHIFT_CONTAINER_PLATFORM_PLAYBOOKS_URI)
-              wget -P $(Build.SourcesDirectory)/tmp/ $(OPENSHIFT_CONTAINER_PLATFORM_PLAYBOOKS_URI)
+              wget -P $(Build.SourcesDirectory)/tmp/openshift-container-platform-playbooks.tar $(OPENSHIFT_CONTAINER_PLATFORM_PLAYBOOKS_URI)
               echo $(CLUSTERNODE_JSON_URI)
-              wget -P $(Build.SourcesDirectory)/tmp/ $(CLUSTERNODE_JSON_URI)
+              wget -P $(Build.SourcesDirectory)/tmp/clusternode.json $(CLUSTERNODE_JSON_URI)
               echo $(OPENSHIFT_DEPLOY_JSON_URI)
-              wget -P $(Build.SourcesDirectory)/tmp/ $(OPENSHIFT_DEPLOY_JSON_URI)
+              wget -P $(Build.SourcesDirectory)/tmp/openshiftdeploy.json $(OPENSHIFT_DEPLOY_JSON_URI)
               echo $(DEPLOY_OPENSHIFT_SH_URI)
-              wget -P $(Build.SourcesDirectory)/tmp/ $(DEPLOY_OPENSHIFT_SH_URI)
+              wget -P $(Build.SourcesDirectory)/tmp/deployOpenShift.sh $(DEPLOY_OPENSHIFT_SH_URI)
               echo $(MASTER_PREP_SH_URI)
-              wget -P $(Build.SourcesDirectory)/tmp/ $(MASTER_PREP_SH_URI)
+              wget -P $(Build.SourcesDirectory)/tmp/masterPrep.sh $(MASTER_PREP_SH_URI)
               echo $(NODE_PREP_SH_URI)
-              wget -P $(Build.SourcesDirectory)/tmp/ $(NODE_PREP_SH_URI)
+              wget -P $(Build.SourcesDirectory)/tmp/nodePrep.sh $(NODE_PREP_SH_URI)
               echo $(COCKPIT_KUBERNETES_IMAGE_URI)
-              wget -P $(Build.SourcesDirectory)/tmp/ $(COCKPIT_KUBERNETES_IMAGE_URI)
+              wget -P $(Build.SourcesDirectory)/tmp/cockpit_kubernetes.docker $(COCKPIT_KUBERNETES_IMAGE_URI)
               echo $(OPENSHIFT_ORIGIN_DEPLOYER_IMAGE_URI)
-              wget -P $(Build.SourcesDirectory)/tmp/ $(OPENSHIFT_ORIGIN_DEPLOYER_IMAGE_URI)
+              wget -P $(Build.SourcesDirectory)/tmp/openshift_origin-deployer.3.9.docker $(OPENSHIFT_ORIGIN_DEPLOYER_IMAGE_URI)
               echo $(OPENSHIFT_ORIGIN_DOCKER_REGISTRY_IMAGE_URI)
-              wget -P $(Build.SourcesDirectory)/tmp/ $(OPENSHIFT_ORIGIN_DOCKER_REGISTRY_IMAGE_URI)
+              wget -P $(Build.SourcesDirectory)/tmp/openshift_origin-docker-registry.3.9.docker $(OPENSHIFT_ORIGIN_DOCKER_REGISTRY_IMAGE_URI)
               echo $(OPENSHIFT_ORIGIN_HA_PROXY_IMAGE_URI)
-              wget -P $(Build.SourcesDirectory)/tmp/ $(OPENSHIFT_ORIGIN_HA_PROXY_IMAGE_URI)
+              wget -P $(Build.SourcesDirectory)/tmp/openshift_origin-haproxy-router.3.9.docker $(OPENSHIFT_ORIGIN_HA_PROXY_IMAGE_URI)
               echo $(OPENSHIFT_ORIGIN_POD_IMAGE_URI)
-              wget -P $(Build.SourcesDirectory)/tmp/ $(OPENSHIFT_ORIGIN_POD_IMAGE_URI)
+              wget -P $(Build.SourcesDirectory)/tmp/openshift_origin-pod.3.9.docker $(OPENSHIFT_ORIGIN_POD_IMAGE_URI)
               ls -al $(Build.SourcesDirectory)/tmp
-            displayName: 'Load links into the pipeline and test SAS links'
+            displayName: 'Test SAS links'
 #          - script: |
 #              sed -i.bak 's|MASTERCOUNT|$(MASTER_COUNT)|g' azuredeploy.parameters.json
 #              sed -i.bak 's|INFRCOUNT|$(INFR_COUNT)|g' azuredeploy.parameters.json

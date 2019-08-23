@@ -32,35 +32,48 @@ $openshiftOriginHAProxyImage = "openshift_origin-haproxy-router.3.9.docker"
 $openshiftOriginPodImage = "openshift_origin-pod.3.9.docker"
 
 #upload assets
-Write-Host "Uploading $($path)$($ansibleArchive) to $($container.CloudBlobContainer.Uri.AbsoluteUri + "/" + "$ansibleArchive")"
-Set-AzureStorageBlobContent -File "$($path)$($ansibleArchive)" -Container $container.Name -Blob $ansibleArchive -Context $ctx -Force:$Force | Out-Null
-Write-Host "Uploading $($path)$($openshiftAnsibleArchive) to $($container.CloudBlobContainer.Uri.AbsoluteUri + "/" + "$openshiftAnsibleArchive")"
-Set-AzureStorageBlobContent -File "$($path)$($openshiftAnsibleArchive)" -Container $container.Name -Blob $openshiftAnsibleArchive -Context $ctx -Force:$Force | Out-Null
-Write-Host "Uploading $($path)$($openshiftContainerPlatformPlaybooksArchive) to $($container.CloudBlobContainer.Uri.AbsoluteUri + "/" + "$openshiftContainerPlatformPlaybooksArchive")"
-Set-AzureStorageBlobContent -File "$($path)$($openshiftContainerPlatformPlaybooksArchive)" -Container $container.Name -Blob $openshiftContainerPlatformPlaybooksArchive -Context $ctx -Force:$Force | Out-Null
+$aoutput = "Uploading $($path)/$($ansibleArchive) to $($container.CloudBlobContainer.Uri.AbsoluteUri)/$($ansibleArchive)"
+Write-Output $aoutput
+Set-AzureStorageBlobContent -File "$($path)/$($ansibleArchive)" -Container $container.Name -Blob $ansibleArchive -Context $ctx -Force:$Force | Out-Null
+$oaoutput = "Uploading $($path)/$($openshiftAnsibleArchive) to $($container.CloudBlobContainer.Uri.AbsoluteUri)/$($openshiftAnsibleArchive)"
+Write-Output $oaoutput
+Set-AzureStorageBlobContent -File "$($path)/$($openshiftAnsibleArchive)" -Container $container.Name -Blob $openshiftAnsibleArchive -Context $ctx -Force:$Force | Out-Null
+$ocppoutput = "Uploading $($path)/$($openshiftContainerPlatformPlaybooksArchive) to $($container.CloudBlobContainer.Uri.AbsoluteUri)/$($openshiftContainerPlatformPlaybooksArchive)"
+Write-Output $ocppoutput
+Set-AzureStorageBlobContent -File "$($path)/$($openshiftContainerPlatformPlaybooksArchive)" -Container $container.Name -Blob $openshiftContainerPlatformPlaybooksArchive -Context $ctx -Force:$Force | Out-Null
 
-Write-Host "Uploading $($path)nested/$($clusternodeJson) to $($container.CloudBlobContainer.Uri.AbsoluteUri + "/" + "$clusternodeJson")"
-Set-AzureStorageBlobContent -File "$($path)nested/$($clusternodeJson)" -Container $container.Name -Blob $clusternodeJson -Context $ctx -Force:$Force | Out-Null
-Write-Host "Uploading $($path)nested/$($openshiftdeployJson) to $($container.CloudBlobContainer.Uri.AbsoluteUri + "/" + "$openshiftdeployJson")"
-Set-AzureStorageBlobContent -File "$($path)nested/$($openshiftdeployJson)" -Container $container.Name -Blob $openshiftdeployJson -Context $ctx -Force:$Force | Out-Null
+$cnjoutput = "Uploading $($path)/nested/$($clusternodeJson) to $($container.CloudBlobContainer.Uri.AbsoluteUri)/$($clusternodeJson)"
+Write-Output $cnjoutput
+Set-AzureStorageBlobContent -File "$($path)/nested/$($clusternodeJson)" -Container $container.Name -Blob $clusternodeJson -Context $ctx -Force:$Force | Out-Null
+$odjoutput = "Uploading $($path)/nested/$($openshiftdeployJson) to $($container.CloudBlobContainer.Uri.AbsoluteUri)/$($openshiftdeployJson)"
+Write-Output $odjoutput
+Set-AzureStorageBlobContent -File "$($path)/nested/$($openshiftdeployJson)" -Container $container.Name -Blob $openshiftdeployJson -Context $ctx -Force:$Force | Out-Null
 
-Write-Host "Uploading $($path)scripts/$($deployOpenShiftSh) to $($container.CloudBlobContainer.Uri.AbsoluteUri + "/" + "$deployOpenShiftSh")"
-Set-AzureStorageBlobContent -File "$($path)scripts/$($deployOpenShiftSh)" -Container $container.Name -Blob $deployOpenShiftSh -Context $ctx -Force:$Force | Out-Null
-Write-Host "Uploading $($path)scripts/$($masterPrepSh) to $($container.CloudBlobContainer.Uri.AbsoluteUri + "/" + "$masterPrepSh")"
-Set-AzureStorageBlobContent -File "$($path)scripts/$($masterPrepSh)" -Container $container.Name -Blob $masterPrepSh -Context $ctx -Force:$Force | Out-Null
-Write-Host "Uploading $($path)scripts/$($nodePrepSh) to $($container.CloudBlobContainer.Uri.AbsoluteUri + "/" + "$nodePrepSh")"
-Set-AzureStorageBlobContent -File "$($path)scripts/$($nodePrepSh)" -Container $container.Name -Blob $nodePrepSh -Context $ctx -Force:$Force | Out-Null
+$doshoutput = "Uploading $($path)/scripts/$($deployOpenShiftSh) to $($container.CloudBlobContainer.Uri.AbsoluteUri)/$($deployOpenShiftSh)"
+Write-Output $doshoutput
+Set-AzureStorageBlobContent -File "$($path)/scripts/$($deployOpenShiftSh)" -Container $container.Name -Blob $deployOpenShiftSh -Context $ctx -Force:$Force | Out-Null
+$mpshoutput = "Uploading $($path)/scripts/$($masterPrepSh) to $($container.CloudBlobContainer.Uri.AbsoluteUri)/$($masterPrepSh)"
+Write-Output $mpshoutput
+Set-AzureStorageBlobContent -File "$($path)/scripts/$($masterPrepSh)" -Container $container.Name -Blob $masterPrepSh -Context $ctx -Force:$Force | Out-Null
+$npshputput = "Uploading $($path)/scripts/$($nodePrepSh) to $($container.CloudBlobContainer.Uri.AbsoluteUri)/$($nodePrepSh)"
+Write-Output $npshputput
+Set-AzureStorageBlobContent -File "$($path)/scripts/$($nodePrepSh)" -Container $container.Name -Blob $nodePrepSh -Context $ctx -Force:$Force | Out-Null
 
-Write-Host "Uploading $($path)$($cockpitKubernetesImage) to $($container.CloudBlobContainer.Uri.AbsoluteUri + "/" + "$cockpitKubernetesImage")"
-Set-AzureStorageBlobContent -File "$($path)$($cockpitKubernetesImage)" -Container $container.Name -Blob $cockpitKubernetesImage -Context $ctx -Force:$Force | Out-Null
-Write-Host "Uploading $($path)$($openshiftOriginDeployerImage) to $($container.CloudBlobContainer.Uri.AbsoluteUri + "/" + "$openshiftOriginDeployerImage")"
-Set-AzureStorageBlobContent -File "$($path)$($openshiftOriginDeployerImage)" -Container $container.Name -Blob $openshiftOriginDeployerImage -Context $ctx -Force:$Force | Out-Null
-Write-Host "Uploading $($path)$($openshiftOriginDockerRegistryImage) to $($container.CloudBlobContainer.Uri.AbsoluteUri + "/" + "$openshiftOriginDockerRegistryImage")"
-Set-AzureStorageBlobContent -File "$($path)$($openshiftOriginDockerRegistryImage)" -Container $container.Name -Blob $openshiftOriginDockerRegistryImage -Context $ctx -Force:$Force | Out-Null
-Write-Host "Uploading $($path)$($openshiftOriginHAProxyImage) to $($container.CloudBlobContainer.Uri.AbsoluteUri + "/" + "$openshiftOriginHAProxyImage")"
-Set-AzureStorageBlobContent -File "$($path)$($openshiftOriginHAProxyImage)" -Container $container.Name -Blob $openshiftOriginHAProxyImage -Context $ctx -Force:$Force | Out-Null
-Write-Host "Uploading $($path)$($openshiftOriginPodImage) to $($container.CloudBlobContainer.Uri.AbsoluteUri + "/" + "$openshiftOriginPodImage")"
-Set-AzureStorageBlobContent -File "$($path)$($openshiftOriginPodImage)" -Container $container.Name -Blob $openshiftOriginPodImage -Context $ctx -Force:$Force | Out-Null
+$ckioutput = "Uploading $($path)/$($cockpitKubernetesImage) to $($container.CloudBlobContainer.Uri.AbsoluteUri)/$($cockpitKubernetesImage)"
+Write-Output $ckioutput
+Set-AzureStorageBlobContent -File "$($path)/$($cockpitKubernetesImage)" -Container $container.Name -Blob $cockpitKubernetesImage -Context $ctx -Force:$Force | Out-Null
+$oodioutput = "Uploading $($path)/$($openshiftOriginDeployerImage) to $($container.CloudBlobContainer.Uri.AbsoluteUri)/$($openshiftOriginDeployerImage)"
+Write-Output $oodioutput
+Set-AzureStorageBlobContent -File "$($path)/$($openshiftOriginDeployerImage)" -Container $container.Name -Blob $openshiftOriginDeployerImage -Context $ctx -Force:$Force | Out-Null
+$oodrioutput = "Uploading $($path)/$($openshiftOriginDockerRegistryImage) to $($container.CloudBlobContainer.Uri.AbsoluteUri)/$($openshiftOriginDockerRegistryImage)"
+Write-Output $oodrioutput
+Set-AzureStorageBlobContent -File "$($path)/$($openshiftOriginDockerRegistryImage)" -Container $container.Name -Blob $openshiftOriginDockerRegistryImage -Context $ctx -Force:$Force | Out-Null
+$oohpioutput = "Uploading $($path)/$($openshiftOriginHAProxyImage) to $($container.CloudBlobContainer.Uri.AbsoluteUri)/$($openshiftOriginHAProxyImage)"
+Write-Output $oohpioutput
+Set-AzureStorageBlobContent -File "$($path)/$($openshiftOriginHAProxyImage)" -Container $container.Name -Blob $openshiftOriginHAProxyImage -Context $ctx -Force:$Force | Out-Null
+$oopioutput = "Uploading $($path)/$($openshiftOriginPodImage) to $($container.CloudBlobContainer.Uri.AbsoluteUri)/$($openshiftOriginPodImage)"
+Write-Output $oopioutput
+Set-AzureStorageBlobContent -File "$($path)/$($openshiftOriginPodImage)" -Container $container.Name -Blob $openshiftOriginPodImage -Context $ctx -Force:$Force | Out-Null
 
 #generate download links
 $containerURI = "https://" + $san + ".blob.core.usgovcloudapi.net/" + $cn + "/"
@@ -102,7 +115,7 @@ $openshiftOriginDeployerImageLink = "$($containerURI)$($openshiftOriginDeployerI
 $openshiftOriginDeployerImageLink | Out-File $path/scripts/OPENSHIFT_ORIGIN_DEPLOYER_IMAGE_LINK.txt -NoNewline
 $openshiftOriginDockerRegistryImageSAS = New-AzureStorageBlobSASToken -Container $cn -Blob $openshiftOriginDockerRegistryImage -Permission rwd -StartTime $startTime -ExpiryTime $endTime -Context $ctx
 $openshiftOriginDockerRegistryImageLink = "$($containerURI)$($openshiftOriginDockerRegistryImage)$($openshiftOriginDockerRegistryImageSAS)"
-$openshiftOriginDockerRegistryImageSAS | Out-File $path/scripts/OPENSHIFT_ORIGIN_DOCKER_REGISTRY_IMAGE_LINK.txt -NoNewline
+$openshiftOriginDockerRegistryImageLink | Out-File $path/scripts/OPENSHIFT_ORIGIN_DOCKER_REGISTRY_IMAGE_LINK.txt -NoNewline
 $openshiftOriginHAProxyImageSAS = New-AzureStorageBlobSASToken -Container $cn -Blob $openshiftOriginHAProxyImage -Permission rwd -StartTime $startTime -ExpiryTime $endTime -Context $ctx
 $openshiftOriginHAProxyImageLink = "$($containerURI)$($openshiftOriginHAProxyImage)$($openshiftOriginHAProxyImageSAS)"
 $openshiftOriginHAProxyImageLink | Out-File $path/scripts/OPENSHIFT_ORIGIN_HA_PROXY_IMAGE_LINK.txt -NoNewline
