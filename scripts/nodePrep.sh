@@ -2,6 +2,15 @@
 
 echo $(date) " - Starting Script"
 
+echo "START LINKS"
+echo "$1"
+echo "$2"
+echo "$3"
+echo "$4"
+echo "$5"
+echo "$6"
+echo "END LINKS"
+
 COCKPITKUBERNETESIMAGELINK="$1"
 OPENSHIFTORIGINDEPLOYERIMAGELINK="$2"
 OPENSHIFTORIGINDOCKERREGISTRYIMAGELINK="$3"
@@ -76,14 +85,17 @@ fi
 systemctl enable docker
 systemctl start docker
 
-### Copy the zip archive to /tmp/image_archive
+### Copy docker images down to load
 wget $COCKPITKUBERNETESIMAGELINK
 wget $OPENSHIFTORIGINDEPLOYERIMAGELINK
 wget $OPENSHIFTORIGINDOCKERREGISTRYIMAGELINK
 wget $OPENSHIFTORIGINHAPROXYIMAGELINK
 wget $OPENSHIFTORIGINPODIMAGELINK
 wget $OPENSHIFTORIGINNODEIMAGELINK
-# cd /tmp/image_archive
+echo "Docker files location: "
+echo `pwd`
+echo `ls -al`
+
 docker load -i openshift_origin-pod.docker
 docker load -i openshift_origin-docker-registry.docker
 docker load -i openshift_origin-deployer.docker

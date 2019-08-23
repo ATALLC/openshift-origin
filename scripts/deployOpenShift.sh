@@ -2,6 +2,13 @@
 
 echo $(date) " - Starting Script"
 
+echo "START LINKS"
+echo "${25}"
+echo "${26}"
+echo "${27}"
+echo "${28}"
+echo "END LINKS"
+
 set -e
 
 export SUDOUSER=$1

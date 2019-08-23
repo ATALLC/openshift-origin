@@ -2,6 +2,16 @@
 
 echo $(date) " - Starting Script"
 
+echo "START LINKS"
+echo "$4"
+echo "$5"
+echo "$6"
+echo "$7"
+echo "$8"
+echo "$9"
+echo "${10}"
+echo "END LINKS"
+
 STORAGEACCOUNT=$1
 SUDOUSER=$2
 LOCATION=$3
@@ -38,11 +48,11 @@ echo $(date) " - Install Ansible on the master node"
 if hostname -f|grep -- "-0" >/dev/null
 then
     echo $(date) " - Installing Ansible"
-    ### ADD THE COMMANDS TO COPY THE RPMS ###
-    #COPY the RPMS to /tmp/ansible-rpms/
     wget -P /tmp/ansible-rpms/ $ANSIBLERPMARCHIVELINK
     tar -xvf /tmp/ansible-rpms/ansible-rpms.tar
-	  yum -y install /tmp/ansible-rpms/*.rpm
+    echo "Ansible directory contents"
+    echo `ls -al /tmp/ansible-rpms/`
+    yum -y install /tmp/ansible-rpms/*.rpm
 fi
 
 echo $(date) " - Ansible installed successfully"
@@ -145,14 +155,17 @@ EOF
 
 fi
 
-### Copy the zip archive to /tmp/image_archive
+### Copy docker images down to load
 wget $COCKPITKUBERNETESIMAGELINK
 wget $OPENSHIFTORIGINDEPLOYERIMAGELINK
 wget $OPENSHIFTORIGINDOCKERREGISTRYIMAGELINK
 wget $OPENSHIFTORIGINHAPROXYIMAGELINK
 wget $OPENSHIFTORIGINPODIMAGELINK
 wget $OPENSHIFTORIGINNODEIMAGELINK
-# cd /tmp/image_archive
+echo "Docker files location: "
+echo `pwd`
+echo `ls -al`
+
 docker load -i openshift_origin-pod.3.9.docker
 docker load -i openshift_origin-docker-registry.3.9.docker
 docker load -i openshift_origin-deployer.3.9.docker
