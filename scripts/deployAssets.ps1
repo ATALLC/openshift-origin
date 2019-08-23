@@ -32,6 +32,8 @@ $openshiftOriginHAProxyImage = "openshift_origin-haproxy-router.3.9.docker"
 $openshiftOriginPodImage = "openshift_origin-pod.3.9.docker"
 $openshiftOriginNodeImage = "openshift_origin-node.docker"
 
+$openshiftOriginArchive = "openshift-origin.tar"
+
 #upload assets
 $aoutput = "Uploading $($path)/$($ansibleArchive) to $($container.CloudBlobContainer.Uri.AbsoluteUri)/$($ansibleArchive)"
 Write-Output $aoutput
@@ -78,6 +80,10 @@ Set-AzureStorageBlobContent -File "$($path)/$($openshiftOriginPodImage)" -Contai
 $oonioutput = "Uploading $($path)/$($openshiftOriginNodeImage) to $($container.CloudBlobContainer.Uri.AbsoluteUri)/$($openshiftOriginNodeImage)"
 Write-Output $oonioutput
 Set-AzureStorageBlobContent -File "$($path)/$($openshiftOriginNodeImage)" -Container $container.Name -Blob $openshiftOriginNodeImage -Context $ctx -Force:$Force | Out-Null
+
+$ooaoutput = "Uploading $($path)/$($openshiftOriginArchive) to $($container.CloudBlobContainer.Uri.AbsoluteUri)/$($openshiftOriginArchive)"
+Write-Output $oonioutput
+Set-AzureStorageBlobContent -File "$($path)/$($openshiftOriginArchive)" -Container $container.Name -Blob $openshiftOriginArchive -Context $ctx -Force:$Force | Out-Null
 
 #generate download links
 $containerURI = "https://" + $san + ".blob.core.usgovcloudapi.net/" + $cn + "/"
