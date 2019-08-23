@@ -19,38 +19,128 @@ stages:
         deploy:
           steps:
           - checkout: self
-          - script: git checkout existing-network-3.9
+          #tar folders for staging in azure storage
+          - task: ArchiveFiles@2
+            displayName: 'Archiving Ansible RPMs'
+            inputs:
+              rootFolderOrFile: '$(Build.SourcesDirectory)/ansible-rpms'
+              includeRootFolder: false
+              archiveType: 'tar'
+              archiveFile: '$(Build.SourcesDirectory)/ansible-rpms.tar'
+              replaceExistingArchive: true
+          - task: ArchiveFiles@2
+            displayName: 'Archiving openshift ansible scripts'
+            inputs:
+              rootFolderOrFile: '$(Build.SourcesDirectory)/openshift-ansible'
+              includeRootFolder: false
+              archiveType: 'tar'
+              archiveFile: '$(Build.SourcesDirectory)/openshift-ansible.tar'
+              replaceExistingArchive: true
+          - task: ArchiveFiles@2
+            displayName: 'Archiving openshift container platform playbooks'
+            inputs:
+              rootFolderOrFile: '$(Build.SourcesDirectory)/openshift-container-platform-playbooks'
+              includeRootFolder: false
+              archiveType: 'tar'
+              archiveFile: '$(Build.SourcesDirectory)/openshift-container-platform-playbooks.tar'
+              replaceExistingArchive: true
           - script: |
-              sed -i.bak 's|MASTERCOUNT|$(MASTER_COUNT)|g' azuredeploy.parameters.json
-              sed -i.bak 's|INFRCOUNT|$(INFR_COUNT)|g' azuredeploy.parameters.json
-              sed -i.bak 's|NODECOUNT|$(NODE_COUNT)|g' azuredeploy.parameters.json
-              sed -i.bak 's|OSADMINUSERNAME|$(OS_ADMIN_USER_NAME)|g' azuredeploy.parameters.json
-              sed -i.bak 's|OSADMINPASSWORD|$(OS_ADMIN_PASSWORD)|g' azuredeploy.parameters.json
-              sed -i.bak 's|SSHPUBLICKEY|$(SSH_PUBLIC_KEY)|g' azuredeploy.parameters.json
-              sed -i.bak 's|KEYVAULTRESOURCEGROUP|$(KEYVAULT_RESOURCE_GROUP)|g' azuredeploy.parameters.json
-              sed -i.bak 's|KEYVAULTNAME|$(KEYVAULT_NAME)|g' azuredeploy.parameters.json
-              sed -i.bak 's|AADCLIENTID|$(AAD_CLIENT_ID)|g' azuredeploy.parameters.json
-              sed -i.bak 's|AADCLIENTSECRET|$(AAD_CLIENT_SECRET)|g' azuredeploy.parameters.json
-              sed -i.bak 's|OPENSHIFTCLUSTERPREFIX|$(OPENSHIFT_CLUSTER_PREFIX)|g' azuredeploy.parameters.json
-              sed -i.bak 's|NETWORKRESOURCEGROUP|$(NETWORK_RESOURCE_GROUP)|g' azuredeploy.parameters.json
-              sed -i.bak 's|VIRTUALNETNAME|$(VNET_NAME)|g' azuredeploy.parameters.json
-              sed -i.bak 's|MASTERSUBNETNAME|$(MASTER_SUBNET_NAME)|g' azuredeploy.parameters.json
-              sed -i.bak 's|NODESUBNETNAME|$(NODE_SUBNET_NAME)|g' azuredeploy.parameters.json
-              sed -i.bak 's|MASTERNETWORKSECURITYGROUPNAME|$(MASTER_NETWORK_SECURITY_GROUP_NAME)|g' azuredeploy.parameters.json
-              sed -i.bak 's|INFRASTRUCTURENETWORKSECURITYGROUPNAME|$(INFRASTRUCTURE_NETWORK_SECURITY_GROUP_NAME)|g' azuredeploy.parameters.json
-              sed -i.bak 's|NODENETWORKSECURITYGROUPNAME|$(NODE_NETWORK_SECURITY_GROUP_NAME)|g' azuredeploy.parameters.json
-              sed -i.bak 's|ENABLEPUBLICACCESS|$(ENABLE_PUBLIC_ACCESS)|g' azuredeploy.parameters.json
-              sed -i.bak 's|INFRASTRUCTUREPUBLICIPDNSPREFIX|$(INFRASTRUCTURE_PUBLIC_IP_DNS_PREFIX)|g' azuredeploy.parameters.json
-              sed -i.bak 's|MASTERPUBLICIPDNSPREFIX|$(MASTER_PUBLIC_IP_DNS_PREFIX)|g' azuredeploy.parameters.json
-              sed -i.bak 's|INFRASTRUCTURESTATICPRIVATEIP|$(INFRASTRUCTURE_STATIC_PRIVATE_IP)|g' azuredeploy.parameters.json
-              sed -i.bak 's|OPENSHIFTSTATICPRIVATEIP|$(OPENSHIFT_STATIC_PRIVATE_IP)|g' azuredeploy.parameters.json
-            displayName: 'Update variables in parameter file from pipeline variables'
-          - task: AzureResourceGroupDeployment@2
-            displayName: 'Deploy Openshift Origin Cluster'
+              ./scripts/cr_docker_archive.sh
+            displayName: 'Download docker images'
+          - task: AzurePowerShell@4
+            displayName: 'Upload the deployable assets to blob store and generate SAS links'
             inputs:
               azureSubscription: $(RESOURCE_MANAGER_SERVICE_CONNECTION)
-              resourceGroupName: $(RESOURCE_GROUP)
+              scriptType: 'FilePath'
+              scriptPath: 'scripts/deployAssets.ps1'
+              scriptArguments: $(Build.SourcesDirectory) $(STORAGE_ACCOUNT_NAME) $(STORAGE_ACCOUNT_KEY) $(CONTAINER_NAME)
+              azurePowerShellVersion: 'LatestVersion'
+          - script: |
+              ANSIBLE_URI=`cat scripts/ANSIBLE_LINK.txt`
+              echo "##vso[task.setvariable variable=ANSIBLE_URI]'$ANSIBLE_URI'"
+              OPENSHIFT_ANSIBLE_URI=`cat scripts/OPENSHIFT_ANSIBLE_LINK.txt`
+              echo "##vso[task.setvariable variable=OPENSHIFT_ANSIBLE_URI]'$OPENSHIFT_ANSIBLE_URI'"
+              OPENSHIFT_CONTAINER_PLATFORM_PLAYBOOKS_URI=`cat scripts/OPENSHIFT_CONTAINER_PLATFORM_PLAYBOOKS_LINK.txt`
+              echo "##vso[task.setvariable variable=OPENSHIFT_CONTAINER_PLATFORM_PLAYBOOKS_URI]'$OPENSHIFT_CONTAINER_PLATFORM_PLAYBOOKS_URI'"
+              CLUSTERNODE_JSON_URI=`cat scripts/CLUSTERNODE_JSON_LINK.txt`
+              echo "##vso[task.setvariable variable=CLUSTERNODE_JSON_URI]'$CLUSTERNODE_JSON_URI'"
+              OPENSHIFT_DEPLOY_JSON_URI=`cat scripts/OPENSHIFT_DEPLOY_JSON_LINK.txt`
+              echo "##vso[task.setvariable variable=OPENSHIFT_DEPLOY_JSON_URI]'$OPENSHIFT_DEPLOY_JSON_URI'"
+              DEPLOY_OPENSHIFT_SH_URI=`cat scripts/DEPLOY_OPENSHIFT_SH_LINK.txt`
+              echo "##vso[task.setvariable variable=DEPLOY_OPENSHIFT_SH_URI]'$DEPLOY_OPENSHIFT_SH_URI'"
+              MASTER_PREP_SH_URI=`cat scripts/MASTER_PREP_SH_LINK.txt`
+              echo "##vso[task.setvariable variable=MASTER_PREP_SH_URI]'$MASTER_PREP_SH_URI'"
+              NODE_PREP_SH_URI=`cat scripts/NODE_PREP_SH_LINK.txt`
+              echo "##vso[task.setvariable variable=NODE_PREP_SH_URI]'$NODE_PREP_SH_URI'"
+              COCKPIT_KUBERNETES_IMAGE_URI=`cat scripts/COCKPIT_KUBERNETES_IMAGE_LINK.txt`
+              echo "##vso[task.setvariable variable=COCKPIT_KUBERNETES_IMAGE_URI]'$COCKPIT_KUBERNETES_IMAGE_URI'"
+              OPENSHIFT_ORIGIN_DEPLOYER_IMAGE_URI=`cat scripts/OPENSHIFT_ORIGIN_DEPLOYER_IMAGE_LINK.txt`
+              echo "##vso[task.setvariable variable=OPENSHIFT_ORIGIN_DEPLOYER_IMAGE_URI]'$OPENSHIFT_ORIGIN_DEPLOYER_IMAGE_URI'"
+              OPENSHIFT_ORIGIN_DOCKER_REGISTRY_IMAGE_URI=`cat scripts/OPENSHIFT_ORIGIN_DOCKER_REGISTRY_IMAGE_LINK.txt`
+              echo "##vso[task.setvariable variable=OPENSHIFT_ORIGIN_DOCKER_REGISTRY_IMAGE_URI]'$OPENSHIFT_ORIGIN_DOCKER_REGISTRY_IMAGE_URI'"
+              OPENSHIFT_ORIGIN_HA_PROXY_IMAGE_URI=`cat scripts/OPENSHIFT_ORIGIN_HA_PROXY_IMAGE_LINK.txt`
+              echo "##vso[task.setvariable variable=OPENSHIFT_ORIGIN_HA_PROXY_IMAGE_URI]'$OPENSHIFT_ORIGIN_HA_PROXY_IMAGE_URI'"
+              OPENSHIFT_ORIGIN_POD_IMAGE_URI=`cat scripts/OPENSHIFT_ORIGIN_POD_IMAGE_LINK.txt`
+              echo "##vso[task.setvariable variable=OPENSHIFT_ORIGIN_POD_IMAGE_URI]'$OPENSHIFT_ORIGIN_POD_IMAGE_URI'"
+              echo $(ANSIBLE_URI)
+              wget -P $(Build.SourcesDirectory)/tmp/ $(ANSIBLE_URI)
+              echo $(OPENSHIFT_ANSIBLE_URI)
+              wget -P $(Build.SourcesDirectory)/tmp/ $(OPENSHIFT_ANSIBLE_URI)
+              echo $(OPENSHIFT_CONTAINER_PLATFORM_PLAYBOOKS_URI)
+              wget -P $(Build.SourcesDirectory)/tmp/ $(OPENSHIFT_CONTAINER_PLATFORM_PLAYBOOKS_URI)
+              echo $(CLUSTERNODE_JSON_URI)
+              wget -P $(Build.SourcesDirectory)/tmp/ $(CLUSTERNODE_JSON_URI)
+              echo $(OPENSHIFT_DEPLOY_JSON_URI)
+              wget -P $(Build.SourcesDirectory)/tmp/ $(OPENSHIFT_DEPLOY_JSON_URI)
+              echo $(DEPLOY_OPENSHIFT_SH_URI)
+              wget -P $(Build.SourcesDirectory)/tmp/ $(DEPLOY_OPENSHIFT_SH_URI)
+              echo $(MASTER_PREP_SH_URI)
+              wget -P $(Build.SourcesDirectory)/tmp/ $(MASTER_PREP_SH_URI)
+              echo $(NODE_PREP_SH_URI)
+              wget -P $(Build.SourcesDirectory)/tmp/ $(NODE_PREP_SH_URI)
+              echo $(COCKPIT_KUBERNETES_IMAGE_URI)
+              wget -P $(Build.SourcesDirectory)/tmp/ $(COCKPIT_KUBERNETES_IMAGE_URI)
+              echo $(OPENSHIFT_ORIGIN_DEPLOYER_IMAGE_URI)
+              wget -P $(Build.SourcesDirectory)/tmp/ $(OPENSHIFT_ORIGIN_DEPLOYER_IMAGE_URI)
+              echo $(OPENSHIFT_ORIGIN_DOCKER_REGISTRY_IMAGE_URI)
+              wget -P $(Build.SourcesDirectory)/tmp/ $(OPENSHIFT_ORIGIN_DOCKER_REGISTRY_IMAGE_URI)
+              echo $(OPENSHIFT_ORIGIN_HA_PROXY_IMAGE_URI)
+              wget -P $(Build.SourcesDirectory)/tmp/ $(OPENSHIFT_ORIGIN_HA_PROXY_IMAGE_URI)
+              echo $(OPENSHIFT_ORIGIN_POD_IMAGE_URI)
+              wget -P $(Build.SourcesDirectory)/tmp/ $(OPENSHIFT_ORIGIN_POD_IMAGE_URI)
+              ls -al $(Build.SourcesDirectory)/tmp
+            displayName: 'Load links into the pipeline and test SAS links'
+#          - script: |
+#              sed -i.bak 's|MASTERCOUNT|$(MASTER_COUNT)|g' azuredeploy.parameters.json
+#              sed -i.bak 's|INFRCOUNT|$(INFR_COUNT)|g' azuredeploy.parameters.json
+#              sed -i.bak 's|NODECOUNT|$(NODE_COUNT)|g' azuredeploy.parameters.json
+#              sed -i.bak 's|OSADMINUSERNAME|$(OS_ADMIN_USER_NAME)|g' azuredeploy.parameters.json
+#              sed -i.bak 's|OSADMINPASSWORD|$(OS_ADMIN_PASSWORD)|g' azuredeploy.parameters.json
+#              sed -i.bak 's|SSHPUBLICKEY|$(SSH_PUBLIC_KEY)|g' azuredeploy.parameters.json
+#              sed -i.bak 's|KEYVAULTRESOURCEGROUP|$(KEYVAULT_RESOURCE_GROUP)|g' azuredeploy.parameters.json
+#              sed -i.bak 's|KEYVAULTNAME|$(KEYVAULT_NAME)|g' azuredeploy.parameters.json
+#              sed -i.bak 's|AADCLIENTID|$(AAD_CLIENT_ID)|g' azuredeploy.parameters.json
+#              sed -i.bak 's|AADCLIENTSECRET|$(AAD_CLIENT_SECRET)|g' azuredeploy.parameters.json
+#              sed -i.bak 's|OPENSHIFTCLUSTERPREFIX|$(OPENSHIFT_CLUSTER_PREFIX)|g' azuredeploy.parameters.json
+#              sed -i.bak 's|NETWORKRESOURCEGROUP|$(NETWORK_RESOURCE_GROUP)|g' azuredeploy.parameters.json
+#              sed -i.bak 's|VIRTUALNETNAME|$(VNET_NAME)|g' azuredeploy.parameters.json
+#              sed -i.bak 's|MASTERSUBNETNAME|$(MASTER_SUBNET_NAME)|g' azuredeploy.parameters.json
+#              sed -i.bak 's|NODESUBNETNAME|$(NODE_SUBNET_NAME)|g' azuredeploy.parameters.json
+#              sed -i.bak 's|MASTERNETWORKSECURITYGROUPNAME|$(MASTER_NETWORK_SECURITY_GROUP_NAME)|g' azuredeploy.parameters.json
+#              sed -i.bak 's|INFRASTRUCTURENETWORKSECURITYGROUPNAME|$(INFRASTRUCTURE_NETWORK_SECURITY_GROUP_NAME)|g' azuredeploy.parameters.json
+#              sed -i.bak 's|NODENETWORKSECURITYGROUPNAME|$(NODE_NETWORK_SECURITY_GROUP_NAME)|g' azuredeploy.parameters.json
+#              sed -i.bak 's|ENABLEPUBLICACCESS|$(ENABLE_PUBLIC_ACCESS)|g' azuredeploy.parameters.json
+#              sed -i.bak 's|INFRASTRUCTUREPUBLICIPDNSPREFIX|$(INFRASTRUCTURE_PUBLIC_IP_DNS_PREFIX)|g' azuredeploy.parameters.json
+#              sed -i.bak 's|MASTERPUBLICIPDNSPREFIX|$(MASTER_PUBLIC_IP_DNS_PREFIX)|g' azuredeploy.parameters.json
+#              sed -i.bak 's|INFRASTRUCTURESTATICPRIVATEIP|$(INFRASTRUCTURE_STATIC_PRIVATE_IP)|g' azuredeploy.parameters.json
+#              sed -i.bak 's|OPENSHIFTSTATICPRIVATEIP|$(OPENSHIFT_STATIC_PRIVATE_IP)|g' azuredeploy.parameters.json
+#            displayName: 'Update variables in parameter file from pipeline variables'
+#          - task: AzureResourceGroupDeployment@2
+#            displayName: 'Deploy Openshift Origin Cluster'
+#            inputs:
+#              azureSubscription: $(RESOURCE_MANAGER_SERVICE_CONNECTION)
+#              resourceGroupName: $(RESOURCE_GROUP)
               # location is ignored if the resource group already exists
-              location: 'East US'
-              csmFile: 'azuredeploy.json'
-              csmParametersFile: 'azuredeploy.parameters.json'
+#              location: 'East US'
+#              csmFile: 'azuredeploy.json'
+#              csmParametersFile: 'azuredeploy.parameters.json'

@@ -32,6 +32,9 @@
 - OPENSHIFT_MASTER_PUBLIC_IP_DNS_LABEL: OpenShift master public IP DNS prefix
 - INFRASTRUCTURE_STATIC_PRIVATE_IP: Static private IP to assign to infrastructure internal load balancer if public access is not enabled
 - OPENSHIFT_STATIC_PRIVATE_IP: Static private IP to assign to openshift internal load balancer if public access is not enabled
+- STORAGE_ACCOUNT_NAME: Name of storage account to use to stage deployment assets
+- STORAGE_ACCOUNT_KEY: Key to use
+- CONTAINER_NAME: Container name to use
 4. Execute the pipeline
 
 **ORIGINAL INSTRUCTIONS**
