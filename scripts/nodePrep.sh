@@ -86,20 +86,20 @@ systemctl enable docker
 systemctl start docker
 
 ### Copy docker images down to load
-wget -O /tmp/docker_images/cockpit_kubernetes.docker $COCKPITKUBERNETESIMAGELINK
-wget -O /tmp/docker_images/openshift_origin-deployer.3.9.docker $OPENSHIFTORIGINDEPLOYERIMAGELINK
-wget -O /tmp/docker_images/openshift_origin-docker-registry.3.9.docker $OPENSHIFTORIGINDOCKERREGISTRYIMAGELINK
-wget -O /tmp/docker_images/openshift_origin-haproxy-router.3.9.docker $OPENSHIFTORIGINHAPROXYIMAGELINK
-wget -O /tmp/docker_images/openshift_origin-pod.3.9.docker $OPENSHIFTORIGINPODIMAGELINK
-wget -O /tmp/docker_images/openshift_origin-node.docker $OPENSHIFTORIGINNODEIMAGELINK
+wget -O /tmp/cockpit_kubernetes.docker $COCKPITKUBERNETESIMAGELINK
+wget -O /tmp/openshift_origin-deployer.3.9.docker $OPENSHIFTORIGINDEPLOYERIMAGELINK
+wget -O /tmp/openshift_origin-docker-registry.3.9.docker $OPENSHIFTORIGINDOCKERREGISTRYIMAGELINK
+wget -O /tmp/openshift_origin-haproxy-router.3.9.docker $OPENSHIFTORIGINHAPROXYIMAGELINK
+wget -O /tmp/openshift_origin-pod.3.9.docker $OPENSHIFTORIGINPODIMAGELINK
+wget -O /tmp/openshift_origin-node.docker $OPENSHIFTORIGINNODEIMAGELINK
 echo "Docker files location: "
 echo `pwd`
 echo `ls -al`
 
-docker load -i /tmp/docker_images/openshift_origin-pod.3.9.docker
-docker load -i /tmp/docker_images/openshift_origin-docker-registry.3.9.docker
-docker load -i /tmp/docker_images/openshift_origin-deployer.3.9.docker
-docker load -i /tmp/docker_images/openshift_origin-haproxy-router.3.9.docker
-docker load -i /tmp/docker_images/cockpit_kubernetes.docker
-docker load -i /tmp/docker_images/openshift_origin-node.docker
+docker load -i /tmp/openshift_origin-pod.3.9.docker
+docker load -i /tmp/openshift_origin-docker-registry.3.9.docker
+docker load -i /tmp/openshift_origin-deployer.3.9.docker
+docker load -i /tmp/openshift_origin-haproxy-router.3.9.docker
+docker load -i /tmp/cockpit_kubernetes.docker
+docker load -i /tmp/openshift_origin-node.docker
 echo $(date) " - Script Complete"

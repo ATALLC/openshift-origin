@@ -74,6 +74,7 @@ else
 fi
 
 # Pulling ansible playbook repository
+mkdir /home/${SUDOUSER}/openshift-container-platform-playbooks
 wget -O /home/${SUDOUSER}/openshift-container-platform-playbooks/openshift-container-platform-playbooks.tar $OPENSHIFTCONTAINERPLATFORMPLAYBOOKSARCHIVELINK
 tar -xvf /home/${SUDOUSER}/openshift-container-platform-playbooks/openshift-container-platform-playbooks.tar
 if [ -d /home/${SUDOUSER}/openshift-container-platform-playbooks ]
@@ -275,6 +276,7 @@ $nodegroup
 EOF
 
 echo $(date) " - Cloning openshift-ansible repo for use in installation"
+mkdir /home/${SUDOUSER}/openshift-ansible
 wget -O /home/${SUDOUSER}/openshift-ansible/openshift-ansible.tar $OPENSHIFTANSIBLEARCHIVELINK
 tar -xvf /home/${SUDOUSER}/openshift-ansible/openshift-ansible.tar
 chmod -R 777 /home/$SUDOUSER/openshift-ansible
