@@ -48,7 +48,7 @@ echo $(date) " - Install Ansible on the master node"
 if hostname -f|grep -- "-0" >/dev/null
 then
     echo $(date) " - Installing Ansible"
-    wget -P /tmp/ansible-rpms/ -o ansible-rpms.tar $ANSIBLERPMARCHIVELINK
+    wget -P /tmp/ansible-rpms/ -O ansible-rpms.tar $ANSIBLERPMARCHIVELINK
     tar -xvf /tmp/ansible-rpms/ansible-rpms.tar
     echo "Ansible directory contents"
     echo `ls -al /tmp/ansible-rpms/`
@@ -156,12 +156,12 @@ EOF
 fi
 
 ### Copy docker images down to load
-wget -o cockpit_kubernetes.docker $COCKPITKUBERNETESIMAGELINK
-wget -o openshift_origin-deployer.3.9.docker $OPENSHIFTORIGINDEPLOYERIMAGELINK
-wget -o openshift_origin-docker-registry.3.9.docker $OPENSHIFTORIGINDOCKERREGISTRYIMAGELINK
-wget -o openshift_origin-haproxy-router.3.9.docker $OPENSHIFTORIGINHAPROXYIMAGELINK
-wget -o openshift_origin-pod.3.9.docker $OPENSHIFTORIGINPODIMAGELINK
-wget -o openshift_origin-node.docker $OPENSHIFTORIGINNODEIMAGELINK
+wget -O cockpit_kubernetes.docker $COCKPITKUBERNETESIMAGELINK
+wget -O openshift_origin-deployer.3.9.docker $OPENSHIFTORIGINDEPLOYERIMAGELINK
+wget -O openshift_origin-docker-registry.3.9.docker $OPENSHIFTORIGINDOCKERREGISTRYIMAGELINK
+wget -O openshift_origin-haproxy-router.3.9.docker $OPENSHIFTORIGINHAPROXYIMAGELINK
+wget -O openshift_origin-pod.3.9.docker $OPENSHIFTORIGINPODIMAGELINK
+wget -O openshift_origin-node.docker $OPENSHIFTORIGINNODEIMAGELINK
 echo "Docker files location: "
 echo `pwd`
 echo `ls -al`
