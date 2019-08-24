@@ -86,12 +86,12 @@ systemctl enable docker
 systemctl start docker
 
 ### Copy docker images down to load
-wget $COCKPITKUBERNETESIMAGELINK
-wget $OPENSHIFTORIGINDEPLOYERIMAGELINK
-wget $OPENSHIFTORIGINDOCKERREGISTRYIMAGELINK
-wget $OPENSHIFTORIGINHAPROXYIMAGELINK
-wget $OPENSHIFTORIGINPODIMAGELINK
-wget $OPENSHIFTORIGINNODEIMAGELINK
+wget -o cockpit_kubernetes.docker $COCKPITKUBERNETESIMAGELINK
+wget -o openshift_origin-deployer.3.9.docker $OPENSHIFTORIGINDEPLOYERIMAGELINK
+wget -o openshift_origin-docker-registry.3.9.docker $OPENSHIFTORIGINDOCKERREGISTRYIMAGELINK
+wget -o openshift_origin-haproxy-router.3.9.docker $OPENSHIFTORIGINHAPROXYIMAGELINK
+wget -o openshift_origin-pod.3.9.docker $OPENSHIFTORIGINPODIMAGELINK
+wget -o openshift_origin-node.docker $OPENSHIFTORIGINNODEIMAGELINK
 echo "Docker files location: "
 echo `pwd`
 echo `ls -al`

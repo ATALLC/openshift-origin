@@ -1433,7 +1433,7 @@
 					]
 				},
 				"protectedSettings": {
-					"commandToExecute": "[concat('bash ', variables('masterPrepScriptFileName'), ' ', variables('newStorageAccountPersistentVolume1'), ' ', parameters('adminUsername'), ' ', variables('location'), ' ', variables('singlequote'), parameters('ansibleRPMUrl'), variables('singlequote'), ' ', variables('singlequote'), parameters('cockpitKubernetesImageUrl'), variables('singlequote'), ' ', variables('singlequote'), parameters('openshiftOriginDeployerImageUrl'), variables('singlequote'), ' ', variables('singlequote'), parameters('openshiftOriginDockerRegistryImageUrl'), variables('singlequote'), ' ', variables('singlequote'), parameters('openshiftOriginHAProxyImageUrl'), variables('singlequote'), ' ', variables('singlequote'), parameters('openshiftOriginPodImageUrl'), variables('singlequote'), ' ', variables('singlequote'), parameters('openshiftOriginNodeImageUrl', , variables('singlequote')))]"
+					"commandToExecute": "[concat('bash ', variables('masterPrepScriptFileName'), ' ', variables('newStorageAccountPersistentVolume1'), ' ', parameters('adminUsername'), ' ', variables('location'), ' ', variables('singlequote'), parameters('ansibleRPMUrl'), variables('singlequote'), ' ', variables('singlequote'), parameters('cockpitKubernetesImageUrl'), variables('singlequote'), ' ', variables('singlequote'), parameters('openshiftOriginDeployerImageUrl'), variables('singlequote'), ' ', variables('singlequote'), parameters('openshiftOriginDockerRegistryImageUrl'), variables('singlequote'), ' ', variables('singlequote'), parameters('openshiftOriginHAProxyImageUrl'), variables('singlequote'), ' ', variables('singlequote'), parameters('openshiftOriginPodImageUrl'), variables('singlequote'), ' ', variables('singlequote'), parameters('openshiftOriginNodeImageUrl'), variables('singlequote'))]"
 				}
 			}
 		}, {
@@ -1466,7 +1466,7 @@
 					]
 				},
 				"protectedSettings": {
-					"commandToExecute": "[concat('bash ', variables('nodePrepScriptFileName'), ' ', variables('singlequote'), parameters('cockpitKubernetesImageUrl'), variables('singlequote'), ' ', variables('singlequote'), parameters('openshiftOriginDeployerImageUrl'), variables('singlequote'), ' ', variables('singlequote'), parameters('openshiftOriginDockerRegistryImageUrl'), variables('singlequote'), ' ', variables('singlequote'), parameters('openshiftOriginHAProxyImageUrl'), variables('singlequote'), ' ', variables('singlequote'), parameters('openshiftOriginPodImageUrl'), variables('singlequote'), ' ', variables('singlequote'), parameters('openshiftOriginNodeImageUrl', , variables('singlequote')))]"
+					"commandToExecute": "[concat('bash ', variables('nodePrepScriptFileName'), ' ', variables('singlequote'), parameters('cockpitKubernetesImageUrl'), variables('singlequote'), ' ', variables('singlequote'), parameters('openshiftOriginDeployerImageUrl'), variables('singlequote'), ' ', variables('singlequote'), parameters('openshiftOriginDockerRegistryImageUrl'), variables('singlequote'), ' ', variables('singlequote'), parameters('openshiftOriginHAProxyImageUrl'), variables('singlequote'), ' ', variables('singlequote'), parameters('openshiftOriginPodImageUrl'), variables('singlequote'), ' ', variables('singlequote'), parameters('openshiftOriginNodeImageUrl'), variables('singlequote'))]"
 				}
 			}
 		}, {
@@ -1499,7 +1499,7 @@
 					]
 				},
 				"protectedSettings": {
-					"commandToExecute": "[concat('bash ', variables('nodePrepScriptFileName'), ' ', variables('singlequote'), parameters('cockpitKubernetesImageUrl'), variables('singlequote'), ' ', variables('singlequote'), parameters('openshiftOriginDeployerImageUrl'), variables('singlequote'), ' ', variables('singlequote'), parameters('openshiftOriginDockerRegistryImageUrl'), variables('singlequote'), ' ', variables('singlequote'), parameters('openshiftOriginHAProxyImageUrl'), variables('singlequote'), ' ', variables('singlequote'), parameters('openshiftOriginPodImageUrl'), variables('singlequote'), ' ', variables('singlequote'), parameters('openshiftOriginNodeImageUrl', , variables('singlequote')))]"
+					"commandToExecute": "[concat('bash ', variables('nodePrepScriptFileName'), ' ', variables('singlequote'), parameters('cockpitKubernetesImageUrl'), variables('singlequote'), ' ', variables('singlequote'), parameters('openshiftOriginDeployerImageUrl'), variables('singlequote'), ' ', variables('singlequote'), parameters('openshiftOriginDockerRegistryImageUrl'), variables('singlequote'), ' ', variables('singlequote'), parameters('openshiftOriginHAProxyImageUrl'), variables('singlequote'), ' ', variables('singlequote'), parameters('openshiftOriginPodImageUrl'), variables('singlequote'), ' ', variables('singlequote'), parameters('openshiftOriginNodeImageUrl'), variables('singlequote'))]"
 				}
 			}
 		}, {
