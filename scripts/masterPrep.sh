@@ -48,7 +48,7 @@ echo $(date) " - Install Ansible on the master node"
 if hostname -f|grep -- "-0" >/dev/null
 then
     echo $(date) " - Installing Ansible"
-    wget -P /tmp/ansible-rpms/ -O ansible-rpms.tar $ANSIBLERPMARCHIVELINK
+    wget -O /tmp/ansible-rpms/ansible-rpms.tar $ANSIBLERPMARCHIVELINK
     tar -xvf /tmp/ansible-rpms/ansible-rpms.tar
     echo "Ansible directory contents"
     echo `ls -al /tmp/ansible-rpms/`
@@ -156,20 +156,20 @@ EOF
 fi
 
 ### Copy docker images down to load
-wget -O cockpit_kubernetes.docker $COCKPITKUBERNETESIMAGELINK
-wget -O openshift_origin-deployer.3.9.docker $OPENSHIFTORIGINDEPLOYERIMAGELINK
-wget -O openshift_origin-docker-registry.3.9.docker $OPENSHIFTORIGINDOCKERREGISTRYIMAGELINK
-wget -O openshift_origin-haproxy-router.3.9.docker $OPENSHIFTORIGINHAPROXYIMAGELINK
-wget -O openshift_origin-pod.3.9.docker $OPENSHIFTORIGINPODIMAGELINK
-wget -O openshift_origin-node.docker $OPENSHIFTORIGINNODEIMAGELINK
+wget -O /tmp/docker_images/cockpit_kubernetes.docker $COCKPITKUBERNETESIMAGELINK
+wget -O /tmp/docker_images/openshift_origin-deployer.3.9.docker $OPENSHIFTORIGINDEPLOYERIMAGELINK
+wget -O /tmp/docker_images/openshift_origin-docker-registry.3.9.docker $OPENSHIFTORIGINDOCKERREGISTRYIMAGELINK
+wget -O /tmp/docker_images/openshift_origin-haproxy-router.3.9.docker $OPENSHIFTORIGINHAPROXYIMAGELINK
+wget -O /tmp/docker_images/openshift_origin-pod.3.9.docker $OPENSHIFTORIGINPODIMAGELINK
+wget -O /tmp/docker_images/openshift_origin-node.docker $OPENSHIFTORIGINNODEIMAGELINK
 echo "Docker files location: "
 echo `pwd`
 echo `ls -al`
 
-docker load -i openshift_origin-pod.3.9.docker
-docker load -i openshift_origin-docker-registry.3.9.docker
-docker load -i openshift_origin-deployer.3.9.docker
-docker load -i openshift_origin-haproxy-router.3.9.docker
-docker load -i cockpit_kubernetes.docker
-docker load -i openshift_origin-node.docker
+docker load -i /tmp/docker_images/openshift_origin-pod.3.9.docker
+docker load -i /tmp/docker_images/openshift_origin-docker-registry.3.9.docker
+docker load -i /tmp/docker_images/openshift_origin-deployer.3.9.docker
+docker load -i /tmp/docker_images/openshift_origin-haproxy-router.3.9.docker
+docker load -i /tmp/docker_images/cockpit_kubernetes.docker
+docker load -i /tmp/docker_images/openshift_origin-node.docker
 echo $(date) " - Script Complete"
