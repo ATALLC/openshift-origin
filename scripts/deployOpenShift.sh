@@ -76,7 +76,7 @@ fi
 # Pulling ansible playbook repository
 mkdir /home/${SUDOUSER}/openshift-container-platform-playbooks
 wget -O /home/${SUDOUSER}/openshift-container-platform-playbooks/openshift-container-platform-playbooks.tar $OPENSHIFTCONTAINERPLATFORMPLAYBOOKSARCHIVELINK
-tar -xvf /home/${SUDOUSER}/openshift-container-platform-playbooks/openshift-container-platform-playbooks.tar
+tar -xvf /home/${SUDOUSER}/openshift-container-platform-playbooks/openshift-container-platform-playbooks.tar -C /home/${SUDOUSER}/openshift-container-platform-playbooks
 if [ -d /home/${SUDOUSER}/openshift-container-platform-playbooks ]
 then
   echo " - Retrieved playbooks successfully"
@@ -278,7 +278,7 @@ EOF
 echo $(date) " - Cloning openshift-ansible repo for use in installation"
 mkdir /home/${SUDOUSER}/openshift-ansible
 wget -O /home/${SUDOUSER}/openshift-ansible/openshift-ansible.tar $OPENSHIFTANSIBLEARCHIVELINK
-tar -xvf /home/${SUDOUSER}/openshift-ansible/openshift-ansible.tar
+tar -xvf /home/${SUDOUSER}/openshift-ansible/openshift-ansible.tar  -C /home/${SUDOUSER}/openshift-ansible
 chmod -R 777 /home/$SUDOUSER/openshift-ansible
 
 # Run a loop playbook to ensure DNS Hostname resolution is working prior to continuing with script
@@ -429,21 +429,6 @@ then
 	   echo $(date) "- Logging configuration failed"
 	   exit 12
 	fi
-fi
-
-# Creating variables file for private master and Azure AD configuration playbook
-echo $(date) " - Creating variables file for future playbooks"
-cat > /home/$SUDOUSER/openshift-container-platform-playbooks/vars.yaml <<EOF
-admin_user: $SUDOUSER
-master_lb_private_dns: $MASTER-0
-domain: $DOMAIN
-EOF
-
-# Configure cluster for private masters
-if [[ $MASTERCLUSTERTYPE == "false" ]]
-then
-	echo $(date) " - Configure cluster for private masters"
-	runuser -l $SUDOUSER -c "ansible-playbook -f 30 ~/openshift-container-platform-playbooks/activate-private-lb-fqdn.31x.yaml"
 fi
 
 # Delete yaml files

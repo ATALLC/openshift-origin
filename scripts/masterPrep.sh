@@ -49,7 +49,7 @@ if hostname -f|grep -- "-0" >/dev/null
 then
     echo $(date) " - Installing Ansible"
     wget -O /tmp/ansible-rpms.tar $ANSIBLERPMARCHIVELINK
-    tar -xvf /tmp/ansible-rpms.tar
+    tar -xvf /tmp/ansible-rpms.tar -C /tmp
     echo "Ansible directory contents"
     echo `ls -al /tmp/`
     yum -y install /tmp/*.rpm
