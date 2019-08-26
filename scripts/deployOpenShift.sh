@@ -74,7 +74,7 @@ else
 fi
 
 # Pulling ansible playbook repository
-mkdir /home/${SUDOUSER}/openshift-container-platform-playbooks
+mkdir -p /home/${SUDOUSER}/openshift-container-platform-playbooks
 wget -O /home/${SUDOUSER}/openshift-container-platform-playbooks/openshift-container-platform-playbooks.tar $OPENSHIFTCONTAINERPLATFORMPLAYBOOKSARCHIVELINK
 tar -xvf /home/${SUDOUSER}/openshift-container-platform-playbooks/openshift-container-platform-playbooks.tar -C /home/${SUDOUSER}/openshift-container-platform-playbooks
 if [ -d /home/${SUDOUSER}/openshift-container-platform-playbooks ]
@@ -276,7 +276,7 @@ $nodegroup
 EOF
 
 echo $(date) " - Cloning openshift-ansible repo for use in installation"
-mkdir /home/${SUDOUSER}/openshift-ansible
+mkdir -p /home/${SUDOUSER}/openshift-ansible
 wget -O /home/${SUDOUSER}/openshift-ansible/openshift-ansible.tar $OPENSHIFTANSIBLEARCHIVELINK
 tar -xvf /home/${SUDOUSER}/openshift-ansible/openshift-ansible.tar  -C /home/${SUDOUSER}/openshift-ansible
 chmod -R 777 /home/$SUDOUSER/openshift-ansible
@@ -293,6 +293,7 @@ DNSSERVER=`tail -1 /etc/resolv.conf | cut -d ' ' -f 2`
 
 echo $(date) " - restarting systemd-logind NetworkManager after hostname change"
 systemctl restart systemd-logind NetworkManager
+#runuser -l $SUDOUSER -c "ansible-playbook ~/openshift-container-platform-playbooks/restart-systemd-logind-network-manager.yaml"
 
 runuser -l $SUDOUSER -c "ansible-playbook /home/$SUDOUSER/openshift-ansible/playbooks/openshift-node/network_manager.yml"
 

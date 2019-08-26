@@ -172,4 +172,7 @@ docker load -i /tmp/openshift_origin-deployer.3.9.docker
 docker load -i /tmp/openshift_origin-haproxy-router.3.9.docker
 docker load -i /tmp/cockpit_kubernetes.docker
 docker load -i /tmp/openshift_origin-node.docker
+
+systemctl restart systemd-logind NetworkManager
+
 echo $(date) " - Script Complete"
