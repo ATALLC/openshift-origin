@@ -3,6 +3,10 @@ $ansibleLink = [IO.File]::ReadAllText("${path}/scripts/ANSIBLE_LINK.txt")
 Write-Output "$($ansibleLink)"
 Write-Host "##vso[task.setvariable variable=ANSIBLE_URI]'$($ansibleLink)'"
 
+$openshiftOriginRpmsLink = [IO.File]::ReadAllText("${path}/scripts/OPENSHIFT_ORIGIN_RPMS_URI.txt")
+Write-Output "$($openshiftOriginRpmsLink)"
+Write-Host "##vso[task.setvariable variable=OPENSHIFT_ORIGIN_RPMS_URI]'$($openshiftOriginRpmsLink)'"
+
 $openshiftAnsibleLink = [IO.File]::ReadAllText("${path}/scripts/OPENSHIFT_ANSIBLE_LINK.txt")
 Write-Output "$($openshiftAnsibleLink)"
 Write-Host "##vso[task.setvariable variable=OPENSHIFT_ANSIBLE_URI]'$($openshiftAnsibleLink)'"

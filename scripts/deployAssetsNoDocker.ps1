@@ -1,6 +1,6 @@
 Param([string]$path, [string]$san, [string]$sak, [string]$cn)
 
-#Enable-AzureRmAlias
+Enable-AzureRmAlias
 
 #create context
 $ctx = New-AzureStorageContext -StorageAccountName $san -StorageAccountKey $sak
@@ -14,7 +14,8 @@ $container = Get-AzureStorageContainer -Name $cn -Context $ctx
 $container.CloudBlobContainer.Uri.AbsoluteUri
 
 #assets to stage
-$ansibleArchive = "ansible-rpms.tar"
+$ansibleRPMsArchive = "ansible-rpms.tar"
+$openshiftOriginRPMsArchive = "openshift-origin-rpms.tar"
 $openshiftAnsibleArchive = "openshift-ansible.tar"
 $openshiftContainerPlatformPlaybooksArchive = "openshift-container-platform-playbooks.tar"
 
@@ -35,9 +36,12 @@ $openshiftOriginNodeImage = "openshift_origin-node.docker"
 $openshiftOriginArchive = "openshift-origin.tar"
 
 #upload assets
-$aoutput = "Uploading $($path)/$($ansibleArchive) to $($container.CloudBlobContainer.Uri.AbsoluteUri)/$($ansibleArchive)"
+$aoutput = "Uploading $($path)/$($ansibleRPMsArchive) to $($container.CloudBlobContainer.Uri.AbsoluteUri)/$($ansibleRPMsArchive)"
 Write-Output $aoutput
-Set-AzureStorageBlobContent -File "$($path)/$($ansibleArchive)" -Container $container.Name -Blob $ansibleArchive -Context $ctx -Force:$Force | Out-Null
+Set-AzureStorageBlobContent -File "$($path)/$($ansibleRPMsArchive)" -Container $container.Name -Blob $ansibleRPMsArchive -Context $ctx -Force:$Force | Out-Null
+$ooroutput = "Uploading $($path)/$($openshiftOriginRPMsArchive) to $($container.CloudBlobContainer.Uri.AbsoluteUri)/$($openshiftOriginRPMsArchive)"
+Write-Output $ooroutput
+Set-AzureStorageBlobContent -File "$($path)/$($openshiftOriginRPMsArchive)" -Container $container.Name -Blob $openshiftOriginRPMsArchive -Context $ctx -Force:$Force | Out-Null
 $oaoutput = "Uploading $($path)/$($openshiftAnsibleArchive) to $($container.CloudBlobContainer.Uri.AbsoluteUri)/$($openshiftAnsibleArchive)"
 Write-Output $oaoutput
 Set-AzureStorageBlobContent -File "$($path)/$($openshiftAnsibleArchive)" -Container $container.Name -Blob $openshiftAnsibleArchive -Context $ctx -Force:$Force | Out-Null
@@ -90,9 +94,12 @@ $containerURI = "https://" + $san + ".blob.core.usgovcloudapi.net/" + $cn + "/"
 $startTime = Get-Date
 $endTime = $startTime.AddHours(2.0)
 
-$ansibleSAS = New-AzureStorageBlobSASToken -Container $cn -Blob $ansibleArchive -Permission rwd -StartTime $startTime -ExpiryTime $endTime -Context $ctx
-$ansibleLink = "$($containerURI)$($ansibleArchive)$($ansibleSAS)"
+$ansibleSAS = New-AzureStorageBlobSASToken -Container $cn -Blob $ansibleRPMsArchive -Permission rwd -StartTime $startTime -ExpiryTime $endTime -Context $ctx
+$ansibleLink = "$($containerURI)$($ansibleRPMsArchive)$($ansibleSAS)"
 $ansibleLink | Out-File $path/scripts/ANSIBLE_LINK.txt -NoNewline
+$openshiftOriginRPMsSAS = New-AzureStorageBlobSASToken -Container $cn -Blob $openshiftOriginRPMsArchive -Permission rwd -StartTime $startTime -ExpiryTime $endTime -Context $ctx
+$openshiftOriginRPMsLink = "$($containerURI)$($openshiftOriginRPMsArchive)$($openshiftOriginRPMsSAS)"
+$openshiftOriginRPMsLink | Out-File $path/scripts/OPENSHIFT_ORIGIN_RPMS_LINK.txt -NoNewline
 $openshiftAnsibleSAS = New-AzureStorageBlobSASToken -Container $cn -Blob $openshiftAnsibleArchive -Permission rwd -StartTime $startTime -ExpiryTime $endTime -Context $ctx
 $openshiftAnsibleLink = "$($containerURI)$($openshiftAnsibleArchive)$($openshiftAnsibleSAS)"
 $openshiftAnsibleLink | Out-File $path/scripts/OPENSHIFT_ANSIBLE_LINK.txt -NoNewline

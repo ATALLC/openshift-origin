@@ -214,7 +214,7 @@ openshift_disable_check=disk_availability,memory_availability,docker_image_avail
 $CLOUDKIND
 
 # This enables all the system containers except for docker:
-openshift_use_system_containers=False
+#openshift_use_system_containers=False
 
 # default selectors for router and registry services
 openshift_router_selector='region=infra'

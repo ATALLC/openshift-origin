@@ -10,6 +10,7 @@ echo "$7"
 echo "$8"
 echo "$9"
 echo "${10}"
+echo "${11}"
 echo "END LINKS"
 
 STORAGEACCOUNT=$1
@@ -22,6 +23,7 @@ OPENSHIFTORIGINDOCKERREGISTRYIMAGELINK="$7"
 OPENSHIFTORIGINHAPROXYIMAGELINK="$8"
 OPENSHIFTORIGINPODIMAGELINK="$9"
 OPENSHIFTORIGINNODEIMAGELINK="${10}"
+OPENSHIFTORIGINRPMSLINK="${11}"
 
 # Install EPEL repository
 echo $(date) " - Installing EPEL"
@@ -30,6 +32,13 @@ yum -y install https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarc
 sed -i -e "s/^enabled=1/enabled=0/" /etc/yum.repos.d/epel.repo
 
 echo $(date) " - EPEL successfully installed"
+
+echo $(date) " - Disabling non Microsoft Yum Repos"
+
+# Disable all non microsoft repos to replicate CCE environment
+sudo yum update -y --disablerepo='*' --enablerepo='*microsoft*'
+
+echo $(date) " - Successfully disabled non Microsoft Yum Repos"
 
 # Update system to latest packages and install dependencies
 echo $(date) " - Update system to latest packages and install dependencies"
@@ -50,12 +59,20 @@ then
     echo $(date) " - Installing Ansible"
     wget -O /tmp/ansible-rpms.tar $ANSIBLERPMARCHIVELINK
     tar -xvf /tmp/ansible-rpms.tar -C /tmp
-    echo "Ansible directory contents"
-    echo `ls -al /tmp/`
     yum -y install /tmp/*.rpm
 fi
 
 echo $(date) " - Ansible installed successfully"
+
+echo $(date) " - Install Openshift Origin rpms"
+
+echo $(date) " - Installing Openshift Origin rpms"
+mkdir -p /tmp/openshift-origin-rpms
+wget -O /tmp/openshift-origin-rpms/openshift-origin-rpms.tar $OPENSHIFTORIGINRPMSLINK
+tar -xvf /tmp/openshift-origin-rpms/openshift-origin-rpms.tar -C /tmp/openshift-origin-rpms
+yum -y install /tmp/openshift-origin-rpms/*.rpm
+
+echo $(date) " - Openshift Origin rpms installed successfully"
 
 if hostname -f|grep -- "-0" >/dev/null
 then
