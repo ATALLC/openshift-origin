@@ -1,6 +1,6 @@
 Param([string]$path, [string]$san, [string]$sak, [string]$cn)
 
-#Enable-AzureRmAlias
+Enable-AzureRmAlias
 
 #create context
 $ctx = New-AzureStorageContext -StorageAccountName $san -StorageAccountKey $sak

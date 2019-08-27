@@ -1,7 +1,6 @@
 #!/bin/bash
 
 echo $(date) " - Starting Script"
-mkdir -p $1/openshift-origin-rpms
 wget -O $1/openshift-origin-rpms/origin-3.9.0-1.el7.git.0.ba7faec.x86_64.rpm "http://mirror.centos.org/centos/7/paas/x86_64/openshift-origin/origin-3.9.0-1.el7.git.0.ba7faec.x86_64.rpm"
 wget -O $1/openshift-origin-rpms/origin-clients-3.9.0-1.el7.git.0.ba7faec.x86_64.rpm "http://mirror.centos.org/centos/7/paas/x86_64/openshift-origin/origin-clients-3.9.0-1.el7.git.0.ba7faec.x86_64.rpm"
 wget -O $1/openshift-origin-rpms/origin-docker-excluder-3.9.0-1.el7.git.0.ba7faec.noarch.rpm "http://mirror.centos.org/centos/7/paas/x86_64/openshift-origin/origin-docker-excluder-3.9.0-1.el7.git.0.ba7faec.noarch.rpm"
