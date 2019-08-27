@@ -360,13 +360,52 @@ if [[ $AZURE == "true" ]]
 then
 	echo $(date) " - Rebooting cluster to complete installation"
 	runuser -l $SUDOUSER -c  "oc label --overwrite nodes $MASTER-0 openshift-infra=apiserver"
+	if [ $? -ne 0 ]
+	then
+	  runuser -l $SUDOUSER -c  "oc label --overwrite nodes $MASTER-0 openshift-infra=apiserver"
+	fi
+
 	runuser -l $SUDOUSER -c  "oc label --overwrite nodes --all logging-infra-fluentd=true logging=true"
+	if [ $? -ne 0 ]
+	then
+	  runuser -l $SUDOUSER -c  "oc label --overwrite nodes --all logging-infra-fluentd=true logging=true"
+	fi
+
 	runuser -l $SUDOUSER -c  "ansible localhost -b -o -m service -a 'name=openvswitch state=restarted'"
+	if [ $? -ne 0 ]
+	then	
+	  runuser -l $SUDOUSER -c  "ansible localhost -b -o -m service -a 'name=openvswitch state=restarted'"
+	fi
+
 	runuser -l $SUDOUSER -c  "ansible localhost -b -o -m service -a 'name=origin-master-api state=restarted'"
+	if [ $? -ne 0 ]
+	then	
+	  runuser -l $SUDOUSER -c  "ansible localhost -b -o -m service -a 'name=origin-master-api state=restarted'"
+	fi
+	
 	runuser -l $SUDOUSER -c  "ansible localhost -b -o -m service -a 'name=origin-master-controllers state=restarted'"
+	if [ $? -ne 0 ]
+	then	
+	  runuser -l $SUDOUSER -c  "ansible localhost -b -o -m service -a 'name=origin-master-controllers state=restarted'"
+	fi	
+	
 	runuser -l $SUDOUSER -c  "ansible localhost -b -o -m service -a 'name=origin-node state=restarted'"
+	if [ $? -ne 0 ]
+	then	
+	  runuser -l $SUDOUSER -c  "ansible localhost -b -o -m service -a 'name=origin-node state=restarted'"
+	fi	
+	
 	runuser -l $SUDOUSER -c "ansible-playbook -f 10 ~/openshift-container-platform-playbooks/reboot-master-origin.yaml"
+	if [ $? -ne 0 ]
+	then	
+	  runuser -l $SUDOUSER -c "ansible-playbook -f 10 ~/openshift-container-platform-playbooks/reboot-master-origin.yaml"
+	fi	
+	
 	runuser -l $SUDOUSER -c "ansible-playbook -f 10 ~/openshift-container-platform-playbooks/reboot-nodes.yaml"
+	if [ $? -ne 0 ]
+	then	
+	  runuser -l $SUDOUSER -c "ansible-playbook -f 10 ~/openshift-container-platform-playbooks/reboot-nodes.yaml"
+	fi
 
 	if [ $? -eq 0 ]
 	then
@@ -380,13 +419,22 @@ then
 	echo $(date) "- Creating Storage Class"
 
 	runuser $SUDOUSER -c "ansible-playbook -f 10 ~/openshift-container-platform-playbooks/configurestorageclass.yaml"
+	if [ $? -ne 0 ]
+	then	
+	  runuser $SUDOUSER -c "ansible-playbook -f 10 ~/openshift-container-platform-playbooks/configurestorageclass.yaml"
+	fi
+
 	echo $(date) "- Sleep for 15"
 	sleep 15
 
 	# Installing Service Catalog, Ansible Service Broker and Template Service Broker
 
 	echo $(date) "- Installing Service Catalog, Ansible Service Broker and Template Service Broker"
-	runuser -l $SUDOUSER -c "ansible-playbook -f 10 /home/$SUDOUSER/openshift-ansible/playbooks/openshift-service-catalog/config.yml"
+	runuser -l $SUDOUSER -c "ansible-playbook -f 10 ~/openshift-ansible/playbooks/openshift-service-catalog/config.yml"
+	if [ $? -ne 0 ]
+	then	
+	  runuser -l $SUDOUSER -c "ansible-playbook -f 10 ~/openshift-ansible/playbooks/openshift-service-catalog/config.yml"
+	fi
 	echo $(date) "- Service Catalog, Ansible Service Broker and Template Service Broker installed successfully"
 
 fi
@@ -401,9 +449,17 @@ then
 	echo $(date) "- Deploying Metrics"
 	if [ $AZURE == "true" ]
 	then
-		runuser -l $SUDOUSER -c "ansible-playbook -f 10 /home/$SUDOUSER/openshift-ansible/playbooks/openshift-metrics/config.yml -e openshift_metrics_install_metrics=True -e openshift_metrics_cassandra_storage_type=dynamic -e openshift_metrics_image_version=$OO_VERSION"
+		runuser -l $SUDOUSER -c "ansible-playbook -f 10 ~/openshift-ansible/playbooks/openshift-metrics/config.yml -e openshift_metrics_install_metrics=True -e openshift_metrics_cassandra_storage_type=dynamic -e openshift_metrics_image_version=$OO_VERSION"
+	    if [ $? -ne 0 ]
+	    then	
+	      runuser -l $SUDOUSER -c "ansible-playbook -f 10 ~/openshift-ansible/playbooks/openshift-metrics/config.yml -e openshift_metrics_install_metrics=True -e openshift_metrics_cassandra_storage_type=dynamic -e openshift_metrics_image_version=$OO_VERSION"
+	    fi
 	else
-		runuser -l $SUDOUSER -c "ansible-playbook -f 10 /home/$SUDOUSER/openshift-ansible/playbooks/openshift-metrics/config.yml -e openshift_metrics_install_metrics=True -e openshift_metrics_image_version=$OO_VERSION"
+		runuser -l $SUDOUSER -c "ansible-playbook -f 10 ~/openshift-ansible/playbooks/openshift-metrics/config.yml -e openshift_metrics_install_metrics=True -e openshift_metrics_image_version=$OO_VERSION"
+	    if [ $? -ne 0 ]
+	    then	
+	      runuser -l $SUDOUSER -c "ansible-playbook -f 10 ~openshift-ansible/playbooks/openshift-metrics/config.yml -e openshift_metrics_install_metrics=True -e openshift_metrics_image_version=$OO_VERSION"
+	    fi
 	fi
 	if [ $? -eq 0 ]
 	then
@@ -422,9 +478,17 @@ then
 	echo $(date) "- Deploying Logging"
 	if [ $AZURE == "true" ]
 	then
-		runuser -l $SUDOUSER -c "ansible-playbook -f 10 /home/$SUDOUSER/openshift-ansible/playbooks/openshift-logging/config.yml -e openshift_logging_install_logging=True -e openshift_logging_es_pvc_dynamic=true -e openshift_master_dynamic_provisioning_enabled=True"
+		runuser -l $SUDOUSER -c "ansible-playbook -f 10 ~/openshift-ansible/playbooks/openshift-logging/config.yml -e openshift_logging_install_logging=True -e openshift_logging_es_pvc_dynamic=true -e openshift_master_dynamic_provisioning_enabled=True"
+	    if [ $? -ne 0 ]
+	    then	
+	      runuser -l $SUDOUSER -c "ansible-playbook -f 10 ~/openshift-ansible/playbooks/openshift-logging/config.yml -e openshift_logging_install_logging=True -e openshift_logging_es_pvc_dynamic=true -e openshift_master_dynamic_provisioning_enabled=True"
+	    fi	
 	else
-		runuser -l $SUDOUSER -c "ansible-playbook -f 10 /home/$SUDOUSER/openshift-ansible/playbooks/openshift-logging/config.yml -e openshift_logging_install_logging=True"
+		runuser -l $SUDOUSER -c "ansible-playbook -f 10 ~/openshift-ansible/playbooks/openshift-logging/config.yml -e openshift_logging_install_logging=True"
+	    if [ $? -ne 0 ]
+	    then	
+	      runuser -l $SUDOUSER -c "ansible-playbook -f 10 ~/openshift-ansible/playbooks/openshift-logging/config.yml -e openshift_logging_install_logging=True"
+	    fi
 	fi
 	if [ $? -eq 0 ]
 	then
@@ -440,8 +504,8 @@ echo $(date) "- Deleting unecessary files"
 
 rm -rf /home/${SUDOUSER}/openshift-container-platform-playbooks
 
-echo $(date) "- Sleep for 30"
+echo $(date) "- Sleep for 60"
 
-sleep 30
+sleep 60
 
 echo $(date) " - Script complete"
