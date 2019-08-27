@@ -69,5 +69,7 @@ fi
 systemctl enable docker
 systemctl start docker
 
+systemctl restart systemd-logind NetworkManager
+
 echo $(date) " - Script Complete"
 

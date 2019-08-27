@@ -123,4 +123,6 @@ EOF
 
 fi
 
+systemctl restart systemd-logind NetworkManager
+
 echo $(date) " - Script Complete"
