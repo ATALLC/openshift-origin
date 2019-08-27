@@ -215,6 +215,8 @@ $CLOUDKIND
 
 # This enables all the system containers except for docker:
 #openshift_use_system_containers=False
+openshift_enable_docker_excluder=False
+openshift_enable_openshift_excluder=False
 
 # default selectors for router and registry services
 openshift_router_selector='region=infra'

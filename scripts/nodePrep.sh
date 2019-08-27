@@ -31,29 +31,29 @@ echo $(date) " - EPEL successfully installed"
 echo $(date) " - Disabling non Microsoft Yum Repos"
 
 # Disable all non microsoft repos to replicate CCE environment
-sudo yum update -y --disablerepo='*' --enablerepo='*microsoft*'
+# sudo yum update -y --disablerepo='*' --enablerepo='*microsoft*'
 
 echo $(date) " - Successfully disabled non Microsoft Yum Repos"
+
+echo $(date) " - Installing Openshift Origin rpms"
+mkdir -p /var/lib/waagent/openshift-origin-rpms
+wget -O /var/lib/waagent/openshift-origin-rpms/openshift-origin-rpms.tar $OPENSHIFTORIGINRPMSLINK
+tar -xvf /var/lib/waagent/openshift-origin-rpms/openshift-origin-rpms.tar -C /var/lib/waagent/openshift-origin-rpms
+ls -al /var/lib/waagent/openshift-origin-rpms
+yum -y install /var/lib/waagent/openshift-origin-rpms/*.rpm
+
+echo $(date) " - Openshift Origin rpms installed successfully"
 
 # Update system to latest packages and install dependencies
 echo $(date) " - Update system to latest packages and install dependencies"
 
+yum repolist all
 yum -y install wget git net-tools bind-utils iptables-services bridge-utils bash-completion kexec-tools sos psacct
 yum -y install cloud-utils-growpart.noarch
 yum -y update --exclude=WALinuxAgent
 systemctl restart dbus
 
 echo $(date) " - System updates successfully installed"
-
-echo $(date) " - Install Openshift Origin rpms"
-
-echo $(date) " - Installing Openshift Origin rpms"
-mkdir -p /tmp/openshift-origin-rpms
-wget -O /tmp/openshift-origin-rpms/openshift-origin-rpms.tar $OPENSHIFTORIGINRPMSLINK
-tar -xvf /tmp/openshift-origin-rpms/openshift-origin-rpms.tar -C /tmp/openshift-origin-rpms
-yum -y install /tmp/openshift-origin-rpms/*.rpm
-
-echo $(date) " - Openshift Origin rpms installed successfully"
 
 # Grow Root File System
 echo $(date) " - Grow Root FS"
