@@ -35,14 +35,16 @@ echo $(date) " - Disabling non Microsoft Yum Repos"
 
 echo $(date) " - Successfully disabled non Microsoft Yum Repos"
 
-echo $(date) " - Installing Openshift Origin rpms"
+echo $(date) " - Creating Local Openshift Origin Yum Repo"
 mkdir -p /var/lib/waagent/openshift-origin-rpms
+mkdir -p /var/lib/waagent/openshift-origin-rpms/repo
 wget -O /var/lib/waagent/openshift-origin-rpms/openshift-origin-rpms.tar $OPENSHIFTORIGINRPMSLINK
-tar -xvf /var/lib/waagent/openshift-origin-rpms/openshift-origin-rpms.tar -C /var/lib/waagent/openshift-origin-rpms
-ls -al /var/lib/waagent/openshift-origin-rpms
-yum -y install /var/lib/waagent/openshift-origin-rpms/*.rpm
+tar -xvf /var/lib/waagent/openshift-origin-rpms/openshift-origin-rpms.tar -C /var/lib/waagent/openshift-origin-rpms/repo
+ls -al /var/lib/waagent/openshift-origin-rpms/repo
+yum -y install createrepo
+createrepo /var/lib/waagent/openshift-origin-rpms/repo
 
-echo $(date) " - Openshift Origin rpms installed successfully"
+echo $(date) " - Local Openshift Origin Yum Repo created successfully"
 
 # Update system to latest packages and install dependencies
 echo $(date) " - Update system to latest packages and install dependencies"
