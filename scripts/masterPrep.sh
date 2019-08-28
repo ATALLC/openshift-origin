@@ -24,6 +24,9 @@ OPENSHIFTORIGINHAPROXYIMAGELINK="$8"
 OPENSHIFTORIGINPODIMAGELINK="$9"
 OPENSHIFTORIGINNODEIMAGELINK="${10}"
 OPENSHIFTORIGINRPMSLINK="${11}"
+OPENSHIFTORIGINWEBCONSOLEIMAGELINK="${12}"
+OPENSHIFTORIGINSERVICECATALOGIMAGELINK="${13}"
+OPENSHIFTORIGINLOGGINGIMAGELINK="${14}"
 
 # Install EPEL repository
 echo $(date) " - Installing EPEL"
@@ -175,22 +178,28 @@ EOF
 fi
 
 ### Copy docker images down to load
-wget -O /tmp/cockpit_kubernetes.docker $COCKPITKUBERNETESIMAGELINK
-wget -O /tmp/openshift_origin-deployer.3.9.docker $OPENSHIFTORIGINDEPLOYERIMAGELINK
+wget -O /tmp/openshift_origin-web-console.3.9.0.docker $OPENSHIFTORIGINWEBCONSOLEIMAGELINK
 wget -O /tmp/openshift_origin-docker-registry.3.9.docker $OPENSHIFTORIGINDOCKERREGISTRYIMAGELINK
 wget -O /tmp/openshift_origin-haproxy-router.3.9.docker $OPENSHIFTORIGINHAPROXYIMAGELINK
-wget -O /tmp/openshift_origin-pod.3.9.docker $OPENSHIFTORIGINPODIMAGELINK
+wget -O /tmp/openshift_origin-deployer.3.9.docker $OPENSHIFTORIGINDEPLOYERIMAGELINK
+wget -O /tmp/openshift_origin-service-catalog.3.9.0.docker $OPENSHIFTORIGINSERVICECATALOGIMAGELINK
+wget -O /tmp/openshift_origin-pod.3.9.0.docker $OPENSHIFTORIGINPODIMAGELINK
 wget -O /tmp/openshift_origin-node.docker $OPENSHIFTORIGINNODEIMAGELINK
+wget -O /tmp/cockpit_kubernetes.docker $COCKPITKUBERNETESIMAGELINK
+wget -O /tmp/openshift_origin-logging-fluentd.3.9.docker $OPENSHIFTORIGINLOGGINGIMAGELINK
 echo "Docker files location: "
 echo `pwd`
 echo `ls -al`
 
-docker load -i /tmp/openshift_origin-pod.3.9.docker
+docker load -i /tmp/openshift_origin-web-console.3.9.0.docker
 docker load -i /tmp/openshift_origin-docker-registry.3.9.docker
-docker load -i /tmp/openshift_origin-deployer.3.9.docker
 docker load -i /tmp/openshift_origin-haproxy-router.3.9.docker
-docker load -i /tmp/cockpit_kubernetes.docker
+docker load -i /tmp/openshift_origin-deployer.3.9.docker
+docker load -i /tmp/openshift_origin-service-catalog.3.9.0.docker
+docker load -i /tmp/openshift_origin-pod.3.9.0.docker
 docker load -i /tmp/openshift_origin-node.docker
+docker load -i /tmp/cockpit_kubernetes.docker
+docker load -i /tmp/openshift_origin-logging-fluentd.3.9.docker
 
 systemctl restart systemd-logind NetworkManager
 

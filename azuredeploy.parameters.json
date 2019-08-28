@@ -145,6 +145,15 @@
 		},
 		"openshiftOriginRpmsUrl": {
 			"value": "OPENSHIFTORIGINRPMSURL"
+		},
+		"openshiftOriginWebConsoleImageUrl": {
+			"value": "OPENSHIFTORIGINWEBCONSOLEIMAGEURL"
+		},
+		"openshiftOriginServiceCatalogImageUrl": {
+			"value": "OPENSHIFTORIGINSERVICECATALOGIMAGEURL"
+		},
+		"openshiftOriginLoggingImageUrl": {
+			"value": "OPENSHIFTORIGINLOGGINGIMAGEURL"
 		}
 	}
 }

@@ -30,8 +30,11 @@ $cockpitKubernetesImage = "cockpit_kubernetes.docker"
 $openshiftOriginDeployerImage = "openshift_origin-deployer.3.9.docker"
 $openshiftOriginDockerRegistryImage = "openshift_origin-docker-registry.3.9.docker"
 $openshiftOriginHAProxyImage = "openshift_origin-haproxy-router.3.9.docker"
-$openshiftOriginPodImage = "openshift_origin-pod.3.9.docker"
+$openshiftOriginPodImage = "openshift_origin-pod.3.9.0.docker"
 $openshiftOriginNodeImage = "openshift_origin-node.docker"
+$openshiftOriginWebConsoleImage = "openshift_origin-web-console.3.9.0.docker"
+$openshiftOriginServiceCatalogImage = "openshift_origin-service-catalog.3.9.0.docker"
+$openshiftOriginLoggingImage = "openshift_origin-logging-fluentd.3.9.docker"
 
 $openshiftOriginArchive = "openshift-origin.tar"
 
@@ -84,6 +87,16 @@ Set-AzureStorageBlobContent -File "$($path)/scripts/$($nodePrepSh)" -Container $
 #$oonioutput = "Uploading $($path)/$($openshiftOriginNodeImage) to $($container.CloudBlobContainer.Uri.AbsoluteUri)/$($openshiftOriginNodeImage)"
 #Write-Output $oonioutput
 #Set-AzureStorageBlobContent -File "$($path)/$($openshiftOriginNodeImage)" -Container $container.Name -Blob $openshiftOriginNodeImage -Context $ctx -Force:$Force | Out-Null
+#$oowcioutput = "Uploading $($path)/$($openshiftOriginWebConsoleImage) to $($container.CloudBlobContainer.Uri.AbsoluteUri)/$($openshiftOriginWebConsoleImage)"
+#Write-Output $oowcioutput
+#Set-AzureStorageBlobContent -File "$($path)/$($openshiftOriginWebConsoleImage)" -Container $container.Name -Blob $openshiftOriginWebConsoleImage -Context $ctx -Force:$Force | Out-Null
+#$oopscutput = "Uploading $($path)/$($openshiftOriginServiceCatalogImage) to $($container.CloudBlobContainer.Uri.AbsoluteUri)/$($openshiftOriginServiceCatalogImage)"
+#Write-Output $oopscutput
+#Set-AzureStorageBlobContent -File "$($path)/$($openshiftOriginServiceCatalogImage)" -Container $container.Name -Blob $openshiftOriginServiceCatalogImage -Context $ctx -Force:$Force | Out-Null
+#$oonlutput = "Uploading $($path)/$($openshiftOriginLoggingImage) to $($container.CloudBlobContainer.Uri.AbsoluteUri)/$($openshiftOriginLoggingImage)"
+#Write-Output $oonlutput
+#Set-AzureStorageBlobContent -File "$($path)/$($openshiftOriginLoggingImage)" -Container $container.Name -Blob $openshiftOriginLoggingImage -Context $ctx -Force:$Force | Out-Null
+
 
 #$ooaoutput = "Uploading $($path)/$($openshiftOriginArchive) to $($container.CloudBlobContainer.Uri.AbsoluteUri)/$($openshiftOriginArchive)"
 #Write-Output $oonioutput
@@ -142,3 +155,12 @@ $openshiftOriginPodImageLink | Out-File $path/scripts/OPENSHIFT_ORIGIN_POD_IMAGE
 $openshiftOriginNodeImageSAS = New-AzureStorageBlobSASToken -Container $cn -Blob $openshiftOriginNodeImage -Permission rwd -StartTime $startTime -ExpiryTime $endTime -Context $ctx
 $openshiftOriginNodeImageLink = "$($containerURI)$($openshiftOriginNodeImage)$($openshiftOriginNodeImageSAS)"
 $openshiftOriginNodeImageLink | Out-File $path/scripts/OPENSHIFT_ORIGIN_NODE_IMAGE_LINK.txt -NoNewline
+$openshiftOriginWebConsoleImageSAS = New-AzureStorageBlobSASToken -Container $cn -Blob $openshiftOriginWebConsoleImage -Permission rwd -StartTime $startTime -ExpiryTime $endTime -Context $ctx
+$openshiftOriginWebConsoleImageLink = "$($containerURI)$($openshiftOriginWebConsoleImage)$($openshiftOriginWebConsoleImageSAS)"
+$openshiftOriginWebConsoleImageLink | Out-File $path/scripts/OPENSHIFT_ORIGIN_WEB_CONSOLE_IMAGE_LINK.txt -NoNewline
+$openshiftOriginServiceCatalogImageSAS = New-AzureStorageBlobSASToken -Container $cn -Blob $openshiftOriginServiceCatalogImage -Permission rwd -StartTime $startTime -ExpiryTime $endTime -Context $ctx
+$openshiftOriginServiceCatalogImageLink = "$($containerURI)$($openshiftOriginServiceCatalogImage)$($openshiftOriginServiceCatalogImageSAS)"
+$openshiftOriginServiceCatalogImageLink | Out-File $path/scripts/OPENSHIFT_ORIGIN_SERVICE_CATALOG_IMAGE_LINK.txt -NoNewline
+$openshiftOriginLoggingImageSAS = New-AzureStorageBlobSASToken -Container $cn -Blob $openshiftOriginLoggingImage -Permission rwd -StartTime $startTime -ExpiryTime $endTime -Context $ctx
+$openshiftOriginLoggingImageLink = "$($containerURI)$($openshiftOriginLoggingImage)$($openshiftOriginLoggingImageSAS)"
+$openshiftOriginLoggingImageLink | Out-File $path/scripts/OPENSHIFT_ORIGIN_LOGGING_IMAGE_LINK.txt -NoNewline

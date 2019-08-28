@@ -58,3 +58,15 @@ Write-Host "##vso[task.setvariable variable=OPENSHIFT_ORIGIN_POD_IMAGE_URI]'$($o
 $openshiftOriginNodeImageLink = [IO.File]::ReadAllText("${path}/scripts/OPENSHIFT_ORIGIN_NODE_IMAGE_LINK.txt")
 Write-Output "$($openshiftOriginNodeImageLink)"
 Write-Host "##vso[task.setvariable variable=OPENSHIFT_ORIGIN_NODE_IMAGE_URI]'$($openshiftOriginNodeImageLink)'"
+
+$openshiftOriginWebConsoleImageLink = [IO.File]::ReadAllText("${path}/scripts/OPENSHIFT_ORIGIN_WEB_CONSOLE_IMAGE_LINK.txt")
+Write-Output "$($openshiftOriginWebConsoleImageLink)"
+Write-Host "##vso[task.setvariable variable=OPENSHIFT_ORIGIN_WEB_CONSOLE_IMAGE_URI]'$($openshiftOriginWebConsoleImageLink)'"
+
+$openshiftOriginServiceCatalogImageLink = [IO.File]::ReadAllText("${path}/scripts/OPENSHIFT_ORIGIN_SERVICE_CATALOG_IMAGE_LINK.txt")
+Write-Output "$($openshiftOriginServiceCatalogImageLink)"
+Write-Host "##vso[task.setvariable variable=OPENSHIFT_ORIGIN_SERVICE_CATALOG_IMAGE_URI]'$($openshiftOriginServiceCatalogImageLink)'"
+
+$openshiftOriginLoggingImageLink = [IO.File]::ReadAllText("${path}/scripts/OPENSHIFT_ORIGIN_LOGGING_IMAGE_LINK.txt")
+Write-Output "$($openshiftOriginLoggingImageLink)"
+Write-Host "##vso[task.setvariable variable=OPENSHIFT_ORIGIN_LOGGING_IMAGE_URI]'$($openshiftOriginLoggingImageLink)'"

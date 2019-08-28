@@ -17,8 +17,8 @@ docker save -o openshift_origin-deployer.3.9.docker openshift/origin-deployer:v3
 #docker pull docker.io/openshift/origin-template-service-broker
 #docker save -o openshift_origin-template-service-broker.docker openshift/origin-template-service-broker
 
-docker pull docker.io/openshift/origin-pod:v3.9
-docker save -o openshift_origin-pod.3.9.docker openshift/origin-pod:v3.9
+docker pull docker.io/openshift/origin-pod:v3.9.0
+docker save -o openshift_origin-pod.3.9.0.docker openshift/origin-pod:v3.9.0
 
 #docker pull docker.io/busybox
 #docker save -o busybox.docker busybox
@@ -32,14 +32,17 @@ docker save -o openshift_origin-docker-registry.3.9.docker openshift/origin-dock
 #docker pull docker.io/openshift/origin-console
 #docker save -o openshift_origin-console.docker openshift/origin-console
 
-#docker pull docker.io/openshift/origin-service-catalog
-#docker save -o openshift_origin-service-catalog.docker openshift/origin-service-catalog
+docker pull docker.io/openshift/origin-service-catalog:v3.9.0
+docker save -o openshift_origin-service-catalog.3.9.0.docker openshift/origin-service-catalog:v3.9.0
 
-#docker pull docker.io/openshift/origin-web-console
-#docker save -o openshift_origin-web-console.docker openshift/origin-web-console
+docker pull docker.io/openshift/origin-web-console:v3.9.0
+docker save -o openshift_origin-web-console.3.9.0.docker openshift/origin-web-console:v3.9.0
 
 docker pull docker.io/cockpit/kubernetes
 docker save -o cockpit_kubernetes.docker cockpit/kubernetes
+
+docker pull docker.io/openshift/origin-logging-fluentd:v3.9
+docker save -o openshift_origin-logging-fluentd.3.9.docker cockpit/kubernetes openshift/origin-logging-fluentd:v3.9
 
 #docker pull docker.io/openshift/prometheus-alertmanager
 #docker save -o openshift_prometheus-alertmanager.docker openshift/prometheus-alertmanager
