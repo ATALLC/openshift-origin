@@ -151,6 +151,9 @@
 		},
 		"infraMetricsImagesUrl": {
 			"value": "INFRAMETRICSIMAGESURL"
+		},
+		"registryImageUrl": {
+			"value": "REGISTRYIMAGEURL"
 		}
 	}
 }

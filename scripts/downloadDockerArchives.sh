@@ -49,4 +49,7 @@ docker save -o infra-metrics-images.tar \
 docker.io/openshift/origin-metrics-hawkular-metrics:v3.9 \
 docker.io/openshift/origin-metrics-heapster:v3.9 
 
+docker save -o registry-image.tar \
+registry \
+
 echo $(date) " - Script Complete"

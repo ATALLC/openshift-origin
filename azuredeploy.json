@@ -404,6 +404,12 @@
 			"metadata": {
 				"description": "Infrastructure node docker images URL metrics"
 			}	
+		},
+		"registryImageUrl": {
+			"type": "string",
+			"metadata": {
+				"description": "Docker registry image URL"
+			}
 		}
 	},
 	"variables": {
@@ -1452,7 +1458,7 @@
 					]
 				},
 				"protectedSettings": {
-					"commandToExecute": "[concat('bash ', variables('masterPrepScriptFileName'), ' ', variables('newStorageAccountPersistentVolume1'), ' ', parameters('adminUsername'), ' ', variables('location'), ' ', variables('singlequote'), parameters('ansibleRPMUrl'), variables('singlequote'), ' ', variables('singlequote'), parameters('openshiftOriginRpmsUrl'), variables('singlequote'), ' ', variables('singlequote'), parameters('masterImagesUrl'), variables('singlequote'), ' ', variables('singlequote'), parameters('nodeImagesUrl'), variables('singlequote'))]"
+					"commandToExecute": "[concat('bash ', variables('masterPrepScriptFileName'), ' ', variables('newStorageAccountPersistentVolume1'), ' ', parameters('adminUsername'), ' ', variables('location'), ' ', variables('singlequote'), parameters('ansibleRPMUrl'), variables('singlequote'), ' ', variables('singlequote'), parameters('openshiftOriginRpmsUrl'), variables('singlequote'), ' ', variables('singlequote'), parameters('masterImagesUrl'), variables('singlequote'), ' ', variables('singlequote'), parameters('nodeImagesUrl'), variables('singlequote'), ' ', variables('singlequote'), parameters('registryImageUrl'), variables('singlequote'))]"
 				}
 			}
 		}, {
@@ -1485,7 +1491,7 @@
 					]
 				},
 				"protectedSettings": {
-					"commandToExecute": "[concat('bash ', variables('infraPrepScriptFileName'), ' ', variables('singlequote'), parameters('openshiftOriginRpmsUrl'), variables('singlequote'), ' ', variables('singlequote'), parameters('nodeImagesUrl'), variables('singlequote'), ' ', variables('singlequote'), parameters('infra1ImagesUrl'), variables('singlequote'), ' ', variables('singlequote'), parameters('infra2ImagesUrl'), variables('singlequote'), ' ', variables('singlequote'), parameters('infra3ImagesUrl'), variables('singlequote'), ' ', variables('singlequote'), parameters('infraLoggingImagesUrl'), variables('singlequote'), ' ', variables('singlequote'), parameters('infraMetricsImagesUrl'), variables('singlequote'))]"
+					"commandToExecute": "[concat('bash ', variables('infraPrepScriptFileName'), ' ', variables('singlequote'), parameters('openshiftOriginRpmsUrl'), variables('singlequote'), ' ', variables('singlequote'), parameters('nodeImagesUrl'), variables('singlequote'), ' ', variables('singlequote'), parameters('infra1ImagesUrl'), variables('singlequote'), ' ', variables('singlequote'), parameters('infra2ImagesUrl'), variables('singlequote'), ' ', variables('singlequote'), parameters('infra3ImagesUrl'), variables('singlequote'), ' ', variables('singlequote'), parameters('infraLoggingImagesUrl'), variables('singlequote'), ' ', variables('singlequote'), parameters('infraMetricsImagesUrl'), variables('singlequote'), ' ', variables('singlequote'), parameters('registryImageUrl'), variables('singlequote'))]"
 				}
 			}
 		}, {
@@ -1518,7 +1524,7 @@
 					]
 				},
 				"protectedSettings": {
-					"commandToExecute": "[concat('bash ', variables('nodePrepScriptFileName'), ' ', variables('singlequote'), parameters('nodeImagesUrl'), variables('singlequote'))]"
+					"commandToExecute": "[concat('bash ', variables('nodePrepScriptFileName'), ' ', variables('singlequote'), parameters('nodeImagesUrl'), variables('singlequote'), ' ', variables('singlequote'), parameters('registryImageUrl'), variables('singlequote'))]"
 				}
 			}
 		}, {

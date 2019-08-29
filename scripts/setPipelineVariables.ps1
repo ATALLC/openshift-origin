@@ -59,3 +59,14 @@ $infra3ImagesLink = [IO.File]::ReadAllText("${path}/scripts/INFRA_3_IMAGES_LINK.
 Write-Output "$($infra3ImagesLink)"
 Write-Host "##vso[task.setvariable variable=INFRA_3_IMAGES_URI]'$($infra3ImagesLink)'"
 
+$infraLoggingImagesLink = [IO.File]::ReadAllText("${path}/scripts/INFRA_LOGGING_IMAGES_LINK.txt")
+Write-Output "$($infraLoggingImagesLink)"
+Write-Host "##vso[task.setvariable variable=INFRA_LOGGING_IMAGES_URI]'$($infraLoggingImagesLink)'"
+
+$infraMetricsImagesLink = [IO.File]::ReadAllText("${path}/scripts/INFRA_METRICS_IMAGES_LINK.txt")
+Write-Output "$($infraMetricsImagesLink)"
+Write-Host "##vso[task.setvariable variable=INFRA_METRICS_IMAGES_URI]'$($infraMetricsImagesLink)'"
+
+$registryImageLink = [IO.File]::ReadAllText("${path}/scripts/REGISTRY_IMAGE_LINK.txt")
+Write-Output "$($registryImageLink)"
+Write-Host "##vso[task.setvariable variable=REGISTRY_IMAGE_URI]'$($registryImageLink)'"

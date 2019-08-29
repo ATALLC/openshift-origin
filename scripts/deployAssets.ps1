@@ -73,8 +73,8 @@ Set-AzureStorageBlobContent -File "$($path)/scripts/$($infraPrepSh)" -Container 
 
 $miaoutput = "Uploading $($path)/$($masterImagesArchive) to $($container.CloudBlobContainer.Uri.AbsoluteUri)/$($masterImagesArchive)"
 Write-Output $miaoutput
-Set-AzureStorageBlobContent -File "$($path)/$($nodeImagesArchive)" -Container $container.Name -Blob $nodeImagesArchive -Context $ctx -Force:$Force | Out-Null
-$niaoutput = "Uploading $($path)/$($masterImagesArchive) to $($container.CloudBlobContainer.Uri.AbsoluteUri)/$($masterImagesArchive)"
+Set-AzureStorageBlobContent -File "$($path)/$($masterImagesArchive)" -Container $container.Name -Blob $masterImagesArchive -Context $ctx -Force:$Force | Out-Null
+$niaoutput = "Uploading $($path)/$($nodeImagesArchive) to $($container.CloudBlobContainer.Uri.AbsoluteUri)/$($nodeImagesArchive)"
 Write-Output $niaoutput
 Set-AzureStorageBlobContent -File "$($path)/$($nodeImagesArchive)" -Container $container.Name -Blob $nodeImagesArchive -Context $ctx -Force:$Force | Out-Null
 $i1iaoutput = "Uploading $($path)/$($infraImagesArchive1) to $($container.CloudBlobContainer.Uri.AbsoluteUri)/$($infraImagesArchive1)"

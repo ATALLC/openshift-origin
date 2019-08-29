@@ -10,6 +10,7 @@ echo "$4"
 echo "$5"
 echo "$6"
 echo "$7"
+echo "$8"
 echo "END LINKS"
 
 OPENSHIFTORIGINRPMSLINK="$1"
@@ -19,6 +20,7 @@ INFRA2IMAGESLINK="$4"
 INFRA3IMAGESLINK="$5"
 INFRALOGGINGIMAGESLINK="$6"
 INFRAMETRICSIMAGESLINK="$7"
+REGISTRYIMAGELINK="$8"
 
 # Install EPEL repository
 echo $(date) " - Installing EPEL"
@@ -107,12 +109,20 @@ systemctl enable docker
 systemctl start docker
 
 ### Copy docker images down to load
+docker load -i /tmp/node-images.tar
+docker load -i /tmp/infra-images1.tar
+docker load -i /tmp/infra-images2.tar
+docker load -i /tmp/infra-images3.tar
+docker load -i /tmp/infra-logging-images.tar
+docker load -i /tmp/infra-metrics-images.tar
+
 wget -O /tmp/node-images.tar $NODEIMAGESLINK
 wget -O /tmp/infra-images1.tar $INFRA1IMAGESLINK
 wget -O /tmp/infra-images2.tar $INFRA2IMAGESLINK
 wget -O /tmp/infra-images3.tar $INFRA3IMAGESLINK
 wget -O /tmp/infra-logging-images.tar $INFRALOGGINGIMAGESLINK
 wget -O /tmp/infra-metrics-images.tar $INFRAMETRICSIMAGESLINK
+wget -O /tmp/infra-images1.tar $REGISTRYIMAGELINK
 
 docker load -i /tmp/node-images.tar
 docker load -i /tmp/infra-images1.tar
@@ -120,6 +130,39 @@ docker load -i /tmp/infra-images2.tar
 docker load -i /tmp/infra-images3.tar
 docker load -i /tmp/infra-logging-images.tar
 docker load -i /tmp/infra-metrics-images.tar
+docker load -i /tmp/registry-image.tar
+
+docker run -d -p 5000:5000 --restart=always --name registry registry
+
+docker tag openshift/origin-logging-fluentd:v3.9 localhost:5000/openshift/origin-logging-fluentd:v3.9
+docker tag cockpit/kubernetes:latest localhost:5000/cockpit/kubernetes:latest
+docker tag openshift/origin-node:latest localhost:5000/openshift/origin-node:latest
+docker tag openshift/origin-pod:v3.9.0 localhost:5000/openshift/origin-pod:v3.9.0
+docker tag openshift/origin-docker-registry:v3.9.0 localhost:5000/openshift/origin-docker-registry:v3.9.0
+docker tag openshift/origin-template-service-broker:v3.9.0 localhost:5000/openshift/origin-template-service-broker:v3.9.0
+docker tag ansibleplaybookbundle/origin-ansible-service-broker:v3.9 localhost:5000/ansibleplaybookbundle/origin-ansible-service-broker:v3.9
+docker tag openshift/origin-haproxy-router:v3.9.0 localhost:5000/openshift/origin-haproxy-router:v3.9.0
+docker tag openshift/origin-deployer:v3.9.0 localhost:5000/openshift/origin-deployer:v3.9.0
+docker tag openshift/origin-logging-auth-proxy:v3.9 localhost:5000/openshift/origin-logging-auth-proxy:v3.9
+docker tag openshift/origin-logging-curator:v3.9 localhost:5000/openshift/origin-logging-curator:v3.9
+docker tag openshift/origin-logging-kibana:v3.9 localhost:5000/openshift/origin-logging-kibana:v3.9
+docker tag openshift/origin-metrics-hawkular-metrics:v3.9 localhost:5000/openshift/origin-metrics-hawkular-metrics:v3.9
+docker tag openshift/origin-metrics-heapster:v3.9 localhost:5000/openshift/origin-metrics-heapster:v3.9
+
+docker push localhost:5000/openshift/origin-logging-fluentd:v3.9
+docker push localhost:5000/cockpit/kubernetes:latest
+docker push localhost:5000/openshift/origin-node:latest
+docker push localhost:5000/openshift/origin-pod:v3.9.0
+docker push localhost:5000/openshift/origin-docker-registry:v3.9.0
+docker push localhost:5000/openshift/origin-template-service-broker:v3.9.0
+docker push localhost:5000/ansibleplaybookbundle/origin-ansible-service-broker:v3.9
+docker push localhost:5000/openshift/origin-haproxy-router:v3.9.0
+docker push localhost:5000/openshift/origin-deployer:v3.9.0
+docker push localhost:5000/openshift/origin-logging-auth-proxy:v3.9
+docker push localhost:5000/openshift/origin-logging-curator:v3.9
+docker push localhost:5000/openshift/origin-logging-kibana:v3.9
+docker push localhost:5000/openshift/origin-metrics-hawkular-metrics:v3.9
+docker push localhost:5000/openshift/origin-metrics-heapster:v3.9
 
 systemctl restart systemd-logind NetworkManager
 
