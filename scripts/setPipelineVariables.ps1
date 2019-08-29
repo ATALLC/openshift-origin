@@ -35,38 +35,27 @@ $nodePrepShLink = [IO.File]::ReadAllText("${path}/scripts/NODE_PREP_SH_LINK.txt"
 Write-Output "$($nodePrepShLink)"
 Write-Host "##vso[task.setvariable variable=NODE_PREP_SH_URI]'$($nodePrepShLink)'"
 
-$cockpitKubernetesImageLink = [IO.File]::ReadAllText("${path}/scripts/COCKPIT_KUBERNETES_IMAGE_LINK.txt")
-Write-Output "$($cockpitKubernetesImageLink)"
-Write-Host "##vso[task.setvariable variable=COCKPIT_KUBERNETES_IMAGE_URI]'$($cockpitKubernetesImageLink)'"
+$infraPrepShLink = [IO.File]::ReadAllText("${path}/scripts/INFRA_PREP_SH_LINK.txt")
+Write-Output "$($infraPrepShLink)"
+Write-Host "##vso[task.setvariable variable=INFRA_PREP_SH_URI]'$($infraPrepShLink)'"
 
-$openshiftOriginDeployerImageLink = [IO.File]::ReadAllText("${path}/scripts/OPENSHIFT_ORIGIN_DEPLOYER_IMAGE_LINK.txt")
-Write-Output "$($openshiftOriginDeployerImageLink)"
-Write-Host "##vso[task.setvariable variable=OPENSHIFT_ORIGIN_DEPLOYER_IMAGE_URI]'$($openshiftOriginDeployerImageLink)'"
+$masterImagesLink = [IO.File]::ReadAllText("${path}/scripts/MASTER_IMAGES_LINK.txt")
+Write-Output "$($masterImagesLink)"
+Write-Host "##vso[task.setvariable variable=MASTER_IMAGES_URI]'$($masterImagesLink)'"
 
-$openshiftOriginDockerRegistryImageLink = [IO.File]::ReadAllText("${path}/scripts/OPENSHIFT_ORIGIN_DOCKER_REGISTRY_IMAGE_LINK.txt")
-Write-Output "$($openshiftOriginDockerRegistryImageLink)"
-Write-Host "##vso[task.setvariable variable=OPENSHIFT_ORIGIN_DOCKER_REGISTRY_IMAGE_URI]'$($openshiftOriginDockerRegistryImageLink)'"
+$nodeImagesLink = [IO.File]::ReadAllText("${path}/scripts/NODE_IMAGES_LINK.txt")
+Write-Output "$($nodeImagesLink)"
+Write-Host "##vso[task.setvariable variable=NODE_IMAGES_URI]'$($nodeImagesLink)'"
 
-$openshiftOriginHAProxyImageLink = [IO.File]::ReadAllText("${path}/scripts/OPENSHIFT_ORIGIN_HA_PROXY_IMAGE_LINK.txt")
-Write-Output "$($openshiftOriginHAProxyImageLink)"
-Write-Host "##vso[task.setvariable variable=OPENSHIFT_ORIGIN_HA_PROXY_IMAGE_URI]'$($openshiftOriginHAProxyImageLink)'"
+$infra1ImagesLink = [IO.File]::ReadAllText("${path}/scripts/INFRA_1_IMAGES_LINK.txt")
+Write-Output "$($infra1ImagesLink)"
+Write-Host "##vso[task.setvariable variable=INFRA_1_IMAGES_URI]'$($infra1ImagesLink)'"
 
-$openshiftOriginPodImageLink = [IO.File]::ReadAllText("${path}/scripts/OPENSHIFT_ORIGIN_POD_IMAGE_LINK.txt")
-Write-Output "$($openshiftOriginPodImageLink)"
-Write-Host "##vso[task.setvariable variable=OPENSHIFT_ORIGIN_POD_IMAGE_URI]'$($openshiftOriginPodImageLink)'"
+$infra2ImagesLink = [IO.File]::ReadAllText("${path}/scripts/INFRA_2_IMAGES_LINK.txt")
+Write-Output "$($infra2ImagesLink)"
+Write-Host "##vso[task.setvariable variable=INFRA_2_IMAGES_URI]'$($infra2ImagesLink)'"
 
-$openshiftOriginNodeImageLink = [IO.File]::ReadAllText("${path}/scripts/OPENSHIFT_ORIGIN_NODE_IMAGE_LINK.txt")
-Write-Output "$($openshiftOriginNodeImageLink)"
-Write-Host "##vso[task.setvariable variable=OPENSHIFT_ORIGIN_NODE_IMAGE_URI]'$($openshiftOriginNodeImageLink)'"
+$infra3ImagesLink = [IO.File]::ReadAllText("${path}/scripts/INFRA_3_IMAGES_LINK.txt")
+Write-Output "$($infra3ImagesLink)"
+Write-Host "##vso[task.setvariable variable=INFRA_3_IMAGES_URI]'$($infra3ImagesLink)'"
 
-$openshiftOriginWebConsoleImageLink = [IO.File]::ReadAllText("${path}/scripts/OPENSHIFT_ORIGIN_WEB_CONSOLE_IMAGE_LINK.txt")
-Write-Output "$($openshiftOriginWebConsoleImageLink)"
-Write-Host "##vso[task.setvariable variable=OPENSHIFT_ORIGIN_WEB_CONSOLE_IMAGE_URI]'$($openshiftOriginWebConsoleImageLink)'"
-
-$openshiftOriginServiceCatalogImageLink = [IO.File]::ReadAllText("${path}/scripts/OPENSHIFT_ORIGIN_SERVICE_CATALOG_IMAGE_LINK.txt")
-Write-Output "$($openshiftOriginServiceCatalogImageLink)"
-Write-Host "##vso[task.setvariable variable=OPENSHIFT_ORIGIN_SERVICE_CATALOG_IMAGE_URI]'$($openshiftOriginServiceCatalogImageLink)'"
-
-$openshiftOriginLoggingImageLink = [IO.File]::ReadAllText("${path}/scripts/OPENSHIFT_ORIGIN_LOGGING_IMAGE_LINK.txt")
-Write-Output "$($openshiftOriginLoggingImageLink)"
-Write-Host "##vso[task.setvariable variable=OPENSHIFT_ORIGIN_LOGGING_IMAGE_URI]'$($openshiftOriginLoggingImageLink)'"

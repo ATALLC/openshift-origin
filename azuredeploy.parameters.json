@@ -107,6 +107,9 @@
 		"masterPrepScriptUrl": {
 			"value": "MASTERPREPSCRIPTURL"
 		},
+		"infraPrepScriptUrl": {
+			"value": "INFRAPREPSCRIPTURL"
+		},
 		"openshiftDeploymentScriptUrl": {
 			"value": "OPENSHIFTDEPLOYMENTSCRIPTURL"
 		},
@@ -125,35 +128,29 @@
 		"openshiftContainerPlatformPlaybooksUrl": {
 			"value": "OPENSHIFTCONTAINERPLATFORMPLAYBOOKSURL"
 		},
-		"cockpitKubernetesImageUrl": {
-			"value": "COCKPITKUBERNETESIMAGEURL"
-		},
-		"openshiftOriginDeployerImageUrl": {
-			"value": "OPENSHIFTORIGINDEPLOYERIMAGEURL"
-		},
-		"openshiftOriginDockerRegistryImageUrl": {
-			"value": "OPENSHIFTORIGINDOCKERREGISTRYIMAGEURL"
-		},
-		"openshiftOriginHAProxyImageUrl": {
-			"value": "OPENSHIFTORIGINHAPROXYIMAGEURL"
-		},
-		"openshiftOriginPodImageUrl": {
-			"value": "OPENSHIFTORIGINPODIMAGEURL"
-		},
-		"openshiftOriginNodeImageUrl": {
-			"value": "OPENSHIFTORIGINNODEIMAGEURL"
-		},
 		"openshiftOriginRpmsUrl": {
 			"value": "OPENSHIFTORIGINRPMSURL"
 		},
-		"openshiftOriginWebConsoleImageUrl": {
-			"value": "OPENSHIFTORIGINWEBCONSOLEIMAGEURL"
+		"masterImagesUrl": {
+			"value": "MASTERIMAGESURL"
 		},
-		"openshiftOriginServiceCatalogImageUrl": {
-			"value": "OPENSHIFTORIGINSERVICECATALOGIMAGEURL"
+		"nodeImagesUrl": {
+			"value": "NODEIMAGESURL"
 		},
-		"openshiftOriginLoggingImageUrl": {
-			"value": "OPENSHIFTORIGINLOGGINGIMAGEURL"
+		"infra1ImagesUrl": {
+			"value": "INFRA1IMAGESURL"
+		},
+		"infra2ImagesUrl": {
+			"value": "INFRA2IMAGESURL"
+		},
+		"infra3ImagesUrl": {
+			"value": "INFRA3IMAGESURL"
+		},
+		"infraLoggingImagesUrl": {
+			"value": "INFRALOGGINGIMAGESURL"
+		},
+		"infraMetricsImagesUrl": {
+			"value": "INFRAMETRICSIMAGESURL"
 		}
 	}
 }

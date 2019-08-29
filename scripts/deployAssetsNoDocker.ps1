@@ -26,15 +26,13 @@ $deployOpenShiftSh = "deployOpenShift.sh"
 $masterPrepSh = "masterPrep.sh"
 $nodePrepSh = "nodePrep.sh"
 
-$cockpitKubernetesImage = "cockpit_kubernetes.docker"
-$openshiftOriginDeployerImage = "openshift_origin-deployer.3.9.docker"
-$openshiftOriginDockerRegistryImage = "openshift_origin-docker-registry.3.9.docker"
-$openshiftOriginHAProxyImage = "openshift_origin-haproxy-router.3.9.docker"
-$openshiftOriginPodImage = "openshift_origin-pod.3.9.0.docker"
-$openshiftOriginNodeImage = "openshift_origin-node.docker"
-$openshiftOriginWebConsoleImage = "openshift_origin-web-console.3.9.0.docker"
-$openshiftOriginServiceCatalogImage = "openshift_origin-service-catalog.3.9.0.docker"
-$openshiftOriginLoggingImage = "openshift_origin-logging-fluentd.3.9.docker"
+$masterImagesArchive = "master-images.tar"
+$nodeImagesArchive = "node-images.tar"
+$infraImagesArchive1 = "infra-images1.tar"
+$infraImagesArchive2 = "infra-images2.tar"
+$infraImagesArchive3 = "infra-images3.tar"
+$infraLoggingArchive = "infra-logging-images.tar"
+$infraMetricsArchive = "infra-metrics-images.tar"
 
 $openshiftOriginArchive = "openshift-origin.tar"
 
@@ -42,9 +40,9 @@ $openshiftOriginArchive = "openshift-origin.tar"
 $aoutput = "Uploading $($path)/$($ansibleRPMsArchive) to $($container.CloudBlobContainer.Uri.AbsoluteUri)/$($ansibleRPMsArchive)"
 Write-Output $aoutput
 Set-AzureStorageBlobContent -File "$($path)/$($ansibleRPMsArchive)" -Container $container.Name -Blob $ansibleRPMsArchive -Context $ctx -Force:$Force | Out-Null
-#$ooroutput = "Uploading $($path)/$($openshiftOriginRPMsArchive) to $($container.CloudBlobContainer.Uri.AbsoluteUri)/$($openshiftOriginRPMsArchive)"
-#Write-Output $ooroutput
-#Set-AzureStorageBlobContent -File "$($path)/$($openshiftOriginRPMsArchive)" -Container $container.Name -Blob $openshiftOriginRPMsArchive -Context $ctx -Force:$Force | Out-Null
+$ooroutput = "Uploading $($path)/$($openshiftOriginRPMsArchive) to $($container.CloudBlobContainer.Uri.AbsoluteUri)/$($openshiftOriginRPMsArchive)"
+Write-Output $ooroutput
+Set-AzureStorageBlobContent -File "$($path)/$($openshiftOriginRPMsArchive)" -Container $container.Name -Blob $openshiftOriginRPMsArchive -Context $ctx -Force:$Force | Out-Null
 $oaoutput = "Uploading $($path)/$($openshiftAnsibleArchive) to $($container.CloudBlobContainer.Uri.AbsoluteUri)/$($openshiftAnsibleArchive)"
 Write-Output $oaoutput
 Set-AzureStorageBlobContent -File "$($path)/$($openshiftAnsibleArchive)" -Container $container.Name -Blob $openshiftAnsibleArchive -Context $ctx -Force:$Force | Out-Null
@@ -69,34 +67,27 @@ $npshputput = "Uploading $($path)/scripts/$($nodePrepSh) to $($container.CloudBl
 Write-Output $npshputput
 Set-AzureStorageBlobContent -File "$($path)/scripts/$($nodePrepSh)" -Container $container.Name -Blob $nodePrepSh -Context $ctx -Force:$Force | Out-Null
 
-#$ckioutput = "Uploading $($path)/$($cockpitKubernetesImage) to $($container.CloudBlobContainer.Uri.AbsoluteUri)/$($cockpitKubernetesImage)"
-#Write-Output $ckioutput
-#Set-AzureStorageBlobContent -File "$($path)/$($cockpitKubernetesImage)" -Container $container.Name -Blob $cockpitKubernetesImage -Context $ctx -Force:$Force | Out-Null
-#$oodioutput = "Uploading $($path)/$($openshiftOriginDeployerImage) to $($container.CloudBlobContainer.Uri.AbsoluteUri)/$($openshiftOriginDeployerImage)"
-#Write-Output $oodioutput
-#Set-AzureStorageBlobContent -File "$($path)/$($openshiftOriginDeployerImage)" -Container $container.Name -Blob $openshiftOriginDeployerImage -Context $ctx -Force:$Force | Out-Null
-#$oodrioutput = "Uploading $($path)/$($openshiftOriginDockerRegistryImage) to $($container.CloudBlobContainer.Uri.AbsoluteUri)/$($openshiftOriginDockerRegistryImage)"
-#Write-Output $oodrioutput
-#Set-AzureStorageBlobContent -File "$($path)/$($openshiftOriginDockerRegistryImage)" -Container $container.Name -Blob $openshiftOriginDockerRegistryImage -Context $ctx -Force:$Force | Out-Null
-#$oohpioutput = "Uploading $($path)/$($openshiftOriginHAProxyImage) to $($container.CloudBlobContainer.Uri.AbsoluteUri)/$($openshiftOriginHAProxyImage)"
-#Write-Output $oohpioutput
-#Set-AzureStorageBlobContent -File "$($path)/$($openshiftOriginHAProxyImage)" -Container $container.Name -Blob $openshiftOriginHAProxyImage -Context $ctx -Force:$Force | Out-Null
-#$oopioutput = "Uploading $($path)/$($openshiftOriginPodImage) to $($container.CloudBlobContainer.Uri.AbsoluteUri)/$($openshiftOriginPodImage)"
-#Write-Output $oopioutput
-#Set-AzureStorageBlobContent -File "$($path)/$($openshiftOriginPodImage)" -Container $container.Name -Blob $openshiftOriginPodImage -Context $ctx -Force:$Force | Out-Null
-#$oonioutput = "Uploading $($path)/$($openshiftOriginNodeImage) to $($container.CloudBlobContainer.Uri.AbsoluteUri)/$($openshiftOriginNodeImage)"
-#Write-Output $oonioutput
-#Set-AzureStorageBlobContent -File "$($path)/$($openshiftOriginNodeImage)" -Container $container.Name -Blob $openshiftOriginNodeImage -Context $ctx -Force:$Force | Out-Null
-#$oowcioutput = "Uploading $($path)/$($openshiftOriginWebConsoleImage) to $($container.CloudBlobContainer.Uri.AbsoluteUri)/$($openshiftOriginWebConsoleImage)"
-#Write-Output $oowcioutput
-#Set-AzureStorageBlobContent -File "$($path)/$($openshiftOriginWebConsoleImage)" -Container $container.Name -Blob $openshiftOriginWebConsoleImage -Context $ctx -Force:$Force | Out-Null
-#$oopscutput = "Uploading $($path)/$($openshiftOriginServiceCatalogImage) to $($container.CloudBlobContainer.Uri.AbsoluteUri)/$($openshiftOriginServiceCatalogImage)"
-#Write-Output $oopscutput
-#Set-AzureStorageBlobContent -File "$($path)/$($openshiftOriginServiceCatalogImage)" -Container $container.Name -Blob $openshiftOriginServiceCatalogImage -Context $ctx -Force:$Force | Out-Null
-#$oonlutput = "Uploading $($path)/$($openshiftOriginLoggingImage) to $($container.CloudBlobContainer.Uri.AbsoluteUri)/$($openshiftOriginLoggingImage)"
-#Write-Output $oonlutput
-#Set-AzureStorageBlobContent -File "$($path)/$($openshiftOriginLoggingImage)" -Container $container.Name -Blob $openshiftOriginLoggingImage -Context $ctx -Force:$Force | Out-Null
-
+#$miaoutput = "Uploading $($path)/$($masterImagesArchive) to $($container.CloudBlobContainer.Uri.AbsoluteUri)/$($masterImagesArchive)"
+#Write-Output $miaoutput
+#Set-AzureStorageBlobContent -File "$($path)/$($nodeImagesArchive)" -Container $container.Name -Blob $nodeImagesArchive -Context $ctx -Force:$Force | Out-Null
+#$niaoutput = "Uploading $($path)/$($masterImagesArchive) to $($container.CloudBlobContainer.Uri.AbsoluteUri)/$($masterImagesArchive)"
+#Write-Output $niaoutput
+#Set-AzureStorageBlobContent -File "$($path)/$($nodeImagesArchive)" -Container $container.Name -Blob $nodeImagesArchive -Context $ctx -Force:$Force | Out-Null
+#$i1iaoutput = "Uploading $($path)/$($infraImagesArchive1) to $($container.CloudBlobContainer.Uri.AbsoluteUri)/$($infraImagesArchive1)"
+#Write-Output $i1iaoutput
+#Set-AzureStorageBlobContent -File "$($path)/$($infraImagesArchive1)" -Container $container.Name -Blob $infraImagesArchive1 -Context $ctx -Force:$Force | Out-Null
+#$i2iaoutput = "Uploading $($path)/$($infraImagesArchive2) to $($container.CloudBlobContainer.Uri.AbsoluteUri)/$($infraImagesArchive2)"
+#Write-Output $i2iaoutput
+#Set-AzureStorageBlobContent -File "$($path)/$($infraImagesArchive2)" -Container $container.Name -Blob $infraImagesArchive2 -Context $ctx -Force:$Force | Out-Null
+#$i3iaoutput = "Uploading $($path)/$($infraImagesArchive3) to $($container.CloudBlobContainer.Uri.AbsoluteUri)/$($infraImagesArchive3)"
+#Write-Output $i3iaoutput
+#Set-AzureStorageBlobContent -File "$($path)/$($infraImagesArchive3)" -Container $container.Name -Blob $infraImagesArchive3 -Context $ctx -Force:$Force | Out-Null
+#$iliaoutput = "Uploading $($path)/$($infraLoggingArchive) to $($container.CloudBlobContainer.Uri.AbsoluteUri)/$($infraLoggingArchive)"
+#Write-Output $iliaoutput
+#Set-AzureStorageBlobContent -File "$($path)/$($infraLoggingArchive)" -Container $container.Name -Blob $infraLoggingArchive -Context $ctx -Force:$Force | Out-Null
+#$imiaoutput = "Uploading $($path)/$($infraMetricsArchive) to $($container.CloudBlobContainer.Uri.AbsoluteUri)/$($infraMetricsArchive)"
+#Write-Output $imiaoutput
+#Set-AzureStorageBlobContent -File "$($path)/$($infraMetricsArchive)" -Container $container.Name -Blob $infraMetricsArchive -Context $ctx -Force:$Force | Out-Null
 
 #$ooaoutput = "Uploading $($path)/$($openshiftOriginArchive) to $($container.CloudBlobContainer.Uri.AbsoluteUri)/$($openshiftOriginArchive)"
 #Write-Output $oonioutput
@@ -137,30 +128,24 @@ $nodePrepShSAS = New-AzureStorageBlobSASToken -Container $cn -Blob $nodePrepSh -
 $nodePrepShLink = "$($containerURI)$($nodePrepSh)$($nodePrepShSAS)"
 $nodePrepShLink | Out-File $path/scripts/NODE_PREP_SH_LINK.txt -NoNewline
 
-$cockpitKubernetesImageSAS = New-AzureStorageBlobSASToken -Container $cn -Blob $cockpitKubernetesImage -Permission rwd -StartTime $startTime -ExpiryTime $endTime -Context $ctx
-$cockpitKubernetesImageLink = "$($containerURI)$($cockpitKubernetesImage)$($cockpitKubernetesImageSAS)"
-$cockpitKubernetesImageLink | Out-File $path/scripts/COCKPIT_KUBERNETES_IMAGE_LINK.txt -NoNewline
-$openshiftOriginDeployerImageSAS = New-AzureStorageBlobSASToken -Container $cn -Blob $openshiftOriginDeployerImage -Permission rwd -StartTime $startTime -ExpiryTime $endTime -Context $ctx
-$openshiftOriginDeployerImageLink = "$($containerURI)$($openshiftOriginDeployerImage)$($openshiftOriginDeployerImageSAS)"
-$openshiftOriginDeployerImageLink | Out-File $path/scripts/OPENSHIFT_ORIGIN_DEPLOYER_IMAGE_LINK.txt -NoNewline
-$openshiftOriginDockerRegistryImageSAS = New-AzureStorageBlobSASToken -Container $cn -Blob $openshiftOriginDockerRegistryImage -Permission rwd -StartTime $startTime -ExpiryTime $endTime -Context $ctx
-$openshiftOriginDockerRegistryImageLink = "$($containerURI)$($openshiftOriginDockerRegistryImage)$($openshiftOriginDockerRegistryImageSAS)"
-$openshiftOriginDockerRegistryImageLink | Out-File $path/scripts/OPENSHIFT_ORIGIN_DOCKER_REGISTRY_IMAGE_LINK.txt -NoNewline
-$openshiftOriginHAProxyImageSAS = New-AzureStorageBlobSASToken -Container $cn -Blob $openshiftOriginHAProxyImage -Permission rwd -StartTime $startTime -ExpiryTime $endTime -Context $ctx
-$openshiftOriginHAProxyImageLink = "$($containerURI)$($openshiftOriginHAProxyImage)$($openshiftOriginHAProxyImageSAS)"
-$openshiftOriginHAProxyImageLink | Out-File $path/scripts/OPENSHIFT_ORIGIN_HA_PROXY_IMAGE_LINK.txt -NoNewline
-$openshiftOriginPodImageSAS = New-AzureStorageBlobSASToken -Container $cn -Blob $openshiftOriginPodImage -Permission rwd -StartTime $startTime -ExpiryTime $endTime -Context $ctx
-$openshiftOriginPodImageLink = "$($containerURI)$($openshiftOriginPodImage)$($openshiftOriginPodImageSAS)"
-$openshiftOriginPodImageLink | Out-File $path/scripts/OPENSHIFT_ORIGIN_POD_IMAGE_LINK.txt -NoNewline
-$openshiftOriginNodeImageSAS = New-AzureStorageBlobSASToken -Container $cn -Blob $openshiftOriginNodeImage -Permission rwd -StartTime $startTime -ExpiryTime $endTime -Context $ctx
-$openshiftOriginNodeImageLink = "$($containerURI)$($openshiftOriginNodeImage)$($openshiftOriginNodeImageSAS)"
-$openshiftOriginNodeImageLink | Out-File $path/scripts/OPENSHIFT_ORIGIN_NODE_IMAGE_LINK.txt -NoNewline
-$openshiftOriginWebConsoleImageSAS = New-AzureStorageBlobSASToken -Container $cn -Blob $openshiftOriginWebConsoleImage -Permission rwd -StartTime $startTime -ExpiryTime $endTime -Context $ctx
-$openshiftOriginWebConsoleImageLink = "$($containerURI)$($openshiftOriginWebConsoleImage)$($openshiftOriginWebConsoleImageSAS)"
-$openshiftOriginWebConsoleImageLink | Out-File $path/scripts/OPENSHIFT_ORIGIN_WEB_CONSOLE_IMAGE_LINK.txt -NoNewline
-$openshiftOriginServiceCatalogImageSAS = New-AzureStorageBlobSASToken -Container $cn -Blob $openshiftOriginServiceCatalogImage -Permission rwd -StartTime $startTime -ExpiryTime $endTime -Context $ctx
-$openshiftOriginServiceCatalogImageLink = "$($containerURI)$($openshiftOriginServiceCatalogImage)$($openshiftOriginServiceCatalogImageSAS)"
-$openshiftOriginServiceCatalogImageLink | Out-File $path/scripts/OPENSHIFT_ORIGIN_SERVICE_CATALOG_IMAGE_LINK.txt -NoNewline
-$openshiftOriginLoggingImageSAS = New-AzureStorageBlobSASToken -Container $cn -Blob $openshiftOriginLoggingImage -Permission rwd -StartTime $startTime -ExpiryTime $endTime -Context $ctx
-$openshiftOriginLoggingImageLink = "$($containerURI)$($openshiftOriginLoggingImage)$($openshiftOriginLoggingImageSAS)"
-$openshiftOriginLoggingImageLink | Out-File $path/scripts/OPENSHIFT_ORIGIN_LOGGING_IMAGE_LINK.txt -NoNewline
+$masterImagesArchiveSAS = New-AzureStorageBlobSASToken -Container $cn -Blob $masterImagesArchive -Permission rwd -StartTime $startTime -ExpiryTime $endTime -Context $ctx
+$masterImagesArchiveLink = "$($containerURI)$($masterImagesArchive)$($masterImagesArchiveSAS)"
+$masterImagesArchiveLink | Out-File $path/scripts/MASTER_IMAGES_LINK.txt -NoNewline
+$nodeImagesArchiveSAS = New-AzureStorageBlobSASToken -Container $cn -Blob $nodeImagesArchive -Permission rwd -StartTime $startTime -ExpiryTime $endTime -Context $ctx
+$nodeImagesArchiveLink = "$($containerURI)$($nodeImagesArchive)$($nodeImagesArchiveSAS)"
+$nodeImagesArchiveLink | Out-File $path/scripts/NODE_IMAGES_LINK.txt -NoNewline
+$infraImagesArchive1SAS = New-AzureStorageBlobSASToken -Container $cn -Blob $infraImagesArchive1 -Permission rwd -StartTime $startTime -ExpiryTime $endTime -Context $ctx
+$infraImagesArchive1Link = "$($containerURI)$($infraImagesArchive1)$($infraImagesArchive1SAS)"
+$infraImagesArchive1Link | Out-File $path/scripts/INFRA_1_IMAGES_LINK.txt -NoNewline
+$infraImagesArchive2SAS = New-AzureStorageBlobSASToken -Container $cn -Blob $infraImagesArchive2 -Permission rwd -StartTime $startTime -ExpiryTime $endTime -Context $ctx
+$infraImagesArchive2Link = "$($containerURI)$($infraImagesArchive2)$($infraImagesArchive2SAS)"
+$infraImagesArchive2Link | Out-File $path/scripts/INFRA_2_IMAGES_LINK.txt -NoNewline
+$infraImagesArchive3SAS = New-AzureStorageBlobSASToken -Container $cn -Blob $infraImagesArchive3 -Permission rwd -StartTime $startTime -ExpiryTime $endTime -Context $ctx
+$infraImagesArchive3Link = "$($containerURI)$($infraImagesArchive3)$($infraImagesArchive3SAS)"
+$infraImagesArchive3Link | Out-File $path/scripts/INFRA_3_IMAGES_LINK.txt -NoNewline
+$infraLoggingArchiveSAS = New-AzureStorageBlobSASToken -Container $cn -Blob $infraLoggingArchive -Permission rwd -StartTime $startTime -ExpiryTime $endTime -Context $ctx
+$infraLoggingArchiveLink = "$($containerURI)$($infraLoggingArchive)$($infraLoggingArchiveSAS)"
+$infraLoggingArchiveLink | Out-File $path/scripts/INFRA_LOGGING_IMAGES_LINK.txt -NoNewline
+$infraMetricsArchiveSAS = New-AzureStorageBlobSASToken -Container $cn -Blob $infraMetricsArchive -Permission rwd -StartTime $startTime -ExpiryTime $endTime -Context $ctx
+$infraMetricsArchiveLink = "$($containerURI)$($infraMetricsArchive)$($infraMetricsArchiveSAS)"
+$infraMetricsArchiveLink | Out-File $path/scripts/INFRA_METRICS_IMAGES_LINK.txt -NoNewline

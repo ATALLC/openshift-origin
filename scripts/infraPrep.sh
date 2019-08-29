@@ -5,10 +5,20 @@ echo $(date) " - Starting Script"
 echo "START LINKS"
 echo "$1"
 echo "$2"
+echo "$3"
+echo "$4"
+echo "$5"
+echo "$6"
+echo "$7"
 echo "END LINKS"
 
 OPENSHIFTORIGINRPMSLINK="$1"
 NODEIMAGESLINK="$2"
+INFRA1IMAGESLINK="$3"
+INFRA2IMAGESLINK="$4"
+INFRA3IMAGESLINK="$5"
+INFRALOGGINGIMAGESLINK="$6"
+INFRAMETRICSIMAGESLINK="$7"
 
 # Install EPEL repository
 echo $(date) " - Installing EPEL"
@@ -98,8 +108,18 @@ systemctl start docker
 
 ### Copy docker images down to load
 wget -O /tmp/node-images.tar $NODEIMAGESLINK
+wget -O /tmp/infra-images1.tar $INFRA1IMAGESLINK
+wget -O /tmp/infra-images2.tar $INFRA2IMAGESLINK
+wget -O /tmp/infra-images3.tar $INFRA3IMAGESLINK
+wget -O /tmp/infra-logging-images.tar $INFRALOGGINGIMAGESLINK
+wget -O /tmp/infra-metrics-images.tar $INFRAMETRICSIMAGESLINK
 
 docker load -i /tmp/node-images.tar
+docker load -i /tmp/infra-images1.tar
+docker load -i /tmp/infra-images2.tar
+docker load -i /tmp/infra-images3.tar
+docker load -i /tmp/infra-logging-images.tar
+docker load -i /tmp/infra-metrics-images.tar
 
 systemctl restart systemd-logind NetworkManager
 

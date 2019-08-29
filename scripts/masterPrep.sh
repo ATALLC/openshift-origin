@@ -7,26 +7,15 @@ echo "$4"
 echo "$5"
 echo "$6"
 echo "$7"
-echo "$8"
-echo "$9"
-echo "${10}"
-echo "${11}"
 echo "END LINKS"
 
 STORAGEACCOUNT=$1
 SUDOUSER=$2
 LOCATION=$3
 ANSIBLERPMARCHIVELINK="$4"
-COCKPITKUBERNETESIMAGELINK="$5"
-OPENSHIFTORIGINDEPLOYERIMAGELINK="$6"
-OPENSHIFTORIGINDOCKERREGISTRYIMAGELINK="$7"
-OPENSHIFTORIGINHAPROXYIMAGELINK="$8"
-OPENSHIFTORIGINPODIMAGELINK="$9"
-OPENSHIFTORIGINNODEIMAGELINK="${10}"
-OPENSHIFTORIGINRPMSLINK="${11}"
-OPENSHIFTORIGINWEBCONSOLEIMAGELINK="${12}"
-OPENSHIFTORIGINSERVICECATALOGIMAGELINK="${13}"
-OPENSHIFTORIGINLOGGINGIMAGELINK="${14}"
+OPENSHIFTORIGINRPMSLINK="$5"
+MASTERIMAGESLINK="$6"
+NODEIMAGESLINK="$7"
 
 # Install EPEL repository
 echo $(date) " - Installing EPEL"
@@ -178,28 +167,11 @@ EOF
 fi
 
 ### Copy docker images down to load
-wget -O /tmp/openshift_origin-web-console.3.9.0.docker $OPENSHIFTORIGINWEBCONSOLEIMAGELINK
-wget -O /tmp/openshift_origin-docker-registry.3.9.docker $OPENSHIFTORIGINDOCKERREGISTRYIMAGELINK
-wget -O /tmp/openshift_origin-haproxy-router.3.9.docker $OPENSHIFTORIGINHAPROXYIMAGELINK
-wget -O /tmp/openshift_origin-deployer.3.9.docker $OPENSHIFTORIGINDEPLOYERIMAGELINK
-wget -O /tmp/openshift_origin-service-catalog.3.9.0.docker $OPENSHIFTORIGINSERVICECATALOGIMAGELINK
-wget -O /tmp/openshift_origin-pod.3.9.0.docker $OPENSHIFTORIGINPODIMAGELINK
-wget -O /tmp/openshift_origin-node.docker $OPENSHIFTORIGINNODEIMAGELINK
-wget -O /tmp/cockpit_kubernetes.docker $COCKPITKUBERNETESIMAGELINK
-wget -O /tmp/openshift_origin-logging-fluentd.3.9.docker $OPENSHIFTORIGINLOGGINGIMAGELINK
-echo "Docker files location: "
-echo `pwd`
-echo `ls -al`
+wget -O /tmp/master-images.tar $MASTERIMAGESLINK
+wget -O /tmp/node-images.tar $NODEIMAGESLINK
 
-docker load -i /tmp/openshift_origin-web-console.3.9.0.docker
-docker load -i /tmp/openshift_origin-docker-registry.3.9.docker
-docker load -i /tmp/openshift_origin-haproxy-router.3.9.docker
-docker load -i /tmp/openshift_origin-deployer.3.9.docker
-docker load -i /tmp/openshift_origin-service-catalog.3.9.0.docker
-docker load -i /tmp/openshift_origin-pod.3.9.0.docker
-docker load -i /tmp/openshift_origin-node.docker
-docker load -i /tmp/cockpit_kubernetes.docker
-docker load -i /tmp/openshift_origin-logging-fluentd.3.9.docker
+docker load -i /tmp/master-images.tar
+docker load -i /tmp/node-images.tar
 
 systemctl restart systemd-logind NetworkManager
 
