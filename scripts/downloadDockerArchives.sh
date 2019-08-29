@@ -18,6 +18,7 @@ docker pull docker.io/openshift/origin-service-catalog:v3.9.0
 docker pull docker.io/openshift/origin-web-console:v3.9.0
 docker pull docker.io/cockpit/kubernetes
 docker pull docker.io/openshift/origin-logging-fluentd:v3.9
+docker pull docker.io/registry
 
 docker save -o node-images.tar \
 docker.io/openshift/origin-logging-fluentd:v3.9 \
