@@ -34,6 +34,7 @@ $infraImagesArchive2 = "infra-images2.tar"
 $infraImagesArchive3 = "infra-images3.tar"
 $infraLoggingArchive = "infra-logging-images.tar"
 $infraMetricsArchive = "infra-metrics-images.tar"
+$registryImageArchive = "registry-image.tar"
 
 $openshiftOriginArchive = "openshift-origin.tar"
 
@@ -92,6 +93,9 @@ Set-AzureStorageBlobContent -File "$($path)/$($infraLoggingArchive)" -Container 
 $imiaoutput = "Uploading $($path)/$($infraMetricsArchive) to $($container.CloudBlobContainer.Uri.AbsoluteUri)/$($infraMetricsArchive)"
 Write-Output $imiaoutput
 Set-AzureStorageBlobContent -File "$($path)/$($infraMetricsArchive)" -Container $container.Name -Blob $infraMetricsArchive -Context $ctx -Force:$Force | Out-Null
+$riaoutput = "Uploading $($path)/$($registryImageArchive) to $($container.CloudBlobContainer.Uri.AbsoluteUri)/$($registryImageArchive)"
+Write-Output $riaoutput
+Set-AzureStorageBlobContent -File "$($path)/$($registryImageArchive)" -Container $container.Name -Blob $registryImageArchive -Context $ctx -Force:$Force | Out-Null
 
 $ooaoutput = "Uploading $($path)/$($openshiftOriginArchive) to $($container.CloudBlobContainer.Uri.AbsoluteUri)/$($openshiftOriginArchive)"
 Write-Output $oonioutput
@@ -156,3 +160,6 @@ $infraLoggingArchiveLink | Out-File $path/scripts/INFRA_LOGGING_IMAGES_LINK.txt 
 $infraMetricsArchiveSAS = New-AzureStorageBlobSASToken -Container $cn -Blob $infraMetricsArchive -Permission rwd -StartTime $startTime -ExpiryTime $endTime -Context $ctx
 $infraMetricsArchiveLink = "$($containerURI)$($infraMetricsArchive)$($infraMetricsArchiveSAS)"
 $infraMetricsArchiveLink | Out-File $path/scripts/INFRA_METRICS_IMAGES_LINK.txt -NoNewline
+$registryImageArchiveSAS = New-AzureStorageBlobSASToken -Container $cn -Blob $registryImageArchive -Permission rwd -StartTime $startTime -ExpiryTime $endTime -Context $ctx
+$registryImageArchiveLink = "$($containerURI)$($registryImageArchive)$($registryImageArchiveSAS)"
+$registryImageArchiveLink | Out-File $path/scripts/REGISTRY_IMAGE_LINK.txt -NoNewline
