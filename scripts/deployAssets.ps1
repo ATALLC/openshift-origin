@@ -27,7 +27,7 @@ $masterPrepSh = "masterPrep.sh"
 $nodePrepSh = "nodePrep.sh"
 $infraPrepSh = "infraPrep.sh"
 $dockerPrepSh = "dockerPrep.sh"
-$regCert = "ca.cert"
+$regCert = "ca.crt"
 $regKey = "ca.key"
 
 $masterImagesArchive = "master-images.tar"
