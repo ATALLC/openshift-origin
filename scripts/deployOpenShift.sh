@@ -213,7 +213,7 @@ openshift_master_console_port=443
 osm_default_node_selector='region=app'
 openshift_disable_check=disk_availability,memory_availability,docker_image_availability
 $CLOUDKIND
-oreg_url=localhost:smartfmdockerreg.io/openshift/origin-${component}:${version}
+oreg_url=smartfmdockerreg.io/openshift/origin-\${component}:\${version}
 openshift_examples_modify_imagestreams=true
 
 # This enables all the system containers except for docker:
