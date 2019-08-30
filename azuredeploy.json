@@ -1479,6 +1479,10 @@
 			"name": "[variables('dockerreghostname')]",
 			"location": "[variables('location')]",
 			"apiVersion": "[variables('apiVersionCompute')]",
+			"dependsOn": [
+				"[resourceId('Microsoft.Storage/storageAccounts', variables('diagStorageAccount2'))]",
+				"[resourceId('Microsoft.Network/networkInterfaces', concat(variables('dockerreghostname'), '-nic'))]"
+			],
 			"tags": {
 				"Role": "dockerregistrynode",
 				"provider": "[variables('redHatTags').provider]",
@@ -1674,8 +1678,7 @@
 				"masterPrepLoop",
 				"infraPrepLoop",
 				"nodePrepLoop",
-				"nodePrepLoop",
-				"[concat(variables('dockerreghostname'), '/prepNodes')]"
+				"[resourceId('Microsoft.Compute/virtualMachines/extensions', variables('dockerreghostname'), 'prepNodes')]"
 			],
 			"properties": {
 				"mode": "Incremental",
