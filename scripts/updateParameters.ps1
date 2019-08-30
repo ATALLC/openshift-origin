@@ -40,7 +40,7 @@ Param([string]$path, [string]$mc, [string]$ic, [string]$nc, [string]$osaun, [str
 ((Get-Content -path "$($path)/azuredeploy.parameters.json" -Raw) -creplace "INFRA2IMAGESURL", "$($inf2u)") | Set-Content -Path "$($path)/azuredeploy.parameters.json"
 ((Get-Content -path "$($path)/azuredeploy.parameters.json" -Raw) -creplace "INFRA3IMAGESURL", "$($inf3u)") | Set-Content -Path "$($path)/azuredeploy.parameters.json"
 ((Get-Content -path "$($path)/azuredeploy.parameters.json" -Raw) -creplace "INFRALOGGINGIMAGESURL", "$($influ)") | Set-Content -Path "$($path)/azuredeploy.parameters.json"
-((Get-Content -path "$($path)/azuredeploy.parameters.json" -Raw) -creplace "INFRAMETRICSIMAGESURL", "$($lnfmu)") | Set-Content -Path "$($path)/azuredeploy.parameters.json"
+((Get-Content -path "$($path)/azuredeploy.parameters.json" -Raw) -creplace "INFRAMETRICSIMAGESURL", "$($infmu)") | Set-Content -Path "$($path)/azuredeploy.parameters.json"
 ((Get-Content -path "$($path)/azuredeploy.parameters.json" -Raw) -creplace "REGISTRYIMAGEURL", "$($regiu)") | Set-Content -Path "$($path)/azuredeploy.parameters.json"
 Write-Output "$($regiu)"
 ((Get-Content -path "$($path)/azuredeploy.parameters.json" -Raw) -creplace "REGCERTURL", "$($rcu)") | Set-Content -Path "$($path)/azuredeploy.parameters.json"
