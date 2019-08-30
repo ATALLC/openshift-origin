@@ -122,3 +122,5 @@ docker push smartfmdockerreg.io/openshift/origin-logging-curator:v3.9
 docker push smartfmdockerreg.io/openshift/origin-logging-kibana:v3.9
 docker push smartfmdockerreg.io/openshift/origin-metrics-hawkular-metrics:v3.9
 docker push smartfmdockerreg.io/openshift/origin-metrics-heapster:v3.9
+
+echo $(date) " - Script Complete"
