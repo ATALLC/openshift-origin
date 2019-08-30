@@ -39,6 +39,10 @@ $infraPrepShLink = [IO.File]::ReadAllText("${path}/scripts/INFRA_PREP_SH_LINK.tx
 Write-Output "$($infraPrepShLink)"
 Write-Host "##vso[task.setvariable variable=INFRA_PREP_SH_URI]'$($infraPrepShLink)'"
 
+$dockerPrepShLink = [IO.File]::ReadAllText("${path}/scripts/DOCKER_PREP_SH_LINK.txt")
+Write-Output "$($dockerPrepShLink)"
+Write-Host "##vso[task.setvariable variable=DOCKER_PREP_SH_URI]'$($dockerPrepShLink)'"
+
 $masterImagesLink = [IO.File]::ReadAllText("${path}/scripts/MASTER_IMAGES_LINK.txt")
 Write-Output "$($masterImagesLink)"
 Write-Host "##vso[task.setvariable variable=MASTER_IMAGES_URI]'$($masterImagesLink)'"
@@ -70,3 +74,11 @@ Write-Host "##vso[task.setvariable variable=INFRA_METRICS_IMAGES_URI]'$($infraMe
 $registryImageLink = [IO.File]::ReadAllText("${path}/scripts/REGISTRY_IMAGE_LINK.txt")
 Write-Output "$($registryImageLink)"
 Write-Host "##vso[task.setvariable variable=REGISTRY_IMAGE_URI]'$($registryImageLink)'"
+
+$regCertLink = [IO.File]::ReadAllText("${path}/scripts/REG_CERT_LINK.txt")
+Write-Output "$($regCertLink)"
+Write-Host "##vso[task.setvariable variable=REG_CERT_URI]'$($regCertLink)'"
+
+$regKeyLink = [IO.File]::ReadAllText("${path}/scripts/REG_KEY_LINK.txt")
+Write-Output "$($regKeyLink)"
+Write-Host "##vso[task.setvariable variable=REG_KEY_URI]'$($regKeyLink)'"

@@ -110,6 +110,9 @@
 		"infraPrepScriptUrl": {
 			"value": "INFRAPREPSCRIPTURL"
 		},
+		"dockerPrepScriptUrl": {
+			"value": "DOCKERPREPSCRIPTURL"
+		},
 		"openshiftDeploymentScriptUrl": {
 			"value": "OPENSHIFTDEPLOYMENTSCRIPTURL"
 		},
@@ -154,6 +157,12 @@
 		},
 		"registryImageUrl": {
 			"value": "REGISTRYIMAGEURL"
+		},
+		"regCertUrl": {
+			"value": "REGCERTURL"
+		},
+		"regKeyUrl": {
+			"value": "REGKEYURL"
 		}
 	}
 }

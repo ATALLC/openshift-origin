@@ -26,6 +26,9 @@ $deployOpenShiftSh = "deployOpenShift.sh"
 $masterPrepSh = "masterPrep.sh"
 $nodePrepSh = "nodePrep.sh"
 $infraPrepSh = "infraPrep.sh"
+$dockerPrepSh = "dockerPrep.sh"
+$regCert = "ca.cert"
+$regKey = "ca.key"
 
 $masterImagesArchive = "master-images.tar"
 $nodeImagesArchive = "node-images.tar"
@@ -65,12 +68,21 @@ Set-AzureStorageBlobContent -File "$($path)/scripts/$($deployOpenShiftSh)" -Cont
 $mpshoutput = "Uploading $($path)/scripts/$($masterPrepSh) to $($container.CloudBlobContainer.Uri.AbsoluteUri)/$($masterPrepSh)"
 Write-Output $mpshoutput
 Set-AzureStorageBlobContent -File "$($path)/scripts/$($masterPrepSh)" -Container $container.Name -Blob $masterPrepSh -Context $ctx -Force:$Force | Out-Null
-$npshputput = "Uploading $($path)/scripts/$($nodePrepSh) to $($container.CloudBlobContainer.Uri.AbsoluteUri)/$($nodePrepSh)"
-Write-Output $npshputput
+$npshoutput = "Uploading $($path)/scripts/$($nodePrepSh) to $($container.CloudBlobContainer.Uri.AbsoluteUri)/$($nodePrepSh)"
+Write-Output $npshoutput
 Set-AzureStorageBlobContent -File "$($path)/scripts/$($nodePrepSh)" -Container $container.Name -Blob $nodePrepSh -Context $ctx -Force:$Force | Out-Null
-$ipshputput = "Uploading $($path)/scripts/$($infraPrepSh) to $($container.CloudBlobContainer.Uri.AbsoluteUri)/$($infraPrepSh)"
-Write-Output $ipshputput
+$ipshoutput = "Uploading $($path)/scripts/$($infraPrepSh) to $($container.CloudBlobContainer.Uri.AbsoluteUri)/$($infraPrepSh)"
+Write-Output $ipshoutput
 Set-AzureStorageBlobContent -File "$($path)/scripts/$($infraPrepSh)" -Container $container.Name -Blob $infraPrepSh -Context $ctx -Force:$Force | Out-Null
+$dpshoutput = "Uploading $($path)/scripts/$($dockerPrepSh) to $($container.CloudBlobContainer.Uri.AbsoluteUri)/$($dockerPrepSh)"
+Write-Output $dpshoutput
+Set-AzureStorageBlobContent -File "$($path)/scripts/$($dockerPrepSh)" -Container $container.Name -Blob $dockerPrepSh -Context $ctx -Force:$Force | Out-Null
+$rcputput = "Uploading $($path)/$($regCert) to $($container.CloudBlobContainer.Uri.AbsoluteUri)/$($regCert)"
+Write-Output $rcputput
+Set-AzureStorageBlobContent -File "$($path)/$($regCert)" -Container $container.Name -Blob $regCert -Context $ctx -Force:$Force | Out-Null
+$rkputput = "Uploading $($path)/$($regKey) to $($container.CloudBlobContainer.Uri.AbsoluteUri)/$($regKey)"
+Write-Output $rkputput
+Set-AzureStorageBlobContent -File "$($path)/$($regKey)" -Container $container.Name -Blob $regKey -Context $ctx -Force:$Force | Out-Null
 
 $miaoutput = "Uploading $($path)/$($masterImagesArchive) to $($container.CloudBlobContainer.Uri.AbsoluteUri)/$($masterImagesArchive)"
 Write-Output $miaoutput
@@ -138,6 +150,15 @@ $nodePrepShLink | Out-File $path/scripts/NODE_PREP_SH_LINK.txt -NoNewline
 $infraPrepShSAS = New-AzureStorageBlobSASToken -Container $cn -Blob $infraPrepSh -Permission rwd -StartTime $startTime -ExpiryTime $endTime -Context $ctx
 $infraPrepShLink = "$($containerURI)$($infraPrepSh)$($infraPrepShSAS)"
 $infraPrepShLink | Out-File $path/scripts/INFRA_PREP_SH_LINK.txt -NoNewline
+$dockerPrepShSAS = New-AzureStorageBlobSASToken -Container $cn -Blob $dockerPrepSh -Permission rwd -StartTime $startTime -ExpiryTime $endTime -Context $ctx
+$dockerPrepShLink = "$($containerURI)$($dockerPrepSh)$($dockerPrepShSAS)"
+$dockerPrepShLink | Out-File $path/scripts/DOCKER_PREP_SH_LINK.txt -NoNewline
+$regCertSAS = New-AzureStorageBlobSASToken -Container $cn -Blob $regCert -Permission rwd -StartTime $startTime -ExpiryTime $endTime -Context $ctx
+$regCertLink = "$($containerURI)$($regCert)$($regCertSAS)"
+$regCertLink | Out-File $path/scripts/REG_CERT_LINK.txt -NoNewline
+$regKeySAS = New-AzureStorageBlobSASToken -Container $cn -Blob $regKey -Permission rwd -StartTime $startTime -ExpiryTime $endTime -Context $ctx
+$regKeyLink = "$($containerURI)$($regKey)$($regKeySAS)"
+$regKeyLink | Out-File $path/scripts/REG_KEY_LINK.txt -NoNewline
 
 $masterImagesArchiveSAS = New-AzureStorageBlobSASToken -Container $cn -Blob $masterImagesArchive -Permission rwd -StartTime $startTime -ExpiryTime $endTime -Context $ctx
 $masterImagesArchiveLink = "$($containerURI)$($masterImagesArchive)$($masterImagesArchiveSAS)"

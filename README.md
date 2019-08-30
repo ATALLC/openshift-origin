@@ -6,7 +6,11 @@
 
 1. READ THE ORIGINAL INSTRUCTIONS CAREFULLY. 
 2. Set-up pre-requisites in original documentation. For ATA members, use the following repo [https://github.com/ATALLC/smartfm-openshift-deploy](https://github.com/ATALLC/smartfm-openshift-deploy) using the openshift-origin-3.9 branch to automatically create those pre-reqs.
-3. Create the following pipeline variables
+3. Before deploying, use the following command to generate the keys in the root directory needed for deployment
+```
+openssl req -newkey rsa:4096 -nodes -sha256 -keyout ca.key -x509 -subj "/C=/ST=/L=/O=/CN=smartfmdockerreg.io" -days 365 -out ca.crt
+```
+4. Create the following pipeline variables
 - RESOURCE_MANAGER_SERVICE_CONNECTION: ADO Service Connection to use. Must have access to the RESOURCE_GROUP.
 - RESOURCE_GROUP: OpenShift resource group to use
 - MASTER_COUNT: Number of master nodes. When running with public access disabled, create only 1 master node. There is an issue with Azure internal load-balancers where a VM behind the loadbalancer cannot access the loadbalancer without a public IP.

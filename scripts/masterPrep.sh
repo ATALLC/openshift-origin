@@ -7,7 +7,6 @@ echo "$4"
 echo "$5"
 echo "$6"
 echo "$7"
-echo "$8"
 echo "END LINKS"
 
 STORAGEACCOUNT=$1
@@ -15,9 +14,8 @@ SUDOUSER=$2
 LOCATION=$3
 ANSIBLERPMARCHIVELINK="$4"
 OPENSHIFTORIGINRPMSLINK="$5"
-MASTERIMAGESLINK="$6"
-NODEIMAGESLINK="$7"
-REGISTRYIMAGELINK="$8"
+CERTLINK="$6"
+REGIP="$7"
 
 # Install EPEL repository
 echo $(date) " - Installing EPEL"
@@ -168,30 +166,11 @@ EOF
 
 fi
 
-### Copy docker images down to load
-wget -O /tmp/master-images.tar $MASTERIMAGESLINK
-wget -O /tmp/node-images.tar $NODEIMAGESLINK
-wget -O /tmp/infra-images1.tar $REGISTRYIMAGELINK
-
-docker load -i /tmp/master-images.tar
-docker load -i /tmp/node-images.tar
-docker load -i /tmp/registry-image.tar
-
-docker run -d -p 5000:5000 --restart=always --name registry registry
-
-docker tag openshift/origin-logging-fluentd:v3.9 localhost:5000/openshift/origin-logging-fluentd:v3.9
-docker tag cockpit/kubernetes:latest localhost:5000/cockpit/kubernetes:latest
-docker tag openshift/origin-node:latest localhost:5000/openshift/origin-node:latest
-docker tag openshift/origin-pod:v3.9.0 localhost:5000/openshift/origin-pod:v3.9.0
-docker tag openshift/origin-web-console:v3.9.0 localhost:5000/openshift/origin-web-console:v3.9.0
-docker tag openshift/origin-service-catalog:v3.9.0 localhost:5000/openshift/origin-service-catalog:v3.9.0
-
-docker push localhost:5000/openshift/origin-logging-fluentd:v3.9
-docker push localhost:5000/cockpit/kubernetes:latest
-docker push localhost:5000/openshift/origin-node:latest
-docker push localhost:5000/openshift/origin-pod:v3.9.0
-docker push localhost:5000/openshift/origin-web-console:v3.9.0
-docker push localhost:5000/openshift/origin-service-catalog:v3.9.0
+# Trust docker registry
+echo "${REGIP} smartfmdockerreg.io" >> /etc/hosts
+mkdir -p /etc/docker/certs.d/smartfmdockerreg.io
+wget -O /etc/docker/certs.d/smartfmdockerreg.io/ca.crt $CERTLINK
+service docker reload
 
 systemctl restart systemd-logind NetworkManager
 

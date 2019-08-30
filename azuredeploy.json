@@ -321,6 +321,12 @@
 				"description": "Infrastructure prep script URL"
 			}
 		},
+		"dockerPrepScriptUrl": {
+			"type": "string",
+			"metadata": {
+				"description": "Docker registry prep script URL"
+			}
+		},
 		"openshiftDeploymentScriptUrl": {
 			"type": "string",
 			"metadata": {
@@ -409,6 +415,18 @@
 			"type": "string",
 			"metadata": {
 				"description": "Docker registry image URL"
+			}
+		},
+		"regCertUrl": {
+			"type": "string",
+			"metadata": {
+				"description": "Docker registry cert"
+			}
+		},
+		"regKeyUrl": {
+			"type": "string",
+			"metadata": {
+				"description": "Docker registry key"
 			}
 		}
 	},
@@ -569,6 +587,7 @@
 		"nodePrepScriptFileName": "nodePrep.sh",
 		"masterPrepScriptFileName": "masterPrep.sh",
 		"infraPrepScriptFileName": "infraPrep.sh",
+		"dockerPrepScriptFileName": "dockerPrep.sh",
 		"openshiftDeploymentScriptFileName": "deployOpenShift.sh",
 		"vmSizesMap": {
 			"Standard_A4": {
@@ -879,7 +898,8 @@
 				"storageAccountType": "Premium_LRS",
 				"storageAccountTier": "Premium"
 			}
-		}
+		},
+		"dockerreghostname": "smartfmdockerreg"
 	},
 	"resources": [
 		{
@@ -1183,6 +1203,32 @@
 				}
 			}
 		}, {
+			"type": "Microsoft.Network/networkInterfaces",
+			"name": "[concat(variables('dockerreghostname'), '-nic')]",
+			"location": "[variables('location')]",
+			"apiVersion": "[variables('apiVersionNetwork')]",
+			"tags": {
+				"displayName": "OpenShiftDockerRegistryNetworkInterface",
+				"provider": "[variables('redHatTags').provider]",
+				"app": "[variables('redHatTags').app]",
+				"version": "[variables('redHatTags').version]",
+				"platform": "[variables('redHatTags').platform]"
+			},
+			"properties": {
+				"ipConfigurations": [{
+					"name": "[concat(variables('dockerreghostname'), 'ipconfig')]",
+					"properties": {
+						"privateIPAllocationMethod": "Dynamic",
+						"subnet": {
+							"id": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', parameters('networkResourceGroup'), '/providers/Microsoft.Network/virtualNetworks/', parameters('vnetName'), '/subnets/', parameters('masterSubnetName'))]"
+						}
+					}
+				}],
+				"networkSecurityGroup": {
+					"id": "[resourceId(parameters('networkResourceGroup'), 'Microsoft.Network/networkSecurityGroups', parameters('masterNetworkSecurityGroupName'))]"
+				}
+			}
+		}, {
 			"name": "[concat('masterVmDeployment', copyindex())]",
 			"type": "Microsoft.Resources/deployments",
 			"apiVersion": "[variables('apiVersionLinkTemplate')]",
@@ -1429,6 +1475,69 @@
 				}
 			}
 		}, {
+			"type": "Microsoft.Compute/virtualMachines",
+			"name": "[variables('dockerreghostname')]",
+			"location": "[variables('location')]",
+			"apiVersion": "[variables('apiVersionCompute')]",
+			"tags": {
+				"Role": "dockerregistrynode",
+				"provider": "[variables('redHatTags').provider]",
+				"app": "[variables('redHatTags').app]",
+				"version": "[variables('redHatTags').version]",
+				"platform": "[variables('redHatTags').platform]"
+			},
+			"properties": {
+				"hardwareProfile": {
+					"vmSize": "[parameters('nodeVmSize')]"
+				},
+				"osProfile": {
+					"computerName": "[variables('dockerreghostname')]",
+					"adminUsername": "[parameters('adminUsername')]",
+					"linuxConfiguration": {
+						"disablePasswordAuthentication": true,
+						"ssh": {
+							"publicKeys": [{
+								"path": "[variables('sshKeyPath')]",
+								"keyData": "[parameters('sshPublicKey')]"
+							}]
+						}
+					}
+				},
+				"storageProfile": {
+					"imageReference": "[variables('imageReference')]",
+					"osDisk": {
+						"name": "[concat(variables('dockerreghostname'), '-osdisk')]",
+						"managedDisk": {
+							"storageAccountType": "Standard_LRS"
+						},
+						"caching": "ReadWrite",
+						"createOption": "FromImage",
+						"diskSizeGB": 64,
+						"osType": "Linux"
+					},
+					"dataDisks": [{
+						"name": "[concat(variables('dockerreghostname'), '-docker-pool')]",
+						"diskSizeGB": "[parameters('dataDiskSize')]",
+						"lun": 0,
+						"managedDisk": {
+							"storageAccountType": "Standard_LRS"
+						},
+						"createOption": "Empty"
+					}]
+				},
+				"networkProfile": {
+					"networkInterfaces": [{
+						"id": "[resourceId('Microsoft.Network/networkInterfaces', concat(variables('dockerreghostname'), '-nic'))]"
+					}]
+				},
+				"diagnosticsProfile": {
+					"bootDiagnostics": {
+						"enabled": true,
+						"storageUri": "[concat(concat(reference(resourceId(resourceGroup().name, 'Microsoft.Storage/storageAccounts', variables('diagStorageAccount2')), variables('apiVersionStorage')).primaryEndpoints['blob']))]"
+					}
+				}
+			}
+		}, {
 			"type": "Microsoft.Compute/virtualMachines/extensions",
 			"name": "[concat(variables('openshiftMasterHostname'), '-', copyIndex(), '/deployOpenShift')]",
 			"location": "[variables('location')]",
@@ -1458,7 +1567,7 @@
 					]
 				},
 				"protectedSettings": {
-					"commandToExecute": "[concat('bash ', variables('masterPrepScriptFileName'), ' ', variables('newStorageAccountPersistentVolume1'), ' ', parameters('adminUsername'), ' ', variables('location'), ' ', variables('singlequote'), parameters('ansibleRPMUrl'), variables('singlequote'), ' ', variables('singlequote'), parameters('openshiftOriginRpmsUrl'), variables('singlequote'), ' ', variables('singlequote'), parameters('masterImagesUrl'), variables('singlequote'), ' ', variables('singlequote'), parameters('nodeImagesUrl'), variables('singlequote'), ' ', variables('singlequote'), parameters('registryImageUrl'), variables('singlequote'))]"
+					"commandToExecute": "[concat('bash ', variables('masterPrepScriptFileName'), ' ', variables('newStorageAccountPersistentVolume1'), ' ', parameters('adminUsername'), ' ', variables('location'), ' ', variables('singlequote'), parameters('ansibleRPMUrl'), variables('singlequote'), ' ', variables('singlequote'), parameters('openshiftOriginRpmsUrl'), variables('singlequote'), ' ', variables('singlequote'), parameters('regCertUrl'), variables('singlequote'), ' ', variables('singlequote'), reference(concat(variables('dockerreghostname'), '-nic')).ipConfigurations[0].properties.privateIPAddress, variables('singlequote'))]"
 				}
 			}
 		}, {
@@ -1491,7 +1600,7 @@
 					]
 				},
 				"protectedSettings": {
-					"commandToExecute": "[concat('bash ', variables('infraPrepScriptFileName'), ' ', variables('singlequote'), parameters('openshiftOriginRpmsUrl'), variables('singlequote'), ' ', variables('singlequote'), parameters('nodeImagesUrl'), variables('singlequote'), ' ', variables('singlequote'), parameters('infra1ImagesUrl'), variables('singlequote'), ' ', variables('singlequote'), parameters('infra2ImagesUrl'), variables('singlequote'), ' ', variables('singlequote'), parameters('infra3ImagesUrl'), variables('singlequote'), ' ', variables('singlequote'), parameters('infraLoggingImagesUrl'), variables('singlequote'), ' ', variables('singlequote'), parameters('infraMetricsImagesUrl'), variables('singlequote'), ' ', variables('singlequote'), parameters('registryImageUrl'), variables('singlequote'))]"
+					"commandToExecute": "[concat('bash ', variables('infraPrepScriptFileName'), ' ', variables('singlequote'), parameters('openshiftOriginRpmsUrl'), variables('singlequote'), ' ', variables('singlequote'), parameters('regCertUrl'), variables('singlequote'), ' ', variables('singlequote'), reference(concat(variables('dockerreghostname'), '-nic')).ipConfigurations[0].properties.privateIPAddress, variables('singlequote'))]"
 				}
 			}
 		}, {
@@ -1524,7 +1633,36 @@
 					]
 				},
 				"protectedSettings": {
-					"commandToExecute": "[concat('bash ', variables('nodePrepScriptFileName'), ' ', variables('singlequote'), parameters('nodeImagesUrl'), variables('singlequote'), ' ', variables('singlequote'), parameters('registryImageUrl'), variables('singlequote'))]"
+					"commandToExecute": "[concat('bash ', variables('nodePrepScriptFileName'), ' ', variables('singlequote'), parameters('openshiftOriginRpmsUrl'), variables('singlequote'), ' ', variables('singlequote'), parameters('regCertUrl'), variables('singlequote'), ' ', variables('singlequote'), reference(concat(variables('dockerreghostname'), '-nic')).ipConfigurations[0].properties.privateIPAddress, variables('singlequote'))]"
+				}
+			}
+		}, {
+			"type": "Microsoft.Compute/virtualMachines/extensions",
+			"name": "[concat(variables('dockerreghostname'), '/prepNodes')]",
+			"location": "[variables('location')]",
+			"apiVersion": "[variables('apiVersionCompute')]",
+			"tags": {
+				"displayName": "PrepDocker",
+				"provider": "[variables('redHatTags').provider]",
+				"app": "[variables('redHatTags').app]",
+				"version": "[variables('redHatTags').version]",
+				"platform": "[variables('redHatTags').platform]"
+			},
+			"dependsOn": [
+				"[variables('dockerreghostname')]"
+			],
+			"properties": {
+				"publisher": "Microsoft.Azure.Extensions",
+				"type": "CustomScript",
+				"typeHandlerVersion": "2.0",
+				"autoUpgradeMinorVersion": true,
+				"settings": {
+					"fileUris": [
+						"[parameters('dockerPrepScriptUrl')]"
+					]
+				},
+				"protectedSettings": {
+					"commandToExecute": "[concat('bash ', variables('dockerPrepScriptFileName'), ' ', variables('singlequote'), parameters('masterImagesUrl'), variables('singlequote'), ' ', variables('singlequote'), parameters('nodeImagesUrl'), variables('singlequote'), ' ', variables('singlequote'), parameters('infra1ImagesUrl'), variables('singlequote'), ' ', variables('singlequote'), parameters('infra2ImagesUrl'), variables('singlequote'), ' ', variables('singlequote'), parameters('infra3ImagesUrl'), variables('singlequote'), ' ', variables('singlequote'), parameters('infraLoggingImagesUrl'), variables('singlequote'), ' ', variables('singlequote'), parameters('registryImageUrl'), variables('singlequote'), ' ', variables('singlequote'), parameters('infraMetricsImagesUrl'), variables('singlequote'), ' ', variables('singlequote'), parameters('regCertUrl'), variables('singlequote'), ' ', variables('singlequote'), parameters('regKeyUrl'), variables('singlequote'), ' ', variables('singlequote'), reference(concat(variables('dockerreghostname'), '-nic')).ipConfigurations[0].properties.privateIPAddress, variables('singlequote'))]"
 				}
 			}
 		}, {
@@ -1535,7 +1673,9 @@
 				"[resourceId('Microsoft.Storage/storageAccounts', variables('newStorageAccountRegistry'))]",
 				"masterPrepLoop",
 				"infraPrepLoop",
-				"nodePrepLoop"
+				"nodePrepLoop",
+				"nodePrepLoop",
+				"[concat(variables('dockerreghostname'), '/prepNodes')]"
 			],
 			"properties": {
 				"mode": "Incremental",

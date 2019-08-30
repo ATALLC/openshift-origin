@@ -1,4 +1,4 @@
-Param([string]$path, [string]$mc, [string]$ic, [string]$nc, [string]$osaun, [string]$osapw, [string]$sshpk, [string]$kvrg, [string]$kvn, [string]$aadcid, [string]$aadcs, [string]$oscp, [string]$nrg, [string]$vnn, [string]$msn, [string]$nsn, [string]$mnsg, [string]$insg, [string]$nnsg, [string]$epa, [string]$ipidp, [string]$mpidp, [string]$ispi, [string]$ospi, [string]$npsu, [string]$mpsu, [string]$ipsu, [string]$odsu, [string]$cdtu, [string]$odtu, [string]$aru, [string]$oau, [string]$ocppu, [String]$ooru, [String]$miu, [String]$niu, [String]$inf1u, [String]$inf2u, [String]$inf3u, [String]$infl, [String]$lnfm, [String]$regiu)
+Param([string]$path, [string]$mc, [string]$ic, [string]$nc, [string]$osaun, [string]$osapw, [string]$sshpk, [string]$kvrg, [string]$kvn, [string]$aadcid, [string]$aadcs, [string]$oscp, [string]$nrg, [string]$vnn, [string]$msn, [string]$nsn, [string]$mnsg, [string]$insg, [string]$nnsg, [string]$epa, [string]$ipidp, [string]$mpidp, [string]$ispi, [string]$ospi, [string]$npsu, [string]$mpsu, [string]$ipsu, [string]$dpsu, [string]$odsu, [string]$cdtu, [string]$odtu, [string]$aru, [string]$oau, [string]$ocppu, [String]$ooru, [String]$miu, [String]$niu, [String]$inf1u, [String]$inf2u, [String]$inf3u, [String]$influ, [String]$rcu, [String]$rku)
 
 ((Get-Content -path "$($path)/azuredeploy.parameters.json" -Raw) -creplace "MASTERCOUNT", "$($mc)") | Set-Content -Path "$($path)/azuredeploy.parameters.json"
 ((Get-Content -path "$($path)/azuredeploy.parameters.json" -Raw) -creplace "INFRCOUNT", "$($ic)") | Set-Content -Path "$($path)/azuredeploy.parameters.json"
@@ -26,6 +26,7 @@ Param([string]$path, [string]$mc, [string]$ic, [string]$nc, [string]$osaun, [str
 ((Get-Content -path "$($path)/azuredeploy.parameters.json" -Raw) -creplace "NODEPREPSCRIPTURL", "$($npsu)") | Set-Content -Path "$($path)/azuredeploy.parameters.json"
 ((Get-Content -path "$($path)/azuredeploy.parameters.json" -Raw) -creplace "MASTERPREPSCRIPTURL", "$($mpsu)") | Set-Content -Path "$($path)/azuredeploy.parameters.json"
 ((Get-Content -path "$($path)/azuredeploy.parameters.json" -Raw) -creplace "INFRAPREPSCRIPTURL", "$($ipsu)") | Set-Content -Path "$($path)/azuredeploy.parameters.json"
+((Get-Content -path "$($path)/azuredeploy.parameters.json" -Raw) -creplace "DOCKERPREPSCRIPTURL", "$($dpsu)") | Set-Content -Path "$($path)/azuredeploy.parameters.json"
 ((Get-Content -path "$($path)/azuredeploy.parameters.json" -Raw) -creplace "OPENSHIFTDEPLOYMENTSCRIPTURL", "$($odsu)") | Set-Content -Path "$($path)/azuredeploy.parameters.json"
 ((Get-Content -path "$($path)/azuredeploy.parameters.json" -Raw) -creplace "CLUSTERNODEDEPLOYMENTTEMPLATEURL", "$($cdtu)") | Set-Content -Path "$($path)/azuredeploy.parameters.json"
 ((Get-Content -path "$($path)/azuredeploy.parameters.json" -Raw) -creplace "OPENSHIFTDEPLOYMENTTEMPLATEURL", "$($odtu)") | Set-Content -Path "$($path)/azuredeploy.parameters.json"
@@ -39,5 +40,8 @@ Param([string]$path, [string]$mc, [string]$ic, [string]$nc, [string]$osaun, [str
 ((Get-Content -path "$($path)/azuredeploy.parameters.json" -Raw) -creplace "INFRA2IMAGESURL", "$($inf2u)") | Set-Content -Path "$($path)/azuredeploy.parameters.json"
 ((Get-Content -path "$($path)/azuredeploy.parameters.json" -Raw) -creplace "INFRA3IMAGESURL", "$($inf3u)") | Set-Content -Path "$($path)/azuredeploy.parameters.json"
 ((Get-Content -path "$($path)/azuredeploy.parameters.json" -Raw) -creplace "INFRALOGGINGIMAGESURL", "$($influ)") | Set-Content -Path "$($path)/azuredeploy.parameters.json"
-((Get-Content -path "$($path)/azuredeploy.parameters.json" -Raw) -creplace "INFRAMETRICSIMAGESURL", "$($infmu)") | Set-Content -Path "$($path)/azuredeploy.parameters.json"
+((Get-Content -path "$($path)/azuredeploy.parameters.json" -Raw) -creplace "INFRAMETRICSIMAGESURL", "$($lnfmu)") | Set-Content -Path "$($path)/azuredeploy.parameters.json"
 ((Get-Content -path "$($path)/azuredeploy.parameters.json" -Raw) -creplace "REGISTRYIMAGEURL", "$($regiu)") | Set-Content -Path "$($path)/azuredeploy.parameters.json"
+Write-Output "$($regiu)"
+((Get-Content -path "$($path)/azuredeploy.parameters.json" -Raw) -creplace "REGCERTURL", "$($rcu)") | Set-Content -Path "$($path)/azuredeploy.parameters.json"
+((Get-Content -path "$($path)/azuredeploy.parameters.json" -Raw) -creplace "REGKEYURL", "$($rku)") | Set-Content -Path "$($path)/azuredeploy.parameters.json"
