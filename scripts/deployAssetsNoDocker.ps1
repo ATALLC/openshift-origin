@@ -77,12 +77,12 @@ Set-AzureStorageBlobContent -File "$($path)/scripts/$($infraPrepSh)" -Container 
 $dpshoutput = "Uploading $($path)/scripts/$($dockerPrepSh) to $($container.CloudBlobContainer.Uri.AbsoluteUri)/$($dockerPrepSh)"
 Write-Output $dpshoutput
 Set-AzureStorageBlobContent -File "$($path)/scripts/$($dockerPrepSh)" -Container $container.Name -Blob $dockerPrepSh -Context $ctx -Force:$Force | Out-Null
-$rcputput = "Uploading $($path)/scripts/$($regCert) to $($container.CloudBlobContainer.Uri.AbsoluteUri)/$($regCert)"
+$rcputput = "Uploading $($path)/$($regCert) to $($container.CloudBlobContainer.Uri.AbsoluteUri)/$($regCert)"
 Write-Output $rcputput
-Set-AzureStorageBlobContent -File "$($path)/scripts/$($regCert)" -Container $container.Name -Blob $regCert -Context $ctx -Force:$Force | Out-Null
-$rkputput = "Uploading $($path)/scripts/$($regKey) to $($container.CloudBlobContainer.Uri.AbsoluteUri)/$($regKey)"
+Set-AzureStorageBlobContent -File "$($path)/$($regCert)" -Container $container.Name -Blob $regCert -Context $ctx -Force:$Force | Out-Null
+$rkputput = "Uploading $($path)/$($regKey) to $($container.CloudBlobContainer.Uri.AbsoluteUri)/$($regKey)"
 Write-Output $rkputput
-Set-AzureStorageBlobContent -File "$($path)/scripts/$($regKey)" -Container $container.Name -Blob $regKey -Context $ctx -Force:$Force | Out-Null
+Set-AzureStorageBlobContent -File "$($path)/$($regKey)" -Container $container.Name -Blob $regKey -Context $ctx -Force:$Force | Out-Null
 
 #$miaoutput = "Uploading $($path)/$($masterImagesArchive) to $($container.CloudBlobContainer.Uri.AbsoluteUri)/$($masterImagesArchive)"
 #Write-Output $miaoutput
