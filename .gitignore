@@ -3,3 +3,10 @@
 *.local
 *.local.json
 .DS_Store
+dev_ca.crt
+dev_ca.key
+test_ca.crt
+test_ca.key
+prod_ca.crt
+prod_ca.key
+*.tar
