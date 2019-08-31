@@ -45,9 +45,9 @@ $openshiftOriginArchive = "openshift-origin.tar"
 $aoutput = "Uploading $($path)/$($ansibleRPMsArchive) to $($container.CloudBlobContainer.Uri.AbsoluteUri)/$($ansibleRPMsArchive)"
 Write-Output $aoutput
 Set-AzureStorageBlobContent -File "$($path)/$($ansibleRPMsArchive)" -Container $container.Name -Blob $ansibleRPMsArchive -Context $ctx -Force:$Force | Out-Null
-$ooroutput = "Uploading $($path)/$($openshiftOriginRPMsArchive) to $($container.CloudBlobContainer.Uri.AbsoluteUri)/$($openshiftOriginRPMsArchive)"
-Write-Output $ooroutput
-Set-AzureStorageBlobContent -File "$($path)/$($openshiftOriginRPMsArchive)" -Container $container.Name -Blob $openshiftOriginRPMsArchive -Context $ctx -Force:$Force | Out-Null
+#$ooroutput = "Uploading $($path)/$($openshiftOriginRPMsArchive) to $($container.CloudBlobContainer.Uri.AbsoluteUri)/$($openshiftOriginRPMsArchive)"
+#Write-Output $ooroutput
+#Set-AzureStorageBlobContent -File "$($path)/$($openshiftOriginRPMsArchive)" -Container $container.Name -Blob $openshiftOriginRPMsArchive -Context $ctx -Force:$Force | Out-Null
 $oaoutput = "Uploading $($path)/$($openshiftAnsibleArchive) to $($container.CloudBlobContainer.Uri.AbsoluteUri)/$($openshiftAnsibleArchive)"
 Write-Output $oaoutput
 Set-AzureStorageBlobContent -File "$($path)/$($openshiftAnsibleArchive)" -Container $container.Name -Blob $openshiftAnsibleArchive -Context $ctx -Force:$Force | Out-Null
