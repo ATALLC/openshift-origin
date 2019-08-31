@@ -58,7 +58,7 @@ systemctl enable docker
 systemctl start docker
 
 ### Copy docker images down to load
-wget -O /tmp/node-images.tar $MASTERIMAGESLINK
+wget -O /tmp/master-images.tar $MASTERIMAGESLINK
 wget -O /tmp/node-images.tar $NODEIMAGESLINK
 wget -O /tmp/infra-images1.tar $INFRA1IMAGESLINK
 wget -O /tmp/infra-images2.tar $INFRA2IMAGESLINK
