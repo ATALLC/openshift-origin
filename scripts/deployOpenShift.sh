@@ -215,6 +215,25 @@ openshift_disable_check=disk_availability,memory_availability,docker_image_avail
 $CLOUDKIND
 oreg_url=smartfmdockerreg.io/openshift/origin-\${component}:\${version}
 openshift_examples_modify_imagestreams=true
+openshift_docker_additional_registries=smartfmdockerreg.io
+openshift_docker_insecure_registries=smartfmdockerreg.io
+openshift_docker_blocked_registries=registry.access.redhat.com,docker.io
+openshift_metrics_image_prefix=smartfmdockerreg.io/openshift/
+openshift_metrics_image_version=v3.9.0
+openshift_logging_image_prefix=repo.home.nicknach.net/openshift/
+openshift_logging_image_version=v3.9.0
+ansible_service_broker_image_prefix=smartfmdockerreg.io/openshift/origin-
+ansible_service_broker_image_tag=v3.9.0
+ansible_service_broker_etcd_image_prefix=smartfmdockerreg.io/coreos/
+ansible_service_broker_etcd_image_tag=latest
+openshift_service_catalog_image_prefix=smartfmdockerreg.io/openshift/origin-
+openshift_service_catalog_image_version=v3.9.0
+openshift_web_console_prefix=smartfmdockerreg.io/openshift/origin-
+openshift_web_console_version=v3.9.0
+openshift_prometheus_proxy_image_prefix=smartfmdockerreg.io/openshift/
+openshift_prometheus_proxy_image_version=v1.0.0
+template_service_broker_prefix=smartfmdockerreg.io/openshift/origin-
+template_service_broker_version=v3.9.0
 
 # This enables all the system containers except for docker:
 #openshift_use_system_containers=False

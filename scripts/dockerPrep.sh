@@ -117,7 +117,7 @@ docker tag openshift/origin-metrics-cassandra:v3.9 smartfmdockerreg.io/openshift
 docker tag openshift/origin-logging-elasticsearch:v3.9 smartfmdockerreg.io/openshift/origin-logging-elasticsearch:v3.9
 docker tag openshift/origin-logging-elasticsearch:v3.9 smartfmdockerreg.io/openshift/origin-logging-elasticsearch:v3.9.0
 docker tag openshift/oauth-proxy:v1.0.0 smartfmdockerreg.io/openshift/oauth-proxy:v1.0.0
-docker tag quay.io/coreos/etcd:latest smartfmdockerreg.io/quay.io/coreos/etcd:latest
+docker tag quay.io/coreos/etcd:latest smartfmdockerreg.io/coreos/etcd:latest
 
 
 docker push smartfmdockerreg.io/openshift/origin-web-console:v3.9.0
@@ -148,6 +148,6 @@ docker push smartfmdockerreg.io/openshift/origin-metrics-cassandra:v3.9.0
 docker push smartfmdockerreg.io/openshift/origin-logging-elasticsearch:v3.9
 docker push smartfmdockerreg.io/openshift/origin-logging-elasticsearch:v3.9.0
 docker push smartfmdockerreg.io/openshift/oauth-proxy:v1.0.0
-docker push smartfmdockerreg.io/quay.io/coreos/etcd:latest
+docker push smartfmdockerreg.io/coreos/etcd:latest
 
 echo $(date) " - Script Complete"
