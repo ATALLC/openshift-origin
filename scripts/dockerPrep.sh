@@ -92,21 +92,30 @@ service docker reload
 docker tag openshift/origin-web-console:v3.9.0 smartfmdockerreg.io/openshift/origin-web-console:v3.9.0 
 docker tag openshift/origin-service-catalog:v3.9.0 smartfmdockerreg.io/openshift/origin-service-catalog:v3.9.0
 docker tag openshift/origin-logging-fluentd:v3.9 smartfmdockerreg.io/openshift/origin-logging-fluentd:v3.9
+docker tag openshift/origin-logging-fluentd:v3.9 smartfmdockerreg.io/openshift/origin-logging-fluentd:v3.9.0
 docker tag cockpit/kubernetes:latest smartfmdockerreg.io/cockpit/kubernetes:latest
 docker tag openshift/origin-node:latest smartfmdockerreg.io/openshift/origin-node:latest
 docker tag openshift/origin-pod:v3.9.0 smartfmdockerreg.io/openshift/origin-pod:v3.9.0
 docker tag openshift/origin-docker-registry:v3.9.0 smartfmdockerreg.io/openshift/origin-docker-registry:v3.9.0
 docker tag openshift/origin-template-service-broker:v3.9.0 smartfmdockerreg.io/openshift/origin-template-service-broker:v3.9.0
 docker tag ansibleplaybookbundle/origin-ansible-service-broker:v3.9 smartfmdockerreg.io/ansibleplaybookbundle/origin-ansible-service-broker:v3.9
+docker tag ansibleplaybookbundle/origin-ansible-service-broker:v3.9 smartfmdockerreg.io/ansibleplaybookbundle/origin-ansible-service-broker:v3.9.0
 docker tag openshift/origin-haproxy-router:v3.9.0 smartfmdockerreg.io/openshift/origin-haproxy-router:v3.9.0
 docker tag openshift/origin-deployer:v3.9.0 smartfmdockerreg.io/openshift/origin-deployer:v3.9.0
 docker tag openshift/origin-logging-auth-proxy:v3.9 smartfmdockerreg.io/openshift/origin-logging-auth-proxy:v3.9
+docker tag openshift/origin-logging-auth-proxy:v3.9 smartfmdockerreg.io/openshift/origin-logging-auth-proxy:v3.9.0
 docker tag openshift/origin-logging-curator:v3.9 smartfmdockerreg.io/openshift/origin-logging-curator:v3.9
+docker tag openshift/origin-logging-curator:v3.9 smartfmdockerreg.io/openshift/origin-logging-curator:v3.9.0
 docker tag openshift/origin-logging-kibana:v3.9 smartfmdockerreg.io/openshift/origin-logging-kibana:v3.9
+docker tag openshift/origin-logging-kibana:v3.9 smartfmdockerreg.io/openshift/origin-logging-kibana:v3.9.0
 docker tag openshift/origin-metrics-hawkular-metrics:v3.9 smartfmdockerreg.io/openshift/origin-metrics-hawkular-metrics:v3.9
+docker tag openshift/origin-metrics-hawkular-metrics:v3.9 smartfmdockerreg.io/openshift/origin-metrics-hawkular-metrics:v3.9.0
 docker tag openshift/origin-metrics-heapster:v3.9 smartfmdockerreg.io/openshift/origin-metrics-heapster:v3.9
+docker tag openshift/origin-metrics-heapster:v3.9 smartfmdockerreg.io/openshift/origin-metrics-heapster:v3.9.0
 docker tag openshift/origin-metrics-cassandra:v3.9 smartfmdockerreg.io/openshift/origin-metrics-cassandra:v3.9
+docker tag openshift/origin-metrics-cassandra:v3.9 smartfmdockerreg.io/openshift/origin-metrics-cassandra:v3.9.0
 docker tag openshift/origin-logging-elasticsearch:v3.9 smartfmdockerreg.io/openshift/origin-logging-elasticsearch:v3.9
+docker tag openshift/origin-logging-elasticsearch:v3.9 smartfmdockerreg.io/openshift/origin-logging-elasticsearch:v3.9.0
 docker tag openshift/oauth-proxy:v1.0.0 smartfmdockerreg.io/openshift/oauth-proxy:v1.0.0
 docker tag quay.io/coreos/etcd:latest smartfmdockerreg.io/quay.io/coreos/etcd:latest
 
@@ -114,21 +123,30 @@ docker tag quay.io/coreos/etcd:latest smartfmdockerreg.io/quay.io/coreos/etcd:la
 docker push smartfmdockerreg.io/openshift/origin-web-console:v3.9.0
 docker push smartfmdockerreg.io/origin-service-catalog:v3.9.0
 docker push smartfmdockerreg.io/openshift/origin-logging-fluentd:v3.9
+docker push smartfmdockerreg.io/openshift/origin-logging-fluentd:v3.9.0
 docker push smartfmdockerreg.io/cockpit/kubernetes:latest
 docker push smartfmdockerreg.io/openshift/origin-node:latest
 docker push smartfmdockerreg.io/openshift/origin-pod:v3.9.0
 docker push smartfmdockerreg.io/openshift/origin-docker-registry:v3.9.0
 docker push smartfmdockerreg.io/openshift/origin-template-service-broker:v3.9.0
 docker push smartfmdockerreg.io/ansibleplaybookbundle/origin-ansible-service-broker:v3.9
+docker push smartfmdockerreg.io/ansibleplaybookbundle/origin-ansible-service-broker:v3.9.0
 docker push smartfmdockerreg.io/openshift/origin-haproxy-router:v3.9.0
 docker push smartfmdockerreg.io/openshift/origin-deployer:v3.9.0
 docker push smartfmdockerreg.io/openshift/origin-logging-auth-proxy:v3.9
+docker push smartfmdockerreg.io/openshift/origin-logging-auth-proxy:v3.9.0
 docker push smartfmdockerreg.io/openshift/origin-logging-curator:v3.9
+docker push smartfmdockerreg.io/openshift/origin-logging-curator:v3.9.0
 docker push smartfmdockerreg.io/openshift/origin-logging-kibana:v3.9
+docker push smartfmdockerreg.io/openshift/origin-logging-kibana:v3.9.0
 docker push smartfmdockerreg.io/openshift/origin-metrics-hawkular-metrics:v3.9
+docker push smartfmdockerreg.io/openshift/origin-metrics-hawkular-metrics:v3.9.0
 docker push smartfmdockerreg.io/openshift/origin-metrics-heapster:v3.9
+docker push smartfmdockerreg.io/openshift/origin-metrics-heapster:v3.9.0
 docker push smartfmdockerreg.io/openshift/origin-metrics-cassandra:v3.9
+docker push smartfmdockerreg.io/openshift/origin-metrics-cassandra:v3.9.0
 docker push smartfmdockerreg.io/openshift/origin-logging-elasticsearch:v3.9
+docker push smartfmdockerreg.io/openshift/origin-logging-elasticsearch:v3.9.0
 docker push smartfmdockerreg.io/openshift/oauth-proxy:v1.0.0
 docker push smartfmdockerreg.io/quay.io/coreos/etcd:latest
 
