@@ -121,7 +121,7 @@ docker tag quay.io/coreos/etcd:latest smartfmdockerreg.io/coreos/etcd:latest
 
 
 docker push smartfmdockerreg.io/openshift/origin-web-console:v3.9.0
-docker push smartfmdockerreg.io/origin-service-catalog:v3.9.0
+docker push smartfmdockerreg.io/openshift/origin-service-catalog:v3.9.0
 docker push smartfmdockerreg.io/openshift/origin-logging-fluentd:v3.9
 docker push smartfmdockerreg.io/openshift/origin-logging-fluentd:v3.9.0
 docker push smartfmdockerreg.io/cockpit/kubernetes:latest
