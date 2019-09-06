@@ -104,7 +104,7 @@ do
 $MASTER-$c openshift_node_labels=\"{'region': 'master', 'zone': 'default'}\" openshift_hostname=$MASTER-$c"
 done
 
-# Create Infra nodes grouping 
+# Create Infra nodes grouping
 echo $(date) " - Creating Infra nodes grouping"
 
 for (( c=0; c<$INFRACOUNT; c++ ))
@@ -319,27 +319,27 @@ then
 	   echo $(date) "- Cloud Provider setup did not complete"
 	   exit 10
 	fi
-	
+
 	# Create Storage Class
 	echo $(date) "- Creating Storage Class"
 
 	runuser $SUDOUSER -c "ansible-playbook -f 10 ~/openshift-container-platform-playbooks/configurestorageclass.yaml"
 	echo $(date) "- Sleep for 15"
 	sleep 15
-	
+
 	# Installing Service Catalog, Ansible Service Broker and Template Service Broker
-	
+
 	echo $(date) "- Installing Service Catalog, Ansible Service Broker and Template Service Broker"
 	runuser -l $SUDOUSER -c "ansible-playbook -f 10 /home/$SUDOUSER/openshift-ansible/playbooks/openshift-service-catalog/config.yml"
 	echo $(date) "- Service Catalog, Ansible Service Broker and Template Service Broker installed successfully"
-	
+
 fi
 
 # Configure Metrics
 
 if [ $METRICS == "true" ]
 then
-	sleep 30	
+	sleep 30
 	echo $(date) "- Determining Origin version from rpm"
 	OO_VERSION="v"$(rpm -q origin | cut -d'-' -f 2 | head -c 3)
 	echo $(date) "- Deploying Metrics"
@@ -360,7 +360,7 @@ fi
 
 # Configure Logging
 
-if [ $LOGGING == "true" ] 
+if [ $LOGGING == "true" ]
 then
 	sleep 60
 	echo $(date) "- Deploying Logging"

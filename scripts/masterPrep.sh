@@ -105,6 +105,7 @@ provisioner: kubernetes.io/azure-disk
 parameters:
   location: ${LOCATION}
   storageAccount: ${STORAGEACCOUNT}
+  encrypted: true
 EOF
 
 cat <<EOF > /home/${SUDOUSER}/scmanaged.yml
@@ -119,6 +120,7 @@ parameters:
   kind: managed
   location: ${LOCATION}
   storageaccounttype: Premium_LRS
+  encrypted: true
 EOF
 
 fi

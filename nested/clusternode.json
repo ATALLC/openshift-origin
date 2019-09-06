@@ -2,6 +2,29 @@
 	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json",
 	"contentVersion": "1.0.0.0",
 	"parameters": {
+		"encryptionOperation": {
+      "allowedValues": [
+        "EnableEncryption",
+        "EnableEncryptionFormat"
+      ],
+      "defaultValue": "EnableEncryption",
+      "metadata": {
+        "description": "EnableEncryption would encrypt the disks in place and EnableEncryptionFormat would format the disks directly"
+      },
+      "type": "string"
+    },
+    "volumeType": {
+      "allowedValues": [
+        "OS",
+        "Data",
+        "All"
+      ],
+			"defaultValue": "Data",
+		 "metadata": {
+			 "description": "Defines which drives should be encrypted. OS encryption is supported on RHEL 7.2, CentOS 7.2 & Ubuntu 16.04."
+		 },
+		 "type": "string"
+		},
 		"location": {
 			"type": "string",
 			"minLength": 1,
