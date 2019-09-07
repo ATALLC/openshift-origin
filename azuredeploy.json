@@ -233,9 +233,34 @@
 			"metadata": {
 				"description": "Default Subdomain for application routing (Wildcard DNS) - must enter something even if you are using nip.io"
 			}
-		}
+		},
+		"useExistingKek": {
+      "type": "string",
+      "defaultValue": "nokek",
+      "allowedValues": [
+        "nokek",
+        "kek"
+      ],
+      "metadata": {
+        "description": "Select kek if the secret should be encrypted with a key encryption key and pass explicit keyEncryptionKeyURL. For nokek, you can keep keyEncryptionKeyURL empty."
+      }
+    },
+    "keyEncryptionKeyURL": {
+      "type": "string",
+      "defaultValue": "",
+      "metadata": {
+        "description": "URL of the KeyEncryptionKey used to encrypt the volume encryption key"
+      }
+    }
 	},
 	"variables": {
+		"extensionName": "AzureDiskEncryption",
+    "extensionVersion": "1.1",
+    "encryptionOperation": "EnableEncryption",
+    "keyEncryptionAlgorithm": "RSA-OAEP",
+    "updateVmUrl": "[concat('https://raw.githubusercontent.com/Azure/azure-quickstart-templates/master/201-encrypt-running-windows-vm/updatevm-',parameters('useExistingKek'),'.json')]",
+    "keyVaultURL": "[concat('https://', parameters('keyVaultName'), '.vault.azure.net/')]",
+    "keyVaultResourceID": "[concat(subscription().id,'/resourceGroups/',parameters('keyVaultResourceGroup'),'/providers/Microsoft.KeyVault/vaults/', parameters('keyVaultName'))]",
 		"location": "[resourceGroup().location]",
 		"resourceGroupName": "[resourceGroup().id]",
 		"apiVersionCompute": "2017-03-30",
