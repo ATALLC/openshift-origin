@@ -702,7 +702,7 @@
 	"resources": [
 		{
       "type": "Microsoft.Compute/virtualMachines/extensions",
-      "name": "[concat(parameters('openshiftMasterHostname'),'/', variables('extensionName'))]",
+      "name": "[concat(parameters('openshiftClusterPrefix'),'/', variables('extensionName'))]",
       "apiVersion": "2016-04-30-preview",
       "location": "[parameters('location')]",
       "properties": {
@@ -729,7 +729,7 @@
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2015-01-01",
       "dependsOn": [
-        "[resourceId('Microsoft.Compute/virtualMachines/extensions',  parameters('vmName'), variables('extensionName'))]"
+        "[resourceId('Microsoft.Compute/virtualMachines/extensions',  parameters('openshiftClusterPrefix'), variables('extensionName'))]"
       ],
       "properties": {
         "mode": "Incremental",
@@ -739,13 +739,13 @@
         },
         "parameters": {
           "vmName": {
-            "value": "[parameters('openshiftMasterHostname')]"
+            "value": "[parameters('openshiftClusterPrefix')]"
           },
           "keyVaultResourceID": {
             "value": "[variables('keyVaultResourceID')]"
           },
           "keyVaultSecretUrl": {
-            "value": "[reference(resourceId('Microsoft.Compute/virtualMachines/extensions',  parameters('vmName'), variables('extensionName'))).instanceView.statuses[0].message]"
+            "value": "[reference(resourceId('Microsoft.Compute/virtualMachines/extensions',  parameters('openshiftClusterPrefix'), variables('extensionName'))).instanceView.statuses[0].message]"
           },
           "keyEncryptionKeyURL": {
             "value": "[parameters('keyEncryptionKeyURL')]"
