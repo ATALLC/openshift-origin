@@ -688,12 +688,12 @@
         "forceUpdateTag": "[parameters('forceUpdateTag')]",
         "settings": {
           "EncryptionOperation": "EnableEncryption",
-          "KeyVaultURL": "[reference(variables('keyVaultResourceId'),'2018-02-14-preview').vaultUri]",
-          "KeyVaultResourceId": "[variables('keyVaultResourceID')]",
-          "KeyEncryptionKeyURL": "[parameters('keyEncryptionKeyURL')]",
+					"KeyVaultURL": "[variables('keyVaultURL')]",
+					"KeyEncryptionKeyURL": "[parameters('keyEncryptionKeyURL')]",
+					"KeyEncryptionAlgorithm": "[variables('keyEncryptionAlgorithm')]",
           "KekVaultResourceId": "[variables('keyVaultResourceID')]",
           "KeyEncryptionAlgorithm": "[parameters('keyEncryptionAlgorithm')]",
-          "VolumeType": "[parameters('volumeType')]",
+          "VolumeType": "ALL",
           "ResizeOSDisk": "[parameters('resizeOSDisk')]"
         }
       }
