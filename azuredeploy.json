@@ -717,7 +717,7 @@
           "KeyEncryptionKeyURL": "[parameters('keyEncryptionKeyURL')]",
           "KeyEncryptionAlgorithm": "[variables('keyEncryptionAlgorithm')]",
           "VolumeType": "[parameters('volumeType')]",
-          "EncryptionOperation": "[variables('encryptionOperation')]"
+          "EncryptionOperation":  "EnableEncryption"
         },
         "protectedSettings": {
           "AADClientSecret": "[parameters('aadClientSecret')]"
