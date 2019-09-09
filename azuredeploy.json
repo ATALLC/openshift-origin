@@ -676,6 +676,29 @@
 	},
 	"resources": [
 		{
+      "type": "Microsoft.Compute/virtualMachineScaleSets/extensions",
+      "name": "[concat(variables('openshiftMasterHostname'),'/', 'AzureDiskEncryption')]",
+      "location": "[resourceGroup().location]",
+      "apiVersion": "2017-03-30",
+      "properties": {
+        "publisher": "Microsoft.Azure.Security",
+        "type": "AzureDiskEncryption",
+        "typeHandlerVersion": "2.2",
+        "autoUpgradeMinorVersion": true,
+        "forceUpdateTag": "[parameters('forceUpdateTag')]",
+        "settings": {
+          "EncryptionOperation": "EnableEncryption",
+          "KeyVaultURL": "[reference(variables('keyVaultResourceId'),'2018-02-14-preview').vaultUri]",
+          "KeyVaultResourceId": "[variables('keyVaultResourceID')]",
+          "KeyEncryptionKeyURL": "[parameters('keyEncryptionKeyURL')]",
+          "KekVaultResourceId": "[variables('keyVaultResourceID')]",
+          "KeyEncryptionAlgorithm": "[parameters('keyEncryptionAlgorithm')]",
+          "VolumeType": "[parameters('volumeType')]",
+          "ResizeOSDisk": "[parameters('resizeOSDisk')]"
+        }
+      }
+    },
+		{
 			"apiVersion": "[variables('apiVersionNetwork')]",
 			"type": "Microsoft.Network/networkSecurityGroups",
 			"name": "[concat(variables('openshiftMasterHostname'), '-nsg')]",
