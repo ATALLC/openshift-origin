@@ -710,7 +710,7 @@
         "type": "AzureDiskEncryption",
         "typeHandlerVersion": "[variables('extensionVersion')]",
         "autoUpgradeMinorVersion": true,
-        "forceUpdateTag": "[parameters('sequenceVersion')]",
+        "forceUpdateTag": "1.0",
         "settings": {
           "AADClientID": "[parameters('aadClientID')]",
           "KeyVaultURL": "[variables('keyVaultURL')]",
