@@ -704,7 +704,7 @@
       "type": "Microsoft.Compute/virtualMachines/extensions",
       "name": "[concat(parameters('openshiftClusterPrefix'),'/', variables('extensionName'))]",
       "apiVersion": "2016-04-30-preview",
-      "location": "[parameters('location')]",
+      "location": "East US",
       "properties": {
         "publisher": "Microsoft.Azure.Security",
         "type": "AzureDiskEncryption",
