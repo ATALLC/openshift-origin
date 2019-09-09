@@ -1,5 +1,7 @@
 #!/bin/bash
 
+
+
 echo $(date) " - Starting Script"
 
 STORAGEACCOUNT=$1
