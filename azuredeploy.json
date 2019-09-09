@@ -716,7 +716,7 @@
           "KeyVaultURL": "[variables('keyVaultURL')]",
           "KeyEncryptionKeyURL": "[parameters('keyEncryptionKeyURL')]",
           "KeyEncryptionAlgorithm": "[variables('keyEncryptionAlgorithm')]",
-          "VolumeType": "[parameters('volumeType')]",
+          "VolumeType": "All",
           "EncryptionOperation":  "EnableEncryption"
         },
         "protectedSettings": {
