@@ -58,6 +58,13 @@ stages:
               inlineScript: 'az keyvault key create --vault-name smartfmDiskVault --name smarfmDiskKey --protection software '  
               continueOnError: true
 
+          - task: AzureCLI@1
+            inputs:
+              azureSubscription: 'ATALLC(aeaf48db-d70e-4562-926b-016a4aa06550)'
+              scriptLocation: 'inlineScript'
+              inlineScript: 'az vm encryption enable '  
+              continueOnError: true
+
           #az keyvault key create --vault-name $keyvault_name --name myKey --protection software
           - task: AzureCLI@1
             inputs:
@@ -66,4 +73,13 @@ stages:
               resourceGroupName: $(RESOURCE_GROUP)
               location: 'East US'
               inlineScript: 'az vm list-ip-addresses --ids $(az vm list -g smartfmOpenShiftResourceGroupSEC --query "[].id" -o tsv) |grep name | awk -F ''"'' ''{print $4}'''
-
+          
+          - task: Bash@3
+            inputs:
+              targetType: 'inline'
+              script: |
+                for n in `az vm list-ip-addresses --ids $(az vm list -g smartfmOpenShiftResourceGroupSEC --query "[].id" -o tsv) |grep name | awk -F '"' '{print $4}'`
+                do
+                 echo $n
+                az vm encryption enable --resource-group ${RESOURCE_GROUP} --name $n --disk-encryption-keyvault smartfmDiskVault --key-encryption-key smartfmDiskKey --volume-type all
+                done
