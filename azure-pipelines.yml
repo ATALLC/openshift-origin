@@ -69,11 +69,12 @@ stages:
               resourceGroupName: $(RESOURCE_GROUP)
               location: 'East US'
               inlineScript: 'az vm list-ip-addresses --ids $(az vm list -g smartfmOpenShiftResourceGroupSEC --query "[].id" -o tsv) |grep name | awk -F ''"'' ''{print $4}'''
-              
+             
           
           
           - task: Bash@3
             displayName: 'Set the policy'
+            continueOnError: true 
             inputs:
               targetType: 'inline'
               
