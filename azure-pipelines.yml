@@ -31,63 +31,13 @@ stages:
               sed -i.bak 's|AADCLIENTID|$(AAD_CLIENT_ID)|g' azuredeploy.parameters.json
               sed -i.bak 's|AADCLIENTSECRET|$(AAD_CLIENT_SECRET)|g' azuredeploy.parameters.json
             displayName: 'Update variables in parameter file from pipeline variables'
-          #- task: AzureResourceGroupDeployment@2
-          #  displayName: 'Deploy Openshift Origin Cluster'
-          #  inputs:
-          #    azureSubscription: $(RESOURCE_MANAGER_SERVICE_CONNECTION)
-          #    resourceGroupName: $(RESOURCE_GROUP)
-          #    # location is ignored if the resource group alreadye exists
-          #    location: 'East US'
-          #    csmFile: 'azuredeploy.json'
-          #    csmParametersFile: 'azuredeploy.parameters.json'
-          
-          
-          - task: AzureCLI@1
+          - task: AzureResourceGroupDeployment@2
+            displayName: 'Deploy Openshift Origin Cluster'
             inputs:
-              azureSubscription: 'ATALLC(aeaf48db-d70e-4562-926b-016a4aa06550)'
-              scriptLocation: 'inlineScript'
+              azureSubscription: $(RESOURCE_MANAGER_SERVICE_CONNECTION)
               resourceGroupName: $(RESOURCE_GROUP)
+              # location is ignored if the resource group alreadye exists
               location: 'East US'
-              inlineScript: 'az keyvault create --name smartfmDiskVault --resource-group smartfmOpenShiftResourceGroupSEC --location eastus --enabled-for-disk-encryption True  '
-              continueOnError: true
-              displayName: 'Create the disk encryption vault'
-             
-          - task: AzureCLI@1
-            displayName: 'Create the key in the vault'
-            inputs:
-              azureSubscription: 'ATALLC(aeaf48db-d70e-4562-926b-016a4aa06550)'
-              scriptLocation: 'inlineScript'
-              inlineScript: 'az keyvault key create --vault-name smartfmDiskVault --name smarfmDiskKey --protection software '  
-              continueOnError: true
-              
-
-          - task: AzureCLI@1
-            displayName: 'List the VMs to be encrypted'
-            inputs:
-              azureSubscription: 'ATALLC(aeaf48db-d70e-4562-926b-016a4aa06550)'
-              scriptLocation: 'inlineScript'
-              resourceGroupName: $(RESOURCE_GROUP)
-              location: 'East US'
-              inlineScript: 'az vm list-ip-addresses --ids $(az vm list -g smartfmOpenShiftResourceGroupSEC --query "[].id" -o tsv) |grep name | awk -F ''"'' ''{print $4}'''
-             
-          
-          
-          - task: Bash@3
-            displayName: 'Set the policy'
-            continueOnError: true 
-            inputs:
-              targetType: 'inline'
-              
-              script: 'az keyvault set-policy --name smartfmDiskVault --spn $AAD_CLIENT_ID --key-permissions wrapKey --secret-permissions set'
-          - task: Bash@3
-            displayName: 'Enable the encryption'
-            inputs:
-              targetType: 'inline'
-              script: |
-                for n in `az vm list-ip-addresses --ids $(az vm list -g smartfmOpenShiftResourceGroupSEC --query "[].id" -o tsv) |grep name | awk -F '"' '{print $4}'`
-                do
-                 echo $n
-                 echo
-                 az vm encryption enable --resource-group ${RESOURCE_GROUP} --name $n --aad-client-id $AAD_CLIENT_ID --aad-client-secret $AAD_CLIENT_SECRET --disk-encryption-keyvault smartfmDiskVault --key-encryption-key smartfmDiskKey --volume-type all
-                 echon completed $n
-                done
+              #csmFile: 'azuredeploy.json'
+              csmFile: 'encryptdisk.json'
+              csmParametersFile: 'azuredeploy.parameters.json'
