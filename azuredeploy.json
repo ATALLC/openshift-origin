@@ -236,7 +236,7 @@
 		}
 	},
 	"variables": {
-		"location": "[resourceGroup().location]",
+	  "location": "[resourceGroup().location]",
 		"resourceGroupName": "[resourceGroup().id]",
 		"apiVersionCompute": "2017-03-30",
 		"apiVersionNetwork": "2017-09-01",
@@ -1208,12 +1208,38 @@
 					"id": "[resourceId('Microsoft.Network/networkSecurityGroups', concat(variables('openshiftNodeHostname'), '-nsg'))]"
 				}
 			}
-		}, {
+		},
+		{
+      "type": "Microsoft.Compute/virtualMachines/extensions",
+      "name": "[concat('masterVmDeployment', copyindex())],'/', variables('extensionName'))]",
+      "apiVersion": "2015-06-15",
+      "location": "[parameters('location')]",
+      "properties": {
+        "protectedSettings": {
+          "AADClientSecret": "[parameters('aadClientSecret')]",
+          "Passphrase": "[parameters('passphrase')]"
+        },
+        "publisher": "Microsoft.Azure.Security",
+        "settings": {
+          "AADClientID": "[parameters('aadClientID')]",
+          "EncryptionOperation": "[parameters('encryptionOperation')]",
+          "KeyEncryptionAlgorithm": "[parameters('keyEncryptionAlgorithm')]",
+          "KeyEncryptionKeyURL": "https://smartfmatadevkeyvaultsec.vault.azure.net/keys/disk-encrypt-key/88c7e3a5de2d48969f0db7f982840bb4",
+          "KeyVaultURL": "[concat('https://', parameters('keyVaultName'), '.vault.azure.net/')]",
+          "SequenceVersion": "1.0",
+          "VolumeType": "ALL"
+        },
+        "type": "AzureDiskEncryptionForLinux",
+        "typeHandlerVersion": "[variables('extensionVersion')]"
+      }
+    },
+		{
 			"name": "[concat('masterVmDeployment', copyindex())]",
 			"type": "Microsoft.Resources/deployments",
 			"apiVersion": "[variables('apiVersionLinkTemplate')]",
 			"dependsOn": [
 				"[resourceId('Microsoft.Storage/storageAccounts', variables('diagStorageAccount1'))]",
+				"[resourceId('Microsoft.Compute/virtualMachines/extensions',  parameters('masterVmDeployment'), variables('extensionName'))]",
 				"masterNicLoop",
 				"masteravailabilityset"
 			],
