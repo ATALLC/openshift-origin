@@ -67,23 +67,6 @@
 		},
 		"defaultSubDomainType": {
 			"value": "nipio"
-	 },
-	 "extensionName": {
-			"value": "AzureDiskEncryptionForLinux"
-	 },
-	 "extensionVersion": {
-		 "value": "0.1"
-	 },
-	 "keyEncryptionAlgorithmn": {
-		 "value": "RSA-OAEP"
-  },
-  "encryptionOperation": {
-	  "value": "EnableEncryption"
-  },
-	"keyVaultResourceID": {
-	  "value": "/subscriptions/aeaf48db-d70e-4562-926b-016a4aa06550/resourceGroups/smartfmKeyVaultResourceGroupSEC/providers/Microsoft.KeyVault/vaults/smartfmATADevKeyVaultSEC"
-  }
-
- }
-
+		}
+	}
 }

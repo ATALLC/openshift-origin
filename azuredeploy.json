@@ -1222,15 +1222,15 @@
         "publisher": "Microsoft.Azure.Security",
         "settings": {
           "AADClientID": "[parameters('aadClientID')]",
-          "EncryptionOperation": "[parameters('encryptionOperation')]",
-          "KeyEncryptionAlgorithm": "[parameters('keyEncryptionAlgorithm')]",
+          "EncryptionOperation": "EnableEncryption",
+          "KeyEncryptionAlgorithm": "RSA-OAEP",
           "KeyEncryptionKeyURL": "https://smartfmatadevkeyvaultsec.vault.azure.net/keys/disk-encrypt-key/88c7e3a5de2d48969f0db7f982840bb4",
           "KeyVaultURL": "[concat('https://', parameters('keyVaultName'), '.vault.azure.net/')]",
           "SequenceVersion": "1.0",
           "VolumeType": "ALL"
         },
         "type": "AzureDiskEncryptionForLinux",
-        "typeHandlerVersion": "[variables('extensionVersion')]"
+        "typeHandlerVersion": "0.1"
       }
     },
 		{
