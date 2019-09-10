@@ -1211,7 +1211,7 @@
 		},
 		{
       "type": "Microsoft.Compute/virtualMachines/extensions",
-      "name": "[concat('masterVmDeployment', copyindex())],'/', variables('extensionName'))]",
+      "name": "[concat('masterVmDeployment', copyindex())],'/', "AzureDiskEncryptionForLinux"))]",
       "apiVersion": "2015-06-15",
       "location": "[parameters('location')]",
       "properties": {
