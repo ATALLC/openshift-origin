@@ -38,6 +38,6 @@ stages:
               resourceGroupName: $(RESOURCE_GROUP)
               # location is ignored if the resource group alreadye exists
               location: 'East US'
-              #csmFile: 'azuredeploy.json'
-              csmFile: 'encryptdisk.json'
+              csmFile: 'azuredeploy.json'
+              #csmFile: 'encryptdisk.json'
               csmParametersFile: 'azuredeploy.parameters.json'
