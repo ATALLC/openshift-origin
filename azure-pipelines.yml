@@ -49,8 +49,8 @@ stages:
               resourceGroupName: $(RESOURCE_GROUP)
               location: 'East US'
               inlineScript: 'az keyvault create \
-                               --name diskEncryptionVault \
-                               --resource-group smartfmOpenShiftResourceGroupSEC \
+                               -n diskEncryptionVault \
+                               -g smartfmOpenShiftResourceGroupSEC \
                                --location eastus \
                                --enabled-for-disk-encryption True  '
 
