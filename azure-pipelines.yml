@@ -51,7 +51,7 @@ stages:
               inlineScript: 'az keyvault create \
                                --name diskEncryptionVault \
                                --resource-group smartfmOpenShiftResourceGroupSEC \
-                               --location 'East US' \
+                               --location eastus \
                                --enabled-for-disk-encryption True  '
 
              
