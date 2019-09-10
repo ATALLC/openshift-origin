@@ -1,0 +1,75 @@
+{
+	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"_artifactsLocation": {
+			"value": "https://raw.githubusercontent.com/ATALLC/openshift-origin/master"
+		},
+		"masterVmSize": {
+			"value": "Standard_D4s_v3"
+		},
+		"infraVmSize": {
+			"value": "Standard_D4s_v3"
+		},
+		"nodeVmSize": {
+			"value": "Standard_D4s_v3"
+		},
+		"storageKind": {
+			"value": "managed"
+		},
+		"openshiftClusterPrefix": {
+			"value": "smartfmcluster"
+		},
+		"masterInstanceCount": {
+			"value": MASTERCOUNT
+		},
+		"infraInstanceCount": {
+			"value": INFRCOUNT
+		},
+		"nodeInstanceCount": {
+			"value": NODECOUNT
+		},
+		"dataDiskSize": {
+			"value": 128
+		},
+		"adminUsername": {
+			"value": "OSADMINUSERNAME"
+		},
+		"openshiftPassword": {
+			"value": "OSADMINPASSWORD"
+		},
+		"enableMetrics": {
+			"value": "true"
+		},
+		"enableLogging": {
+			"value": "true"
+		},
+		"sshPublicKey": {
+			"value": "SSHPUBLICKEY"
+		},
+		"keyVaultResourceGroup": {
+			"value": "KEYVAULTRESOURCEGROUP"
+		},
+		"keyVaultName": {
+			"value": "KEYVAULTNAME"
+		},
+		"keyVaultSecret": {
+			"value": "sshPrivateKey"
+		},
+		"enableAzure": {
+			"value": "true"
+		},
+		"aadClientId": {
+			"value": "AADCLIENTID"
+		},
+		"aadClientSecret": {
+			"value": "AADCLIENTSECRET"
+		},
+		"defaultSubDomainType": {
+			"value": "nipio"
+		},
+		"vmName": {
+			"value": "smartfmcluster-node-0"
+		}
+	}
+}
