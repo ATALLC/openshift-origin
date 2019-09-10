@@ -55,7 +55,7 @@ stages:
                                --enabled-for-disk-encryption True  '
 
              
-        - task: AzureCLI@1
+          - task: AzureCLI@1
             inputs:
               azureSubscription: 'ATALLC(aeaf48db-d70e-4562-926b-016a4aa06550)'
               scriptLocation: 'inlineScript'
