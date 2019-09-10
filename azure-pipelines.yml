@@ -42,28 +42,21 @@ stages:
           #    csmParametersFile: 'azuredeploy.parameters.json'
           
           
-          #- task: AzureCLI@1
-          #  inputs:
-          #    azureSubscription: 'ATALLC(aeaf48db-d70e-4562-926b-016a4aa06550)'
-          #    scriptLocation: 'inlineScript'
-          #    resourceGroupName: $(RESOURCE_GROUP)
-          #    location: 'East US'
-          #    inlineScript: 'az keyvault create \
-          #                     --name smartfmDiskVault \
-          #                     --resource-group smartfmOpenShiftResourceGroupSEC \
-          #                     --location eastus \
-          #                     --enabled-for-disk-encryption True  '
-
+          - task: AzureCLI@1
+            inputs:
+              azureSubscription: 'ATALLC(aeaf48db-d70e-4562-926b-016a4aa06550)'
+              scriptLocation: 'inlineScript'
+              resourceGroupName: $(RESOURCE_GROUP)
+              location: 'East US'
+              inlineScript: 'az keyvault create --name smartfmDiskVault --resource-group smartfmOpenShiftResourceGroupSEC --location eastus --enabled-for-disk-encryption True  '
+              continueOnError: true
              
           - task: AzureCLI@1
             inputs:
               azureSubscription: 'ATALLC(aeaf48db-d70e-4562-926b-016a4aa06550)'
               scriptLocation: 'inlineScript'
-              inlineScript: 'az keyvault key create \
-                               --vault-name smartfmDiskVault 
-                               --name smarfmDiskKey \
-                               --protection software '  
-
+              inlineScript: 'az keyvault key create --vault-name smartfmDiskVault --name smarfmDiskKey --protection software '  
+              continueOnError: true
 
           #az keyvault key create --vault-name $keyvault_name --name myKey --protection software
           - task: AzureCLI@1
