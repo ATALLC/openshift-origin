@@ -50,34 +50,34 @@ stages:
               location: 'East US'
               inlineScript: 'az keyvault create --name smartfmDiskVault --resource-group smartfmOpenShiftResourceGroupSEC --location eastus --enabled-for-disk-encryption True  '
               continueOnError: true
+              displayName: 'Create the disk encryption vault'
              
           - task: AzureCLI@1
+            displayName: 'Create the key in the vault'
             inputs:
               azureSubscription: 'ATALLC(aeaf48db-d70e-4562-926b-016a4aa06550)'
               scriptLocation: 'inlineScript'
               inlineScript: 'az keyvault key create --vault-name smartfmDiskVault --name smarfmDiskKey --protection software '  
               continueOnError: true
+              
 
           - task: AzureCLI@1
-            inputs:
-              azureSubscription: 'ATALLC(aeaf48db-d70e-4562-926b-016a4aa06550)'
-              scriptLocation: 'inlineScript'
-              inlineScript: 'az vm encryption enable '  
-              continueOnError: true
-
-          #az keyvault key create --vault-name $keyvault_name --name myKey --protection software
-          - task: AzureCLI@1
+            displayName: 'List the VMs to be encrypted'
             inputs:
               azureSubscription: 'ATALLC(aeaf48db-d70e-4562-926b-016a4aa06550)'
               scriptLocation: 'inlineScript'
               resourceGroupName: $(RESOURCE_GROUP)
               location: 'East US'
               inlineScript: 'az vm list-ip-addresses --ids $(az vm list -g smartfmOpenShiftResourceGroupSEC --query "[].id" -o tsv) |grep name | awk -F ''"'' ''{print $4}'''
+              
           - task: Bash@3
+            displayName: 'Set the policy'
             inputs:
               targetType: 'inline'
+              
               script: 'az keyvault set-policy --name smartfmDiskVault --spn $AAD_CLIENT_ID --key-permissions wrapKey --secret-permissions set'
           - task: Bash@3
+            displayName: 'Enable the encryption'
             inputs:
               targetType: 'inline'
               script: |
