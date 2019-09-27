@@ -1287,6 +1287,18 @@
 					},
 					"redHatTags": {
 						"value": "[variables('redHatTags')]"
+					},
+					"encryptionOperation": {
+						"value": "EnableEncryption"
+					},
+					"volumeType": {
+						"value": "All"
+					},
+					"keyVaultResourceGroup": {
+						"value": "[parameters('keyVaultResourceGroup')]"
+					},
+					"keyVaultName": {
+						"value": "[parameters('keyVaultName')]"
 					}
 				}
 			}
