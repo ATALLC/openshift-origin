@@ -345,7 +345,7 @@
 			"publisher": "Openlogic",
 			"offer": "CentOS",
 			"sku": "7.5",
-			"version": "7.6"
+			"version": "latest"
 		},
 		"redHatTags": {
 			"app": "OpenShiftOrigin",
